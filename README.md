@@ -244,3 +244,5 @@ python -m unittest tests/test_app.py
 
 ## 🎓 Academic Submission Statement
 *Developed as a Final-Year CSE / AIML Capstone Project demonstrating full-stack engineering, production Flask REST APIs, explainable machine learning models, and modern user experience design.*
+#   B A R G A I N K A R T _ A I  
+ 
