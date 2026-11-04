@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block title %}About Project & Team 10 AIML{% endblock %}
+
+{% block content %}
+<div class="about-academic-page" style="max-width: 1200px; margin: 0 auto; padding-bottom: 50px;">
+
+    <!-- Top Academic Context Header -->
+    <div class="card" style="margin-bottom: 28px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85)); border: 1px solid rgba(148, 163, 184, 0.15); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
+            <div style="display: flex; align-items: flex-start; gap: 20px;">
+                <!-- College Logo Badge -->
+                <div style="width: 82px; height: 82px; border-radius: 50%; background: #ffffff; border: 3px solid #38bdf8; display: flex; align-items: center; justify-content: center; padding: 4px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); flex-shrink: 0;">
+                    <img src="{{ url_for('static', filename='images/college_logo.png') }}" alt="Kakatiya University Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: 700; letter-spacing: 0.5px;">
+                            <i class="fa-solid fa-graduation-cap"></i> B.Tech Capstone Project
+                        </span>
+                        <span class="badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; font-weight: 700;">
+                            Team 10 AIML
+                        </span>
+                    </div>
+                    <h1 style="font-size: 2rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 6px;">
+                        BargainKart AI
+                    </h1>
+                    <p style="font-size: 0.9rem; color: #94a3b8; max-width: 750px; line-height: 1.6;">
+                        Smart E-Commerce Platform with AI Automated Price Negotiation, Multi-Seller Risk Transparency, Visual Empty Space Recommendations, and Multi-Factor Authenticity Verification.
+                    </p>
+                </div>
+            </div>
+
+            <div style="text-align: right; background: rgba(15, 23, 42, 0.6); padding: 12px 18px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px;">Academic Year</div>
+                <div style="font-size: 1.15rem; font-weight: 800; color: #38bdf8; font-family: 'Space Grotesk', sans-serif;">2026 – 2027</div>
+            </div>
+        </div>
+
+        <!-- Academic Metadata Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(148, 163, 184, 0.12);">
+            <div>
+                <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">Institution</span>
+                <strong style="color: #f1f5f9; font-size: 0.92rem;">University College of Engineering and Technology for Women (UCETW)</strong>
+                <div style="font-size: 0.78rem; color: #38bdf8;">Kakatiya University, Warangal</div>
+            </div>
+            <div>
+                <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">Department & Branch</span>
+                <strong style="color: #f1f5f9; font-size: 0.92rem;">Computer Science & Engineering (AI & ML)</strong>
+                <div style="font-size: 0.78rem; color: #c084fc;">Specialization in Artificial Intelligence & Machine Learning</div>
+            </div>
+            <div>
+                <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 3px;">Core AI Innovations</span>
+                <strong style="color: #f1f5f9; font-size: 0.92rem;">Multi-Agent Negotiation & Visual Recommender</strong>
+                <div style="font-size: 0.78rem; color: #34d399;">500 Products • Price Transparency • Voice STT/TTS</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROJECT GUIDE SECTION -->
+    <div style="margin-bottom: 36px;">
+        <div style="font-size: 0.75rem; font-weight: 800; color: #10b981; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">
+            PROJECT GUIDE
+        </div>
+        <h2 style="font-size: 1.55rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 18px;">
+            Guided Academic Development
+        </h2>
+
+        <div style="max-width: 480px;">
+            <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-lg); padding: 28px; text-align: center; position: relative; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(16,185,129,0.08);">
+                <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #10b981, #06b6d4);"></div>
+
+                <!-- Guide Photo Circular Avatar -->
+                <div style="width: 120px; height: 120px; border-radius: 50%; border: 3.5px solid #10b981; overflow: hidden; margin: 0 auto 16px; box-shadow: 0 0 25px rgba(16,185,129,0.35); background: #0f172a; position: relative;">
+                    <img src="{{ url_for('static', filename='images/team/guide.jpg') }}" alt="Smt. P. Vaishnavi - Project Guide" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%;">
+                </div>
+
+                <h3 style="font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 4px;">
+                    Smt. P. Vaishnavi
+                </h3>
+                <div style="font-size: 0.88rem; font-weight: 700; color: #34d399; margin-bottom: 4px;">
+                    Project Guide
+                </div>
+                <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px;">
+                    Department of CSE (AI & ML)
+                </div>
+                <div style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 18px;">
+                    University College of Engineering and Technology for Women<br>
+                    <span style="color: #64748b;">Kakatiya University, Warangal</span>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <a href="{{ url_for('auth.quick_login', identifier='smt.p.vaishnavi') }}" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #059669, #10b981); border: none; font-size: 0.8rem; padding: 7px 16px;">
+                        <i class="fa-solid fa-right-to-bracket"></i> Sign In as Guide
+                    </a>
+                </div>
+
+                <div style="font-size: 0.72rem; color: #64748b; margin-top: 14px; border-top: 1px solid rgba(148,163,184,0.1); padding-top: 10px;">
+                    Project Guide details are configured. Authorized credential login available.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OUR TEAM SECTION -->
+    <div style="margin-bottom: 36px;">
+        <div style="font-size: 0.75rem; font-weight: 800; color: #a855f7; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;">
+            OUR TEAM
+        </div>
+        <h2 style="font-size: 1.55rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 6px;">
+            Meet Our Team — Team 10 AIML
+        </h2>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px;">
+            Working together to build intelligent solutions for automated AI price negotiation, price transparency, and counterfeit risk assessment.
+        </p>
+
+        <!-- 5 Team Cards Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 18px; margin-bottom: 16px;">
+            
+            <!-- Member 1: V. Poojarani -->
+            <div class="card" style="text-align: center; padding: 24px 16px; border: 1px solid rgba(168, 85, 247, 0.25); transition: transform 0.2s, border-color 0.2s; position: relative; background: rgba(15, 23, 42, 0.75);">
+                <div style="width: 90px; height: 90px; border-radius: 50%; border: 3px solid #c084fc; overflow: hidden; margin: 0 auto 14px; box-shadow: 0 0 15px rgba(168,85,247,0.3); background: #1e293b;">
+                    <img src="{{ url_for('static', filename='images/team/poojarani.png') }}" alt="V. Poojarani" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+                </div>
+                <h4 style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 4px;">V. Poojarani</h4>
+                <div style="font-size: 0.78rem; font-weight: 700; color: #a855f7; margin-bottom: 6px;">Team Member</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px; font-family: monospace; background: rgba(15,23,42,0.6); padding: 4px 8px; border-radius: 4px; display: inline-block;">
+                    Roll: <strong>23568T3055</strong>
+                </div>
+                <div>
+                    <a href="{{ url_for('auth.quick_login', identifier='23568T3055') }}" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 5px 12px; width: 100%;">
+                        <i class="fa-solid fa-user-check"></i> Sign In
+                    </a>
+                </div>
+            </div>
+
+            <!-- Member 2: P. Anusha -->
+            <div class="card" style="text-align: center; padding: 24px 16px; border: 1px solid rgba(56, 189, 248, 0.25); transition: transform 0.2s, border-color 0.2s; position: relative; background: rgba(15, 23, 42, 0.75);">
+                <div style="width: 95px; height: 95px; border-radius: 50%; border: 3px solid #38bdf8; overflow: hidden; margin: 0 auto 14px; box-shadow: 0 0 18px rgba(56,189,248,0.35); background: #1e293b;">
+                    <img src="{{ url_for('static', filename='images/team/anusha.png') }}" alt="P. Anusha" style="width: 100%; height: 100%; object-fit: cover; object-position: center 8%; transform: scale(1.05);">
+                </div>
+                <h4 style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 4px;">P. Anusha</h4>
+                <div style="font-size: 0.78rem; font-weight: 700; color: #38bdf8; margin-bottom: 6px;">Team Member</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px; font-family: monospace; background: rgba(15,23,42,0.6); padding: 4px 8px; border-radius: 4px; display: inline-block;">
+                    Roll: <strong>245683064L</strong>
+                </div>
+                <div>
+                    <a href="{{ url_for('auth.quick_login', identifier='245683064L') }}" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 5px 12px; width: 100%;">
+                        <i class="fa-solid fa-user-check"></i> Sign In
+                    </a>
+                </div>
+            </div>
+
+            <!-- Member 3: G. Deepika -->
+            <div class="card" style="text-align: center; padding: 24px 16px; border: 1px solid rgba(244, 63, 94, 0.25); transition: transform 0.2s, border-color 0.2s; position: relative; background: rgba(15, 23, 42, 0.75);">
+                <div style="width: 90px; height: 90px; border-radius: 50%; border: 3px solid #fb7185; overflow: hidden; margin: 0 auto 14px; box-shadow: 0 0 15px rgba(244,63,94,0.3); background: #1e293b;">
+                    <img src="{{ url_for('static', filename='images/team/deepika.png') }}" alt="G. Deepika" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+                </div>
+                <h4 style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 4px;">G. Deepika</h4>
+                <div style="font-size: 0.78rem; font-weight: 700; color: #fb7185; margin-bottom: 6px;">Team Member</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px; font-family: monospace; background: rgba(15,23,42,0.6); padding: 4px 8px; border-radius: 4px; display: inline-block;">
+                    Roll: <strong>23568T3018</strong>
+                </div>
+                <div>
+                    <a href="{{ url_for('auth.quick_login', identifier='23568T3018') }}" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 5px 12px; width: 100%;">
+                        <i class="fa-solid fa-user-check"></i> Sign In
+                    </a>
+                </div>
+            </div>
+
+            <!-- Member 4: D. Pavani Alekhya -->
+            <div class="card" style="text-align: center; padding: 24px 16px; border: 1px solid rgba(16, 185, 129, 0.25); transition: transform 0.2s, border-color 0.2s; position: relative; background: rgba(15, 23, 42, 0.75);">
+                <div style="width: 90px; height: 90px; border-radius: 50%; border: 3px solid #34d399; overflow: hidden; margin: 0 auto 14px; box-shadow: 0 0 15px rgba(16,185,129,0.3); background: #1e293b;">
+                    <img src="{{ url_for('static', filename='images/team/pavani.png') }}" alt="D. Pavani Alekhya" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+                </div>
+                <h4 style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 4px;">D. Pavani Alekhya</h4>
+                <div style="font-size: 0.78rem; font-weight: 700; color: #34d399; margin-bottom: 6px;">Team Member</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px; font-family: monospace; background: rgba(15,23,42,0.6); padding: 4px 8px; border-radius: 4px; display: inline-block;">
+                    Roll: <strong>23568T3012</strong>
+                </div>
+                <div>
+                    <a href="{{ url_for('auth.quick_login', identifier='23568T3012') }}" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 5px 12px; width: 100%;">
+                        <i class="fa-solid fa-user-check"></i> Sign In
+                    </a>
+                </div>
+            </div>
+
+            <!-- Member 5: K. Prathyusha -->
+            <div class="card" style="text-align: center; padding: 24px 16px; border: 1px solid rgba(245, 158, 11, 0.25); transition: transform 0.2s, border-color 0.2s; position: relative; background: rgba(15, 23, 42, 0.75);">
+                <div style="width: 90px; height: 90px; border-radius: 50%; border: 3px solid #fbbf24; overflow: hidden; margin: 0 auto 14px; box-shadow: 0 0 15px rgba(245,158,11,0.3); background: #1e293b;">
+                    <img src="{{ url_for('static', filename='images/team/prathyusha.png') }}" alt="K. Prathyusha" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;">
+                </div>
+                <h4 style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 4px;">K. Prathyusha</h4>
+                <div style="font-size: 0.78rem; font-weight: 700; color: #fbbf24; margin-bottom: 6px;">Team Member</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px; font-family: monospace; background: rgba(15,23,42,0.6); padding: 4px 8px; border-radius: 4px; display: inline-block;">
+                    Roll: <strong>23568T3029</strong>
+                </div>
+                <div>
+                    <a href="{{ url_for('auth.quick_login', identifier='23568T3029') }}" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 5px 12px; width: 100%;">
+                        <i class="fa-solid fa-user-check"></i> Sign In
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="font-size: 0.75rem; color: #64748b; text-align: center;">
+            Team names and roll numbers are configured. Individual accounts authenticated for academic project presentation.
+        </div>
+    </div>
+
+    <!-- COLLEGE IDENTITY SECTION (Matching Image 3) -->
+    <div class="card" style="margin-bottom: 28px; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color);">
+        <div style="font-size: 0.75rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
+            College Identity & Affiliation
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
+            <!-- College Emblem Logo -->
+            <div style="width: 120px; height: 120px; border-radius: 50%; background: #ffffff; border: 3px solid #38bdf8; display: flex; align-items: center; justify-content: center; padding: 6px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.4); flex-shrink: 0; overflow: hidden;">
+                <img src="{{ url_for('static', filename='images/college_logo.png') }}" alt="Kakatiya University Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+
+            <div style="flex: 1; min-width: 280px;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: #fff; margin-bottom: 4px;">
+                    University College of Engineering and Technology for Women (UCETW)
+                </h3>
+                <div style="font-size: 0.92rem; color: #38bdf8; font-weight: 700; margin-bottom: 6px;">
+                    Kakatiya University, Warangal, Telangana – 506009
+                </div>
+                <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
+                    Department of Computer Science & Engineering (Artificial Intelligence and Machine Learning). Final-Year Capstone Project demonstrating modern full-stack engineering, multi-turn AI negotiation game algorithms, Google Gemini LLM integration, and multi-seller price transparency.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLATFORM CAPABILITIES SUMMARY -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+        <div class="card" style="padding: 18px; border-left: 4px solid #10b981;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 4px;">
+                <i class="fa-solid fa-microphone text-emerald-400"></i> Voice STT / TTS Assistant
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">
+                Full voice input recording via speech recognition and animated talking robot voice response using Web Speech Synthesis.
+            </p>
+        </div>
+
+        <div class="card" style="padding: 18px; border-left: 4px solid #a855f7;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 4px;">
+                <i class="fa-solid fa-gamepad text-purple-400"></i> Festival Negotiation Game
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">
+                Play Bathukamma and Diwali bargain mini-games, earn coupons (e.g. BATHUKAMMA20: Rs.200 -> Rs.180), and place instant orders!
+            </p>
+        </div>
+
+        <div class="card" style="padding: 18px; border-left: 4px solid #38bdf8;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 4px;">
+                <i class="fa-solid fa-camera-retro text-cyan-400"></i> Empty Space Visual AI
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">
+                Upload photos of empty rooms, walls, or kitchen counters; AI scans the area and recommends matching furniture and decor from 500 catalog items.
+            </p>
+        </div>
+
+        <div class="card" style="padding: 18px; border-left: 4px solid #f59e0b;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 4px;">
+                <i class="fa-solid fa-scale-balanced text-amber-400"></i> Multi-Seller Risk Transparency
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">
+                Compare identical products across verified safe sellers (Prime), marketplace merchants, and high-risk sellers with clear risk badges.
+            </p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<div class="orders-page">
+
+    <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+            Order History & Tracking
+        </h1>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Review past transactions, itemized negotiated savings, and real-time shipment status.
+        </p>
+    </div>
+
+    {% if orders %}
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        {% for order in orders %}
+        <div class="card" style="padding: 24px;">
+            <!-- Order Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 18px;">
+                <div>
+                    <div style="font-size: 1.15rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                        Order #{{ order.order_number }}
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
+                        Placed on {{ order.created_at.strftime('%d %b %Y, %I:%M %p') if order.created_at else '' }} • Tracking ID: <strong style="color: var(--accent-teal);">{{ order.tracking_number }}</strong>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <span class="badge {% if order.status == 'Delivered' %}badge-low-risk{% elif order.status in ['Shipped', 'Out for Delivery'] %}badge-savings{% else %}badge-medium-risk{% endif %}">
+                        <i class="fa-solid {% if order.status == 'Delivered' %}fa-circle-check{% else %}fa-truck{% endif %}"></i> {{ order.status }}
+                    </span>
+                    <a href="{{ url_for('orders.track_order', identifier=order.id) }}" class="btn btn-secondary btn-sm">
+                        <i class="fa-solid fa-route"></i> Live Tracking
+                    </a>
+                </div>
+            </div>
+
+            <!-- Items in Order -->
+            <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 18px;">
+                {% for it in order.items %}
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem;">
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <img src="{{ it.product.image_url if it.product else '' }}" alt="{{ it.product_name }}" style="width: 48px; height: 48px; object-fit: contain; background: #0b1120; border-radius: var(--radius-sm); padding: 4px;">
+                        <div>
+                            <div style="font-weight: 700; color: #fff;">{{ it.product_name }}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Quantity: {{ it.quantity }}</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                            {{ format_inr(it.unit_price * it.quantity) }}
+                        </div>
+                        {% if it.savings > 0 %}
+                        <div style="font-size: 0.72rem; color: #10b981; font-weight: 600;">
+                            Saved {{ format_inr(it.savings) }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Footer Metrics -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 14px; border-top: 1px solid var(--border-color); font-size: 0.85rem;">
+                <div style="color: var(--text-muted);">
+                    Paid via <strong>{{ order.payment_method }}</strong> • Ship to <strong>{{ order.shipping_address.split(',')[0] }}</strong>
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 14px;">
+                    {% if order.total_savings > 0 %}
+                    <span style="color: #10b981; font-weight: 700;">
+                        <i class="fa-solid fa-piggy-bank"></i> Saved {{ format_inr(order.total_savings) }}
+                    </span>
+                    {% endif %}
+                    <span style="font-size: 1.15rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                        Total: {{ format_inr(order.total_amount) }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; padding: 60px 20px;">
+        <i class="fa-solid fa-receipt" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 16px;"></i>
+        <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 8px;">No Orders Placed Yet</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
+            Your past purchases and live shipment tracking milestones will appear here.
+        </p>
+        <a href="{{ url_for('products.product_list') }}" class="btn btn-primary">
+            Start Shopping
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

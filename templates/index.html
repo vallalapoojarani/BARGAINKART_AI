@@ -1,0 +1,291 @@
+{% extends "base.html" %}
+
+{% block title %}Shop Smarter. Verify. Bargain. Save.{% endblock %}
+
+{% block content %}
+<div class="landing-page-wrapper">
+
+    <!-- HERO SECTION -->
+    <section class="hero-section" style="padding: 40px 0 60px; text-align: center; position: relative;">
+        <div class="hero-badge" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); padding: 6px 16px; border-radius: 9999px; font-size: 0.8rem; font-weight: 700; color: #a5b4fc; margin-bottom: 24px;">
+            <i class="fa-solid fa-wand-magic-sparkles text-accent"></i> Final-Year CSE / AIML Academic Capstone
+        </div>
+
+        <h1 style="font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.15; color: #fff; max-width: 900px; margin: 0 auto 20px; font-family: 'Space Grotesk', sans-serif;">
+            Shop Smarter. <span style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Verify Before You Buy.</span><br>
+            <span style="background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Bargain Before You Pay.</span>
+        </h1>
+
+        <p style="font-size: 1.15rem; color: #94a3b8; max-width: 680px; margin: 0 auto 36px; line-height: 1.6;">
+            BARGAINKART is the next-generation e-commerce system that combines explainable AI authenticity audits, multi-seller price transparency, and real-time automated conversational price negotiation.
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 50px;">
+            <a href="{{ url_for('products.product_list') }}" class="btn btn-primary" style="padding: 14px 28px; font-size: 1rem;">
+                <i class="fa-solid fa-box-open"></i> Browse 500 Products
+            </a>
+            <a href="{{ url_for('game_zone.game_zone') }}" class="btn btn-secondary" style="background: linear-gradient(135deg, #a855f7, #ec4899); border: none; padding: 14px 28px; font-size: 1rem; color: #fff; box-shadow: 0 4px 20px rgba(236,72,153,0.3);">
+                <i class="fa-solid fa-gamepad"></i> Game Zone & Rewards
+            </a>
+            <button class="btn btn-ai" onclick="document.getElementById('openAssistantBtn').click()" style="padding: 14px 28px; font-size: 1rem;">
+                <i class="fa-solid fa-robot"></i> Talking AI Assistant
+            </button>
+            <a href="{{ url_for('dashboard.about') }}" class="btn btn-secondary" style="padding: 14px 28px; font-size: 1rem; border-color: rgba(16,185,129,0.3); color: #34d399;">
+                <i class="fa-solid fa-graduation-cap"></i> Team 10 AIML
+            </a>
+        </div>
+
+        <!-- Live Platform Stats Strip -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; max-width: 1000px; margin: 0 auto; background: rgba(30, 41, 59, 0.5); border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 20px 24px;">
+            <div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">94.8%</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Avg Authenticity Accuracy</div>
+            </div>
+            <div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #10b981; font-family: 'Space Grotesk', sans-serif;">₹8,420</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Avg User Savings</div>
+            </div>
+            <div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #c084fc; font-family: 'Space Grotesk', sans-serif;">3 Rounds</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">AI Negotiation Engine</div>
+            </div>
+            <div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #38bdf8; font-family: 'Space Grotesk', sans-serif;">100%</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; text-transform: uppercase; font-weight: 600;">Transparent Price Matrix</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW BARGAINKART WORKS -->
+    <section style="margin: 60px 0;">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-teal); text-transform: uppercase; letter-spacing: 1px;">Workflow</span>
+            <h2 style="font-size: 2rem; font-weight: 800; color: #fff; margin-top: 6px; font-family: 'Space Grotesk', sans-serif;">How BargainKart Works</h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+            <div class="card" style="text-align: center; padding: 30px 20px;">
+                <div style="width: 54px; height: 54px; border-radius: 50%; background: rgba(99, 102, 241, 0.15); color: #818cf8; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin: 0 auto 18px;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 10px;">1. Browse & Select</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                    Explore verified electronics, flagship laptops, and tech gadgets backed by full specification datasheets.
+                </p>
+            </div>
+
+            <div class="card" style="text-align: center; padding: 30px 20px;">
+                <div style="width: 54px; height: 54px; border-radius: 50%; background: rgba(16, 185, 129, 0.15); color: #34d399; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin: 0 auto 18px;">
+                    <i class="fa-solid fa-shield-check"></i>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 10px;">2. AI Verification</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                    Our ML model evaluates seller trust, review NLP signals, and price anomalies to generate an explainable confidence score.
+                </p>
+            </div>
+
+            <div class="card" style="text-align: center; padding: 30px 20px;">
+                <div style="width: 54px; height: 54px; border-radius: 50%; background: rgba(6, 182, 212, 0.15); color: #22d3ee; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin: 0 auto 18px;">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 10px;">3. Compare Transparency</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                    View identical product listings across verified sellers and external platforms to instantly lock the lowest base price.
+                </p>
+            </div>
+
+            <div class="card" style="text-align: center; padding: 30px 20px;">
+                <div style="width: 54px; height: 54px; border-radius: 50%; background: rgba(168, 85, 247, 0.15); color: #c084fc; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin: 0 auto 18px;">
+                    <i class="fa-solid fa-handshake"></i>
+                </div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 10px;">4. Bargain & Save</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                    Make your custom offer. The AI negotiates against inventory pressure and margin boundaries to lock in exclusive cart savings.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- THREE PILLARS SHOWCASE: AI VERIFICATION, PRICE TRANSPARENCY, NEGOTIATION -->
+    <section style="margin: 60px 0;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+            <!-- Pillar 1 -->
+            <div class="card" style="border-top: 4px solid #10b981;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                    <span class="badge badge-low-risk"><i class="fa-solid fa-shield-halved"></i> 96.5% Confidence</span>
+                    <span style="font-size: 0.75rem; color: #10b981; font-weight: 700;">LOW RISK</span>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 12px;">Explainable AI Verification</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
+                    Never buy a counterfeit. Our multi-factor model inspects seller history, price anomaly distance, specification integrity, and review linguistic authenticity.
+                </p>
+                <a href="{{ url_for('verify.verify_center') }}" class="btn btn-secondary btn-sm" style="width: 100%;">
+                    Test Verification Studio <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="card" style="border-top: 4px solid #06b6d4;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                    <span class="badge badge-savings"><i class="fa-solid fa-tag"></i> Real-Time Matrix</span>
+                    <span style="font-size: 0.75rem; color: #38bdf8; font-weight: 700;">₹5,000+ SPREAD</span>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 12px;">Price Transparency Engine</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
+                    Compare identical models across independent vendors and leading marketplaces. We automatically highlight the lowest eligible offer with zero hidden markups.
+                </p>
+                <a href="{{ url_for('compare.compare_center') }}" class="btn btn-secondary btn-sm" style="width: 100%;">
+                    Open Comparison Hub <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="card" style="border-top: 4px solid #a855f7;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                    <span class="badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3);"><i class="fa-solid fa-handshake"></i> Multi-Round</span>
+                    <span style="font-size: 0.75rem; color: #c084fc; font-weight: 700;">AI COUNTER-OFFER</span>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 12px;">Dynamic AI Negotiation</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
+                    Enter your target offer. The AI analyzes seller reserve margin and market predictions to calculate counter-offers. Agreed savings apply directly to your cart!
+                </p>
+                <a href="{{ url_for('negotiate.negotiate_center') }}" class="btn btn-secondary btn-sm" style="width: 100%;">
+                    Start AI Bargaining <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED PRODUCTS CAROUSEL / GRID -->
+    <section style="margin: 60px 0;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 12px;">
+            <div>
+                <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-purple); text-transform: uppercase; letter-spacing: 1px;">Verified Catalog</span>
+                <h2 style="font-size: 1.8rem; font-weight: 800; color: #fff; margin-top: 4px; font-family: 'Space Grotesk', sans-serif;">Featured Smart Deals</h2>
+            </div>
+            <a href="{{ url_for('products.product_list') }}" class="btn btn-secondary btn-sm">
+                View All Products <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="products-grid">
+            {% for product in featured_products %}
+            <div class="product-card">
+                <div class="product-card-image">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+                    <div class="card-top-badges">
+                        <span class="badge badge-low-risk">
+                            <i class="fa-solid fa-shield-check"></i> Authentic
+                        </span>
+                        {% if product.potential_savings > 0 %}
+                        <span class="badge badge-savings">
+                            Save {{ product.potential_savings_percent }}%
+                        </span>
+                        {% endif %}
+                    </div>
+                    <button class="wishlist-toggle-btn" data-product-id="{{ product.id }}" title="Toggle Wishlist">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                </div>
+
+                <div class="product-card-body">
+                    <div class="product-brand">{{ product.brand }}</div>
+                    <a href="{{ url_for('products.product_detail', product_id=product.id) }}" class="product-title" title="{{ product.name }}">
+                        {{ product.name }}
+                    </a>
+
+                    <div class="product-rating">
+                        <span class="stars"><i class="fa-solid fa-star"></i> {{ product.rating }}</span>
+                        <span>({{ product.review_count }} reviews)</span>
+                        <span style="margin-left: auto; color: #10b981; font-weight: 600; font-size: 0.72rem;">
+                            <i class="fa-solid fa-check"></i> In Stock
+                        </span>
+                    </div>
+
+                    <div class="product-pricing-box">
+                        <div class="price-row">
+                            <span class="current-price">{{ format_inr(product.base_price) }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="lowest-market-price">Lowest: {{ format_inr(product.lowest_seller_price) }}</span>
+                            {% if product.potential_savings > 0 %}
+                            <span class="savings-tag">Save {{ format_inr(product.potential_savings) }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- 6 Required Actions on Product Card -->
+                    <div class="product-card-actions">
+                        <a href="{{ url_for('products.product_detail', product_id=product.id) }}" class="btn-card-action">
+                            <i class="fa-solid fa-eye"></i> View
+                        </a>
+                        <a href="{{ url_for('verify.verify_center', product_id=product.id) }}" class="btn-card-action">
+                            <i class="fa-solid fa-shield"></i> Verify
+                        </a>
+                        <a href="{{ url_for('compare.compare_center', product_id=product.id) }}" class="btn-card-action">
+                            <i class="fa-solid fa-code-compare"></i> Compare
+                        </a>
+                        <a href="{{ url_for('negotiate.negotiate_center', product_id=product.id) }}" class="btn-card-action btn-negotiate">
+                            <i class="fa-solid fa-handshake"></i> Bargain
+                        </a>
+                        <button class="btn-card-action wishlist-toggle-btn" data-product-id="{{ product.id }}" style="position: static; width: 100%; height: auto; border-radius: var(--radius-sm); background: rgba(255,255,255,0.04);">
+                            <i class="fa-regular fa-heart"></i> Wishlist
+                        </button>
+                        <button class="btn-card-action btn-cart btn-add-to-cart" data-product-id="{{ product.id }}">
+                            <i class="fa-solid fa-cart-plus"></i> Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- CUSTOMER BENEFITS & ACADEMIC VALUE -->
+    <section class="card" style="margin: 60px 0; background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);">
+        <div style="text-align: center; max-width: 700px; margin: 0 auto 36px;">
+            <h2 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                Built For Academic Rigor & Production Scalability
+            </h2>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 8px;">
+                Designed for final-year CSE/AIML presentation with explainable machine learning heuristics, real-time database persistence, and REST APIs.
+            </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+            <div style="padding: 16px; background: rgba(15, 23, 42, 0.5); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <i class="fa-solid fa-brain" style="font-size: 1.4rem; color: #c084fc; margin-bottom: 10px;"></i>
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #fff;">Explainable AI Scoring</h4>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+                    Clear factor-by-factor breakdown rather than black-box claims. Transparent confidence metrics.
+                </p>
+            </div>
+
+            <div style="padding: 16px; background: rgba(15, 23, 42, 0.5); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <i class="fa-solid fa-lock" style="font-size: 1.4rem; color: #34d399; margin-bottom: 10px;"></i>
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #fff;">Session Security</h4>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+                    Werkzeug secure salted password hashing, route guards, and zero plaintext credentials.
+                </p>
+            </div>
+
+            <div style="padding: 16px; background: rgba(15, 23, 42, 0.5); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <i class="fa-solid fa-chart-line" style="font-size: 1.4rem; color: #38bdf8; margin-bottom: 10px;"></i>
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #fff;">Chart.js Analytics</h4>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+                    8 dynamic visual charts mapping spending, savings, authenticity distribution, and negotiations.
+                </p>
+            </div>
+
+            <div style="padding: 16px; background: rgba(15, 23, 42, 0.5); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <i class="fa-solid fa-database" style="font-size: 1.4rem; color: #fbbf24; margin-bottom: 10px;"></i>
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #fff;">PostgreSQL Ready</h4>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+                    Relational schema with foreign keys, ready for instant production deployment.
+                </p>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

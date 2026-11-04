@@ -1,0 +1,661 @@
+[
+  {
+    "id": 1,
+    "name": "Apple MacBook Pro 16\" (M3 Max, 36GB, 1TB SSD)",
+    "brand": "Apple",
+    "category": "Laptops",
+    "base_price": 349900.0,
+    "rating": 4.9,
+    "review_count": 124,
+    "stock": 18,
+    "image_url": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80",
+    "description": "The ultimate professional workstation powered by Apple Silicon M3 Max. Features Liquid Retina XDR display, 22-hour battery life, and studio-grade microphones.",
+    "specs": {
+      "Processor": "Apple M3 Max 16-Core CPU",
+      "GPU": "40-Core Neural Graphics",
+      "Memory": "36GB Unified RAM",
+      "Storage": "1TB NVMe Fast SSD",
+      "Display": "16.2-inch Liquid Retina XDR (3456 x 2234)",
+      "Battery": "Up to 22 hours video playback",
+      "Weight": "2.16 kg"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 2,
+    "name": "Dell XPS 15 OLED (Intel Core i9, 32GB, RTX 4070)",
+    "brand": "Dell",
+    "category": "Laptops",
+    "base_price": 214990.0,
+    "rating": 4.7,
+    "review_count": 86,
+    "stock": 22,
+    "image_url": "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=800&q=80",
+    "description": "Premium ultraportable creator laptop featuring a stunning 3.5K OLED InfinityEdge touch screen and NVIDIA GeForce RTX 4070 studio GPU.",
+    "specs": {
+      "Processor": "Intel Core i9-13900H (14 Cores)",
+      "GPU": "NVIDIA GeForce RTX 4070 8GB GDDR6",
+      "Memory": "32GB DDR5 4800MHz",
+      "Storage": "1TB PCIe Gen4 SSD",
+      "Display": "15.6\" 3.5K (3456x2160) OLED Touch",
+      "Battery": "86Whr ExpressCharge",
+      "Weight": "1.92 kg"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 3,
+    "name": "Apple iPhone 15 Pro Max (256GB, Natural Titanium)",
+    "brand": "Apple",
+    "category": "Smartphones",
+    "base_price": 148900.0,
+    "rating": 4.9,
+    "review_count": 342,
+    "stock": 35,
+    "image_url": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80",
+    "description": "Forged in aerospace-grade titanium with the groundbreaking A17 Pro chip, customizable Action button, and 5x optical telephoto camera system.",
+    "specs": {
+      "Chipset": "Apple A17 Pro (3nm architecture)",
+      "Display": "6.7-inch Super Retina XDR OLED, 120Hz ProMotion",
+      "Camera": "48MP Main + 12MP Ultra-Wide + 12MP 5x Telephoto",
+      "Storage": "256GB High-Speed Flash",
+      "Material": "Grade 5 Titanium frame with Ceramic Shield",
+      "Connector": "USB-C with USB 3 speeds (10Gbps)"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 4,
+    "name": "Samsung Galaxy S24 Ultra (512GB, Titanium Gray, AI Enabled)",
+    "brand": "Samsung",
+    "category": "Smartphones",
+    "base_price": 129999.0,
+    "rating": 4.8,
+    "review_count": 210,
+    "stock": 40,
+    "image_url": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=800&q=80",
+    "description": "The standard of mobile intelligence. Galaxy AI live translation, Circle to Search, 200MP Quad Tele zoom camera, and integrated S-Pen stylus.",
+    "specs": {
+      "Chipset": "Snapdragon 8 Gen 3 for Galaxy",
+      "Display": "6.8\" Dynamic AMOLED 2X, 2600 nits, Gorilla Armor",
+      "Camera": "200MP + 50MP + 12MP + 10MP Quad Tele",
+      "Memory & Storage": "12GB RAM + 512GB UFS 4.0",
+      "Battery": "5,000 mAh 45W Fast Charging",
+      "Stylus": "Embedded Bluetooth S-Pen"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 5,
+    "name": "OnePlus 12 5G (16GB RAM, 512GB, Silky Black)",
+    "brand": "OnePlus",
+    "category": "Smartphones",
+    "base_price": 64999.0,
+    "rating": 4.6,
+    "review_count": 148,
+    "stock": 28,
+    "image_url": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=800&q=80",
+    "description": "Flagship killer reinvented. Snapdragon 8 Gen 3, 4th Gen Hasselblad Camera system, 2K 120Hz ProXDR display, and 100W SUPERVOOC charging.",
+    "specs": {
+      "Processor": "Qualcomm Snapdragon 8 Gen 3",
+      "RAM": "16GB LPDDR5X",
+      "Storage": "512GB UFS 4.0",
+      "Charging": "100W Wired + 50W AIRVOOC Wireless",
+      "Battery": "5400 mAh dual-cell",
+      "Camera": "50MP Sony LYT-808 + 64MP Periscope 3X"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 6,
+    "name": "Sony WH-1000XM5 Wireless Noise Cancelling Headphones",
+    "brand": "Sony",
+    "category": "Audio",
+    "base_price": 29990.0,
+    "rating": 4.8,
+    "review_count": 420,
+    "stock": 45,
+    "image_url": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80",
+    "description": "Industry-leading noise cancellation with two processors and 8 microphones. Hi-Res Audio, LDAC support, and exceptional 30-hour battery life.",
+    "specs": {
+      "Noise Cancellation": "Dual Processor V1 + HD QN1",
+      "Drivers": "30mm carbon fiber composite dome",
+      "Battery Life": "30 hours (ANC On), 40 hours (ANC Off)",
+      "Codecs": "LDAC, AAC, SBC",
+      "Weight": "250 grams",
+      "Microphones": "8 beamforming mics with AI noise reduction"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 7,
+    "name": "Bose QuietComfort Ultra Wireless Headphones",
+    "brand": "Bose",
+    "category": "Audio",
+    "base_price": 35900.0,
+    "rating": 4.7,
+    "review_count": 180,
+    "stock": 19,
+    "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
+    "description": "World-class active noise cancellation with breakthrough Bose Immersive Audio spatial sound and custom-tuned acoustic architecture.",
+    "specs": {
+      "Spatial Audio": "Bose Immersive Audio mode",
+      "Connectivity": "Bluetooth 5.3 with SimpleSync",
+      "Battery": "Up to 24 hours (18 hrs with Immersive)",
+      "Quick Charge": "15-min charge gives 2.5 hours",
+      "Design": "Luxe leatherette cushions, aluminum arms"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 8,
+    "name": "Sony PlayStation 5 Slim Console (Disc Edition, 1TB)",
+    "brand": "Sony",
+    "category": "Gaming",
+    "base_price": 54990.0,
+    "rating": 4.9,
+    "review_count": 560,
+    "stock": 14,
+    "image_url": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=800&q=80",
+    "description": "Slimmer form factor with 1TB ultra-high speed SSD, ray tracing, 4K-TV gaming at up to 120fps, HDR technology, and Tempest 3D AudioTech.",
+    "specs": {
+      "Storage": "1TB Custom High-Speed NVMe SSD",
+      "Optical Drive": "Ultra HD Blu-ray Disc Player",
+      "Video Output": "HDMI 2.1 supporting 4K 120Hz & 8K TVs",
+      "Controller": "DualSense Wireless Controller with Haptic Feedback",
+      "Audio": "Tempest 3D AudioTech engine"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 9,
+    "name": "ASUS ROG Zephyrus G16 (Core Ultra 9, RTX 4080, OLED)",
+    "brand": "ASUS",
+    "category": "Laptops",
+    "base_price": 249990.0,
+    "rating": 4.8,
+    "review_count": 74,
+    "stock": 12,
+    "image_url": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=800&q=80",
+    "description": "Precision-crafted CNC aluminum gaming powerhouse. Features 2.5K 240Hz ROG Nebula OLED display, Intel AI Boost NPU, and vapor chamber cooling.",
+    "specs": {
+      "CPU": "Intel Core Ultra 9 185H with AI NPU",
+      "GPU": "NVIDIA GeForce RTX 4080 12GB GDDR6",
+      "Display": "16\" 2.5K (2560x1600) 240Hz OLED 0.2ms",
+      "RAM": "32GB LPDDR5X 7467MHz",
+      "Storage": "2TB PCIe 4.0 NVMe SSD",
+      "Chassis": "1.49cm thin CNC Aluminum Unibody"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 10,
+    "name": "Apple Watch Ultra 2 (GPS + Cellular, 49mm Titanium)",
+    "brand": "Apple",
+    "category": "Watches & Wearables",
+    "base_price": 89900.0,
+    "rating": 4.9,
+    "review_count": 165,
+    "stock": 26,
+    "image_url": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
+    "description": "The most capable and rugged Apple Watch. Precision dual-frequency GPS, 3000-nit display, depth gauge to 40m, and up to 72 hours in Low Power Mode.",
+    "specs": {
+      "Case": "49mm aerospace-grade titanium with raised bezel",
+      "Display": "Always-On Retina display, 3000 nits peak",
+      "Water Resistance": "100m water resistant, EN13319 dive rated",
+      "Sensors": "Blood Oxygen, ECG, Temperature sensing",
+      "Connectivity": "LTE Cellular + Dual-Frequency L1 & L5 GPS",
+      "Battery": "36 hours normal use / 72 hours Low Power"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 11,
+    "name": "Tissot PRX Powermatic 80 Automatic (40mm Blue Dial)",
+    "brand": "Tissot",
+    "category": "Watches & Wearables",
+    "base_price": 62500.0,
+    "rating": 4.8,
+    "review_count": 92,
+    "stock": 15,
+    "image_url": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=800&q=80",
+    "description": "Swiss precision craftsmanship with an integrated 1978 design unibody bracelet, waffle-pattern sunray dial, and Nivachron anti-magnetic balance spring.",
+    "specs": {
+      "Movement": "Swiss Made Powermatic 80.111 (80-Hour Reserve)",
+      "Case Material": "316L Stainless Steel (40mm Diameter)",
+      "Crystal": "Scratch-resistant Sapphire with Anti-reflective coating",
+      "Water Resistance": "Up to a pressure of 10 bar (100 m / 330 ft)",
+      "Case Back": "See-through exhibition sapphire case back"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 12,
+    "name": "Ray-Ban Aviator Classic Polarized (Gold / G-15 Green)",
+    "brand": "Ray-Ban",
+    "category": "Accessories",
+    "base_price": 11290.0,
+    "rating": 4.7,
+    "review_count": 230,
+    "stock": 50,
+    "image_url": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=800&q=80",
+    "description": "Originally designed for U.S. aviators in 1937. Legendary polarized mineral glass crystal lenses with 100% UV400 radiation protection.",
+    "specs": {
+      "Frame Material": "Arista Gold Metal Wire",
+      "Lenses": "Polarized G-15 Green Crystal",
+      "UV Protection": "100% UVA & UVB blocking",
+      "Bridge & Size": "Standard 58-14 mm",
+      "Origin": "Made in Italy"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 13,
+    "name": "Nintendo Switch OLED Model (Mario Red Edition)",
+    "brand": "Nintendo",
+    "category": "Gaming",
+    "base_price": 32990.0,
+    "rating": 4.7,
+    "review_count": 112,
+    "stock": 24,
+    "image_url": "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=800&q=80",
+    "description": "Vibrant 7-inch OLED screen with wide adjustable stand, enhanced audio, wired LAN port in the dock, and 64GB of internal storage in Mario signature red.",
+    "specs": {
+      "Display": "7.0 inch OLED multi-touch (1280x720)",
+      "Storage": "64 GB internal (expandable via microSDXC)",
+      "Battery": "Approximately 4.5 to 9 hours",
+      "Modes": "TV Mode, Tabletop Mode, Handheld Mode",
+      "Weight": "Approx 420g with Joy-Cons"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 14,
+    "name": "Logitech MX Master 3S Wireless Performance Mouse",
+    "brand": "Logitech",
+    "category": "Accessories",
+    "base_price": 9495.0,
+    "rating": 4.9,
+    "review_count": 380,
+    "stock": 60,
+    "image_url": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=800&q=80",
+    "description": "Quiet clicks, 8K DPI any-surface tracking including glass, MagSpeed electromagnetic scrolling, and multi-computer Flow connectivity.",
+    "specs": {
+      "Sensor": "Darkfield High Precision 8000 DPI",
+      "Scroll Wheel": "MagSpeed Electromagnetic 1000 lines/sec",
+      "Battery": "500 mAh Li-Po (70 days full charge)",
+      "Charging": "1 min charge gives 3 hours use via USB-C",
+      "Connectivity": "Bluetooth Low Energy + Logi Bolt USB"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 15,
+    "name": "Apple iPad Pro 13\" (M4 Chip, Ultra Retina XDR, 512GB)",
+    "brand": "Apple",
+    "category": "Tablets",
+    "base_price": 149900.0,
+    "rating": 4.9,
+    "review_count": 188,
+    "stock": 20,
+    "image_url": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80",
+    "description": "Unbelievably thin design with groundbreaking Tandem OLED Ultra Retina XDR display, outrageous performance of the Apple M4 chip, and Apple Pencil Pro support.",
+    "specs": {
+      "Processor": "Apple M4 chip (9-core CPU, 10-core GPU)",
+      "Display": "13-inch Ultra Retina XDR Tandem OLED, 1600 nits peak",
+      "Storage": "512GB High Speed Storage",
+      "Thickness": "5.1 mm ultra-thin unibody aluminum",
+      "Weight": "579 grams"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 16,
+    "name": "Samsung Galaxy Tab S9 Ultra (14.6\" Dynamic AMOLED 2X, S-Pen)",
+    "brand": "Samsung",
+    "category": "Tablets",
+    "base_price": 108999.0,
+    "rating": 4.8,
+    "review_count": 142,
+    "stock": 18,
+    "image_url": "https://images.unsplash.com/photo-1561154464-82e9adf32764?auto=format&fit=crop&w=800&q=80",
+    "description": "Massive 14.6-inch flagship Android workstation tablet with IP68 water resistance, bundled bidirectional charging S-Pen, and Snapdragon 8 Gen 2 for Galaxy.",
+    "specs": {
+      "Display": "14.6\" Dynamic AMOLED 2X, 120Hz, HDR10+",
+      "Processor": "Snapdragon 8 Gen 2 for Galaxy",
+      "Battery": "11,200 mAh with 45W fast charging",
+      "Durability": "Armor Aluminum frame, IP68 water & dust resistant"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 17,
+    "name": "Lenovo ThinkPad X1 Carbon Gen 12 (Intel Core Ultra 7, 32GB)",
+    "brand": "Lenovo",
+    "category": "Laptops",
+    "base_price": 178990.0,
+    "rating": 4.8,
+    "review_count": 95,
+    "stock": 16,
+    "image_url": "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=800&q=80",
+    "description": "The gold standard of enterprise ultrabooks. Carbon fiber reinforced chassis, Intel AI Boost NPU, legendary tactile ThinkPad keyboard, and 2.8K OLED display.",
+    "specs": {
+      "Processor": "Intel Core Ultra 7 155H with Intel AI Boost",
+      "RAM": "32GB LPDDR5x 7500MHz",
+      "Storage": "1TB PCIe Gen4 Performance NVMe SSD",
+      "Display": "14.0\" 2.8K (2880x1800) OLED 120Hz Anti-Glare",
+      "Weight": "1.09 kg ultra-lightweight"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 18,
+    "name": "HP Spectre x360 2-in-1 (Intel Core Ultra 7, 32GB, 2.8K OLED)",
+    "brand": "HP",
+    "category": "Laptops",
+    "base_price": 164990.0,
+    "rating": 4.7,
+    "review_count": 84,
+    "stock": 14,
+    "image_url": "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?auto=format&fit=crop&w=800&q=80",
+    "description": "Exquisite gem-cut 2-in-1 convertible laptop. 9MP AI camera with night mode, quad audio speakers tuned by Poly Studio, and 360-degree precision hinge.",
+    "specs": {
+      "Processor": "Intel Core Ultra 7 155H 16-Cores",
+      "Memory": "32GB LPDDR5x RAM",
+      "Display": "14\" 2.8K (2880 x 1800) OLED Touch 120Hz",
+      "Battery": "68Whr supporting fast charge"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 19,
+    "name": "Google Pixel 8 Pro (256GB, Bay Blue, Tensor G3, AI Magic)",
+    "brand": "Google",
+    "category": "Smartphones",
+    "base_price": 98999.0,
+    "rating": 4.7,
+    "review_count": 175,
+    "stock": 25,
+    "image_url": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=800&q=80",
+    "description": "Engineered by Google with Tensor G3 processor, pro-level triple rear camera with 5x telephoto, Best Take, Magic Editor, and 7 years of OS updates.",
+    "specs": {
+      "Chipset": "Google Tensor G3 with Titan M2 security coprocessor",
+      "Display": "6.7-inch Super Actua OLED (1344 x 2992), 2400 nits",
+      "Camera": "50MP Octa PD main + 48MP Quad PD telephoto 5x",
+      "Battery": "5050 mAh with wireless fast charging"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 20,
+    "name": "Xiaomi 14 Ultra (512GB, Leica Quad Camera, 1-inch Sensor)",
+    "brand": "Xiaomi",
+    "category": "Smartphones",
+    "base_price": 99999.0,
+    "rating": 4.8,
+    "review_count": 130,
+    "stock": 19,
+    "image_url": "https://images.unsplash.com/photo-1511707171634-5f897ff02560?auto=format&fit=crop&w=800&q=80",
+    "description": "Mobile photography pinnacle co-engineered with Leica. Features four 50MP cameras with stepless variable aperture f/1.63-f/4.0 and Snapdragon 8 Gen 3.",
+    "specs": {
+      "Optics": "Leica Summilux Quad 50MP system with 1-inch LYT-900",
+      "SoC": "Snapdragon 8 Gen 3 Mobile Platform (4nm)",
+      "Display": "6.73\" WQHD+ AMOLED, 3000 nits, Dolby Vision",
+      "Charging": "90W HyperCharge + 80W Wireless HyperCharge"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 21,
+    "name": "Nothing Phone (2) (512GB, Dark Grey, Glyph Interface)",
+    "brand": "Nothing",
+    "category": "Smartphones",
+    "base_price": 44999.0,
+    "rating": 4.6,
+    "review_count": 192,
+    "stock": 32,
+    "image_url": "https://images.unsplash.com/photo-1580910051074-3eb694886505?auto=format&fit=crop&w=800&q=80",
+    "description": "Iconic transparent back with customizable Glyph light interface. Snapdragon 8+ Gen 1, dual 50MP Sony flagship cameras, and Nothing OS 2.5.",
+    "specs": {
+      "Processor": "Qualcomm Snapdragon 8+ Gen 1",
+      "Interface": "Glyph Interface with 33 addressable LED zones",
+      "Display": "6.7\" flexible LTPO OLED, 120Hz adaptive",
+      "Battery": "4700 mAh with 45W PPS fast charge"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 22,
+    "name": "Sennheiser Momentum 4 Wireless Audiophile Headphones",
+    "brand": "Sennheiser",
+    "category": "Audio",
+    "base_price": 27990.0,
+    "rating": 4.8,
+    "review_count": 215,
+    "stock": 28,
+    "image_url": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80",
+    "description": "Signature audiophile acoustics with 42mm transducer system. Industry-crushing 60-hour battery life, Adaptive Hybrid ANC, and customizable sound zones.",
+    "specs": {
+      "Battery Life": "Unsurpassed 60 hours continuous playback with ANC",
+      "Transducer": "42mm audiophile dynamic driver",
+      "Codecs": "aptX, aptX Adaptive, AAC, SBC",
+      "Weight": "293 grams"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 23,
+    "name": "Marshall Stanmore III Bluetooth Home Speaker",
+    "brand": "Marshall",
+    "category": "Audio",
+    "base_price": 37999.0,
+    "rating": 4.7,
+    "review_count": 160,
+    "stock": 22,
+    "image_url": "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80",
+    "description": "Iconic rock-and-roll vintage aesthetic with re-engineered wider soundstage. Outward-angled tweeters, updated waveguides, and Bluetooth 5.2 LE.",
+    "specs": {
+      "Power Amplifiers": "One 50 Watt Class D (Woofer) + Two 15 Watt (Tweeters)",
+      "Frequency Range": "45\u201320,000 Hz",
+      "Inputs": "3.5 mm AUX, RCA inputs, Bluetooth 5.2"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 24,
+    "name": "Apple AirPods Max (Space Gray, Computational Audio)",
+    "brand": "Apple",
+    "category": "Audio",
+    "base_price": 59900.0,
+    "rating": 4.8,
+    "review_count": 295,
+    "stock": 18,
+    "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
+    "description": "High-fidelity audio with active noise cancellation and Transparency mode. Knit-mesh canopy and memory foam ear cushions for exceptional acoustic seal.",
+    "specs": {
+      "Acoustic Driver": "Apple-designed 40mm dynamic driver",
+      "Chips": "Apple H1 headphone chip (one in each ear cup)",
+      "Battery": "Up to 20 hours listening time with ANC"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 25,
+    "name": "Microsoft Xbox Series X Console (1TB NVMe, True 4K)",
+    "brand": "Microsoft",
+    "category": "Gaming",
+    "base_price": 55990.0,
+    "rating": 4.8,
+    "review_count": 310,
+    "stock": 16,
+    "image_url": "https://images.unsplash.com/photo-1621259182978-fbf93132d53d?auto=format&fit=crop&w=800&q=80",
+    "description": "The fastest, most powerful Xbox ever. 12 teraflops of raw graphic processing power, DirectX ray tracing, custom SSD, and Quick Resume across games.",
+    "specs": {
+      "CPU & GPU": "8X Cores @ 3.8 GHz AMD Zen 2 + 12 TFLOPS RDNA 2",
+      "Memory & Storage": "16GB GDDR6 + 1TB Custom NVMe SSD",
+      "Resolution": "True 4K Gaming up to 120 FPS, 8K HDR support"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 26,
+    "name": "Valve Steam Deck OLED (1TB, 90Hz HDR, Handheld PC)",
+    "brand": "Valve",
+    "category": "Gaming",
+    "base_price": 68500.0,
+    "rating": 4.9,
+    "review_count": 180,
+    "stock": 12,
+    "image_url": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=800&q=80",
+    "description": "Brilliant 7.4-inch HDR OLED display with pure blacks and 90Hz refresh rate. Custom 6nm AMD APU, WiFi 6E, and 50Whr battery for extended gaming on the go.",
+    "specs": {
+      "Display": "7.4\" diagonal 1280 x 800 HDR OLED 90Hz, 1000 nits",
+      "APU": "6nm AMD \"Sephiroth\" APU (Zen 2 4c/8t + RDNA 2)",
+      "Storage": "1TB High-speed NVMe SSD with etched anti-glare glass"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 27,
+    "name": "ASUS ROG Ally Z1 Extreme Gaming Handheld (512GB, 120Hz FHD)",
+    "brand": "ASUS",
+    "category": "Gaming",
+    "base_price": 59990.0,
+    "rating": 4.7,
+    "review_count": 140,
+    "stock": 20,
+    "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+    "description": "Windows 11 gaming handheld powered by AMD Ryzen Z1 Extreme processor with RDNA 3 graphics. 120Hz FreeSync Premium display and dual-fan zero-gravity cooling.",
+    "specs": {
+      "Processor": "AMD Ryzen Z1 Extreme (8 cores, 16 threads, 8.6 TFlops)",
+      "Display": "7-inch FHD (1920 x 1080) 120Hz 500nits 100% sRGB",
+      "RAM & SSD": "16GB LPDDR5 + 512GB PCIe 4.0 NVMe"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 28,
+    "name": "Sony Alpha A7 IV Full-Frame Mirrorless Camera (Body Only)",
+    "brand": "Sony",
+    "category": "Cameras",
+    "base_price": 219990.0,
+    "rating": 4.9,
+    "review_count": 165,
+    "stock": 10,
+    "image_url": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80",
+    "description": "Groundbreaking 33MP Exmor R back-illuminated CMOS sensor, BIONZ XR processing engine, 4K 60p 10-bit 4:2:2 recording, and real-time Eye AF for creators.",
+    "specs": {
+      "Sensor": "33.0 MP 35mm full-frame Exmor R CMOS",
+      "Video": "4K 60p in Super 35 format, 4K 30p 7K oversampled",
+      "Stabilization": "5-axis optical in-body image stabilization (5.5 stops)"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 29,
+    "name": "DJI Osmo Pocket 3 Creator Combo (1\" CMOS 4K 120fps Gimbal)",
+    "brand": "DJI",
+    "category": "Cameras",
+    "base_price": 63990.0,
+    "rating": 4.9,
+    "review_count": 220,
+    "stock": 15,
+    "image_url": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=800&q=80",
+    "description": "Compact pocket-sized vlogging camera with powerful 1-inch CMOS sensor, 2-inch rotatable OLED touchscreen, 3-axis mechanical stabilization, and DJI Mic 2 transmitter.",
+    "specs": {
+      "Sensor": "1-inch CMOS with 4K/120fps high-frame-rate recording",
+      "Display": "2.0-inch rotatable OLED touchscreen",
+      "Audio": "Three-mic array with stereo recording & DJI Mic 2 support"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 30,
+    "name": "GoPro HERO12 Black Action Camera (5.3K HDR, HyperSmooth 6.0)",
+    "brand": "GoPro",
+    "category": "Cameras",
+    "base_price": 37990.0,
+    "rating": 4.7,
+    "review_count": 190,
+    "stock": 30,
+    "image_url": "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&w=800&q=80",
+    "description": "Rugged waterproof action camera with HDR 5.3K60 video, Emmy Award-winning HyperSmooth 6.0 stabilization, vertical capture mode, and Bluetooth audio support.",
+    "specs": {
+      "Video Resolution": "5.3K60, 4K120, 2.7K240 fps ultra slow motion",
+      "Stabilization": "HyperSmooth 6.0 with 360-degree Horizon Lock",
+      "Waterproof": "10 meters (33 ft) without housing"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 31,
+    "name": "LG UltraGear 34\" Curved WQHD OLED Gaming Monitor (240Hz, 0.03ms)",
+    "brand": "LG",
+    "category": "Monitors",
+    "base_price": 109990.0,
+    "rating": 4.8,
+    "review_count": 82,
+    "stock": 12,
+    "image_url": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80",
+    "description": "Immersive 800R curved UltraWide OLED gaming display. 0.03ms response time, 240Hz refresh rate, DCI-P3 98.5% color accuracy, and NVIDIA G-SYNC compatibility.",
+    "specs": {
+      "Panel": "34-inch Curved OLED 800R (3440 x 1440 WQHD)",
+      "Refresh & Response": "240Hz refresh rate with 0.03ms (GtG) response",
+      "Contrast Ratio": "1,500,000:1 with HDR True Black 400"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 32,
+    "name": "Keychron Q1 Pro Wireless Custom Mechanical Keyboard",
+    "brand": "Keychron",
+    "category": "Accessories",
+    "base_price": 18499.0,
+    "rating": 4.9,
+    "review_count": 110,
+    "stock": 25,
+    "image_url": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80",
+    "description": "Premium 75% CNC machined aluminum wireless mechanical keyboard. Double-gasket design, hot-swappable switches, screw-in stabs, and QMK/VIA programmability.",
+    "specs": {
+      "Body": "Full CNC 6063 Aluminum Body (2.0 kg solid weight)",
+      "Mounting": "Double-Gasket acoustic dampening architecture",
+      "Connectivity": "Bluetooth 5.1 + Type-C Wired (1000Hz polling)"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 33,
+    "name": "ClonePods Pro Max 2026 - Master First Copy (Sealed Box)",
+    "brand": "Generic",
+    "category": "Audio",
+    "base_price": 3499.0,
+    "rating": 2.6,
+    "review_count": 18,
+    "stock": 5,
+    "image_url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
+    "description": "Unbelievable 94% off wholesale clearance deal! Sealed box replica item with bass boost. Best deal anywhere in market.",
+    "specs": {
+      "Chip": "Generic wireless audio module",
+      "Battery": "Approx 2-3 hours playback",
+      "Origin": "Unbranded wholesale import"
+    },
+    "seller_count": 4
+  },
+  {
+    "id": 34,
+    "name": "Refurbished UltraBook SuperDeal 16GB RAM (No Brand Name)",
+    "brand": "Generic",
+    "category": "Laptops",
+    "base_price": 14999.0,
+    "rating": 2.4,
+    "review_count": 9,
+    "stock": 4,
+    "image_url": "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=800&q=80",
+    "description": "Super cheap laptop deal. Intel Core something, fast speed, contact for wholesale discount.",
+    "specs": {
+      "Processor": "Unknown refurbished dual core",
+      "RAM": "16GB mixed modules"
+    },
+    "seller_count": 4
+  }
+]

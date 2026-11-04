@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Profile & Settings{% endblock %}
+
+{% block content %}
+<div class="profile-page" style="max-width: 800px; margin: 0 auto;">
+
+    <div style="margin-bottom: 28px;">
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+            Profile & Settings
+        </h1>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Manage your account credentials, default shipping locations, and session security.
+        </p>
+    </div>
+
+    <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fa-solid fa-user-gear text-indigo-400"></i> Personal Information
+            </h3>
+            <span class="badge" style="background: rgba(99,102,241,0.2); color: #818cf8;">{{ user.role|upper }}</span>
+        </div>
+
+        <form method="POST" action="{{ url_for('auth.profile') }}">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px;">
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #e2e8f0; margin-bottom: 6px;">Full Name</label>
+                    <input type="text" name="name" value="{{ user.name }}" required
+                           style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #e2e8f0; margin-bottom: 6px;">Email Address (Immutable)</label>
+                    <input type="email" value="{{ user.email }}" readonly
+                           style="width: 100%; background: #0b0f19; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 14px; color: #94a3b8; font-size: 0.88rem; outline: none;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 18px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #e2e8f0; margin-bottom: 6px;">Phone Number</label>
+                <input type="text" name="phone" value="{{ user.phone }}" required
+                       style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #e2e8f0; margin-bottom: 6px;">Default Shipping Address</label>
+                <textarea name="address" rows="3" required
+                          style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">{{ user.address }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-floppy-disk"></i> Save Profile Changes
+            </button>
+        </form>
+    </div>
+
+    <!-- Security Information -->
+    <div class="card">
+        <h3 class="card-title" style="margin-bottom: 14px;">
+            <i class="fa-solid fa-shield-halved text-emerald-400"></i> Account Security & Cryptographic Integrity
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            Your account is authenticated via Werkzeug scrypt/pbkdf2 salted hashing. No plaintext credentials are saved in memory or on disk. All API communications operate within CORS-protected local scopes.
+        </p>
+    </div>
+
+</div>
+{% endblock %}

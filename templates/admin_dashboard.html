@@ -1,0 +1,580 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard • BargainKart Control Centre{% endblock %}
+
+{% block content %}
+<div class="admin-control-centre" style="max-width: 1350px; margin: 0 auto; padding-bottom: 60px;">
+
+    <!-- TOP HEADER MATCHING FARMCARE AI REFERENCE (IMAGE 1) -->
+    <div style="margin-bottom: 24px;">
+        <div style="font-size: 0.76rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #10b981; margin-bottom: 6px;">
+            BARGAINKART AI • CONTROL CENTRE
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
+            <div>
+                <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 6px;">
+                    Admin Dashboard
+                </h1>
+                <p style="font-size: 0.88rem; color: #94a3b8; margin: 0;">
+                    Live counts from this installation's SQLite database. No demo statistics are inserted.
+                </p>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <span class="badge" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; font-size: 0.8rem; padding: 6px 14px;">
+                    <i class="fa-solid fa-database"></i> SQLite Relational Engine Active
+                </span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-sm" style="font-size: 0.8rem; padding: 6px 14px; background: rgba(244,63,94,0.12); border-color: rgba(244,63,94,0.3); color: #fb7185;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8 LIVE DATABASE COUNT STAT CARDS (4x2 GRID MATCHING IMAGE 1) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 28px;">
+        
+        <!-- Card 1: Registered profiles -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); padding: 20px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 8px;">
+                Registered profiles
+            </div>
+            <div style="font-size: 2.4rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; line-height: 1;">
+                {{ total_users }}
+            </div>
+        </div>
+
+        <!-- Card 2: AI assessments / reports -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); padding: 20px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 8px;">
+                Authenticity checks / reports
+            </div>
+            <div style="font-size: 2.4rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; line-height: 1;">
+                {{ total_verified }}
+            </div>
+        </div>
+
+        <!-- Card 3: Catalog products in library -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); padding: 20px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 8px;">
+                Catalog products in library
+            </div>
+            <div style="font-size: 2.4rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; line-height: 1;">
+                {{ total_products }}
+            </div>
+        </div>
+
+        <!-- Card 4: Multi-seller merchant profiles -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); padding: 20px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 8px;">
+                Verified merchant profiles
+            </div>
+            <div style="font-size: 2.4rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; line-height: 1;">
+                {{ sellers|length }}
+            </div>
+        </div>
+
+        <!-- Card 5: All saved orders -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); padding: 20px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 8px;">
+                All saved orders
+            </div>
+            <div style="font-size: 2.4rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; line-height: 1;">
+                {{ total_orders }}
+            </div>
+        </div>
+
+        <!-- Card 6: All active coupons & deals -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); padding: 20px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 8px;">
+                Active coupons & deals
+            </div>
+            <div style="font-size: 2.4rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; line-height: 1;">
+                {{ total_coupons }}
+            </div>
+        </div>
+
+        <!-- Card 7: Active voice negotiations -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); padding: 20px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 8px;">
+                AI voice negotiations
+            </div>
+            <div style="font-size: 2.4rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; line-height: 1;">
+                {{ total_negotiations }}
+            </div>
+        </div>
+
+        <!-- Card 8: Customer reviews in library -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); padding: 20px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 8px;">
+                Quality reviews in library
+            </div>
+            <div style="font-size: 2.4rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; line-height: 1;">
+                {{ total_reviews }}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ORDER LOGISTICS & DELIVERY MANAGEMENT (SHIPPING, DELIVERY, REACH, CANCEL) -->
+    <div class="card" style="margin-bottom: 28px; background: rgba(15, 23, 42, 0.9); border: 1.5px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 18px; border-bottom: 1px solid rgba(148, 163, 184, 0.15); padding-bottom: 16px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.72rem; font-weight: 700;">
+                        <i class="fa-solid fa-truck-ramp-box"></i> Live Logistics Center
+                    </span>
+                    <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 0.72rem;">
+                        Real-time Delivery Pipeline
+                    </span>
+                </div>
+                <h2 style="font-size: 1.45rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 4px;">
+                    Product Orders & Delivery Management
+                </h2>
+                <p style="font-size: 0.82rem; color: #94a3b8; margin: 0;">
+                    Manage order dispatch lifecycle: Update ordered products to <strong>Shipping</strong>, <strong>Delivery</strong>, <strong>Reach (Delivered)</strong>, or <strong>Cancel</strong>.
+                </p>
+            </div>
+
+            <!-- Status Filter Tabs -->
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; background: rgba(30, 41, 59, 0.7); padding: 5px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <button type="button" class="btn btn-sm order-filter-btn active" data-filter="all" style="font-size: 0.74rem; padding: 5px 12px; border-radius: 6px; background: rgba(16,185,129,0.25); color: #34d399; border: none;">All Orders ({{ orders|length }})</button>
+                <button type="button" class="btn btn-sm order-filter-btn" data-filter="Shipped" style="font-size: 0.74rem; padding: 5px 12px; border-radius: 6px; background: transparent; color: #38bdf8; border: 1px solid rgba(56,189,248,0.3);"><i class="fa-solid fa-truck"></i> Shipping</button>
+                <button type="button" class="btn btn-sm order-filter-btn" data-filter="Out for Delivery" style="font-size: 0.74rem; padding: 5px 12px; border-radius: 6px; background: transparent; color: #c084fc; border: 1px solid rgba(168,85,247,0.3);"><i class="fa-solid fa-motorcycle"></i> Delivery</button>
+                <button type="button" class="btn btn-sm order-filter-btn" data-filter="Delivered" style="font-size: 0.74rem; padding: 5px 12px; border-radius: 6px; background: transparent; color: #34d399; border: 1px solid rgba(16,185,129,0.3);"><i class="fa-solid fa-circle-check"></i> Reach / Reached</button>
+                <button type="button" class="btn btn-sm order-filter-btn" data-filter="Cancelled" style="font-size: 0.74rem; padding: 5px 12px; border-radius: 6px; background: transparent; color: #fb7185; border: 1px solid rgba(244,63,94,0.3);"><i class="fa-solid fa-ban"></i> Cancel</button>
+            </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;" id="adminOrdersTable">
+                <thead>
+                    <tr style="border-bottom: 1.5px solid rgba(148, 163, 184, 0.2); color: #94a3b8; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <th style="padding: 12px 14px;">Order / Date</th>
+                        <th style="padding: 12px 14px;">Customer & Address</th>
+                        <th style="padding: 12px 14px;">Ordered Products</th>
+                        <th style="padding: 12px 14px;">Amount / Savings</th>
+                        <th style="padding: 12px 14px; text-align: center;">Current Status</th>
+                        <th style="padding: 12px 14px; text-align: right;">Update Delivery Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if orders %}
+                        {% for o in orders %}
+                        <tr class="order-row" data-status="{{ o.status }}" id="order-row-{{ o.id }}" style="border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0; transition: background 0.2s;">
+                            <!-- Order / Date -->
+                            <td style="padding: 12px 14px; vertical-align: top;">
+                                <strong style="color: #fff; font-family: monospace; font-size: 0.86rem; display: block;">{{ o.order_number }}</strong>
+                                <span style="font-size: 0.72rem; color: #64748b;">{{ o.created_at.strftime('%d %b %Y, %I:%M %p') if o.created_at else 'Recent' }}</span>
+                                <div style="font-size: 0.7rem; color: #38bdf8; margin-top: 3px; font-family: monospace;">Trk: {{ o.tracking_number }}</div>
+                            </td>
+
+                            <!-- Customer & Address -->
+                            <td style="padding: 12px 14px; vertical-align: top;">
+                                <div style="font-weight: 700; color: #f1f5f9; margin-bottom: 2px;">{{ o.user.name if o.user else 'Customer' }}</div>
+                                <div style="font-size: 0.74rem; color: #94a3b8; max-width: 220px; line-height: 1.3;">
+                                    <i class="fa-solid fa-location-dot" style="color: #64748b; font-size: 0.7rem;"></i> {{ o.shipping_address }}
+                                </div>
+                            </td>
+
+                            <!-- Ordered Products -->
+                            <td style="padding: 12px 14px; vertical-align: top;">
+                                {% if o.items %}
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        {% for item in o.items %}
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div style="width: 32px; height: 32px; border-radius: 4px; background: rgba(30,41,59,0.8); border: 1px solid rgba(148,163,184,0.2); overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                                {% if item.product and item.product.image_url %}
+                                                    <img src="{{ item.product.image_url }}" alt="" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100';">
+                                                {% else %}
+                                                    <i class="fa-solid fa-box text-slate-500" style="font-size: 0.8rem;"></i>
+                                                {% endif %}
+                                            </div>
+                                            <div style="font-size: 0.78rem; line-height: 1.25;">
+                                                <div style="color: #fff; font-weight: 600;">{{ item.product_name }}</div>
+                                                <div style="color: #94a3b8; font-size: 0.72rem;">Qty: <strong>{{ item.quantity }}</strong> × ₹{{ item.unit_price|int }}</div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <span style="color: #64748b; font-size: 0.75rem;">1 Item (Festive Bargain Deal)</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Amount / Savings -->
+                            <td style="padding: 12px 14px; vertical-align: top;">
+                                <div style="font-weight: 800; color: #34d399; font-size: 0.95rem;">₹{{ o.total_amount|int }}</div>
+                                {% if o.total_savings and o.total_savings > 0 %}
+                                <div style="font-size: 0.72rem; color: #fbbf24; font-weight: 600;">
+                                    <i class="fa-solid fa-tags"></i> Saved ₹{{ o.total_savings|int }}
+                                </div>
+                                {% endif %}
+                                <div style="font-size: 0.7rem; color: #64748b; margin-top: 2px;">{{ o.payment_method }}</div>
+                            </td>
+
+                            <!-- Current Status Badge -->
+                            <td style="padding: 12px 14px; text-align: center; vertical-align: middle;" id="status-badge-cell-{{ o.id }}">
+                                {% if o.status == 'Confirmed' %}
+                                    <span class="badge" style="background: rgba(234, 179, 8, 0.2); color: #facc15; font-size: 0.75rem; padding: 5px 10px; border: 1px solid rgba(234, 179, 8, 0.4);">
+                                        <i class="fa-solid fa-clock"></i> Confirmed
+                                    </span>
+                                {% elif o.status == 'Shipped' %}
+                                    <span class="badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 0.75rem; padding: 5px 10px; border: 1px solid rgba(56, 189, 248, 0.4);">
+                                        <i class="fa-solid fa-truck"></i> Shipped
+                                    </span>
+                                {% elif o.status == 'Out for Delivery' %}
+                                    <span class="badge" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; font-size: 0.75rem; padding: 5px 10px; border: 1px solid rgba(168, 85, 247, 0.4);">
+                                        <i class="fa-solid fa-motorcycle"></i> Out for Delivery
+                                    </span>
+                                {% elif o.status == 'Delivered' %}
+                                    <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.75rem; padding: 5px 10px; border: 1px solid rgba(16, 185, 129, 0.4);">
+                                        <i class="fa-solid fa-circle-check"></i> Reached / Delivered
+                                    </span>
+                                {% elif o.status == 'Cancelled' %}
+                                    <span class="badge" style="background: rgba(244, 63, 94, 0.2); color: #fb7185; font-size: 0.75rem; padding: 5px 10px; border: 1px solid rgba(244, 63, 94, 0.4);">
+                                        <i class="fa-solid fa-ban"></i> Cancelled
+                                    </span>
+                                {% else %}
+                                    <span class="badge" style="background: rgba(148, 163, 184, 0.2); color: #cbd5e1; font-size: 0.75rem; padding: 5px 10px;">
+                                        {{ o.status }}
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Update Delivery Status Action Buttons -->
+                            <td style="padding: 12px 14px; text-align: right; vertical-align: middle;">
+                                <div style="display: inline-flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end;">
+                                    <!-- Shipping Button -->
+                                    <button type="button" class="btn btn-sm" onclick="setOrderStatus({{ o.id }}, 'Shipped')" title="Mark as Shipping (Handed to Logistics)"
+                                            style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
+                                        <i class="fa-solid fa-truck"></i> Shipping
+                                    </button>
+
+                                    <!-- Delivery Button -->
+                                    <button type="button" class="btn btn-sm" onclick="setOrderStatus({{ o.id }}, 'Out for Delivery')" title="Mark for Delivery (Out for Courier Delivery)"
+                                            style="background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.35); color: #c084fc; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
+                                        <i class="fa-solid fa-motorcycle"></i> Delivery
+                                    </button>
+
+                                    <!-- Reach Button -->
+                                    <button type="button" class="btn btn-sm" onclick="setOrderStatus({{ o.id }}, 'Delivered')" title="Mark as Reached (Successfully Delivered)"
+                                            style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
+                                        <i class="fa-solid fa-circle-check"></i> Reach
+                                    </button>
+
+                                    <!-- Cancel Button -->
+                                    <button type="button" class="btn btn-sm" onclick="setOrderStatus({{ o.id }}, 'Cancelled')" title="Cancel Order"
+                                            style="background: rgba(244, 63, 94, 0.12); border: 1px solid rgba(244, 63, 94, 0.35); color: #fb7185; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
+                                        <i class="fa-solid fa-ban"></i> Cancel
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" style="padding: 24px; text-align: center; color: #94a3b8;">
+                                No customer orders recorded in system yet. Place an order or play Game Zone to see it here!
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; margin-bottom: 28px;">
+        
+        <!-- Left Table: Registered Profiles -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-lg); padding: 22px;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 4px;">
+                Registered profiles
+            </h3>
+            <p style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 16px;">
+                Local demo profiles; phone numbers are personal data. Protect the deployment and database.
+            </p>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(148, 163, 184, 0.15); color: #94a3b8; font-size: 0.72rem; text-transform: uppercase;">
+                            <th style="padding: 10px 12px;">Name</th>
+                            <th style="padding: 10px 12px;">Phone / Roll</th>
+                            <th style="padding: 10px 12px;">Role / Dept</th>
+                            <th style="padding: 10px 12px;">Created</th>
+                            <th style="padding: 10px 12px; text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); color: #e2e8f0;">
+                            <td style="padding: 10px 12px;">
+                                <strong style="color: #fff;">{{ u.name }}</strong>
+                                {% if u.is_admin %}
+                                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.65rem; margin-left: 4px;">System Admin</span>
+                                {% elif u.role == 'guide' %}
+                                <span class="badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 0.65rem; margin-left: 4px;">Project Guide</span>
+                                {% elif '23568' in (u.roll_number or '') or '24568' in (u.roll_number or '') %}
+                                <span class="badge" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; font-size: 0.65rem; margin-left: 4px;">Team 10 AIML</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 10px 12px; font-family: monospace; color: #38bdf8; font-size: 0.78rem;">
+                                {{ u.roll_number if u.roll_number else (u.phone if u.phone else '—') }}
+                            </td>
+                            <td style="padding: 10px 12px; color: #94a3b8; font-size: 0.78rem;">
+                                {% if u.is_admin %}
+                                    <strong style="color: #34d399;">Administrator</strong>
+                                {% elif u.role == 'guide' %}
+                                    <strong style="color: #38bdf8;">Project Guide</strong>
+                                {% else %}
+                                    Student / Customer
+                                {% endif %}
+                            </td>
+                            <td style="padding: 10px 12px; color: #64748b; font-size: 0.74rem;">
+                                {{ u.created_at.strftime('%Y-%m-%d') if u.created_at else '2026-10-29' }}
+                            </td>
+                            <td style="padding: 10px 12px; text-align: right;">
+                                <button type="button" class="btn btn-sm" onclick="showToast('Profile protected under academic evaluation protocol.', 'info')" 
+                                        style="background: rgba(244, 63, 94, 0.12); border: 1px solid rgba(244, 63, 94, 0.35); color: #fb7185; font-size: 0.7rem; padding: 4px 10px; border-radius: 4px;">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Right Table: Recent Reports & Orders -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-lg); padding: 22px;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 4px;">
+                Recent reports
+            </h3>
+            <p style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 16px;">
+                Logged transactions, negotiated concessions, and product authenticity audits.
+            </p>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(148, 163, 184, 0.15); color: #94a3b8; font-size: 0.72rem; text-transform: uppercase;">
+                            <th style="padding: 10px 12px;">Type</th>
+                            <th style="padding: 10px 12px;">Title</th>
+                            <th style="padding: 10px 12px; text-align: right;">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if orders %}
+                            {% for o in orders[:8] %}
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); color: #e2e8f0;">
+                                <td style="padding: 10px 12px;">
+                                    <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 0.68rem;">order</span>
+                                </td>
+                                <td style="padding: 10px 12px;">
+                                    <strong style="color: #fff;">{{ o.order_number }}</strong>
+                                    <span style="font-size: 0.74rem; color: #34d399; margin-left: 6px;">₹{{ o.total_amount|int }}</span>
+                                </td>
+                                <td style="padding: 10px 12px; color: #64748b; font-size: 0.74rem; text-align: right;">
+                                    {{ o.created_at.strftime('%Y-%m-%d') if o.created_at else '2026-11-01' }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="3" style="padding: 20px; text-align: center; color: #64748b;">No recent reports found.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SECONDARY TABLES SECTION (MATCHING REFERENCE IMAGE 3) -->
+    <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; margin-bottom: 28px;">
+        
+        <!-- Left Table: Recent Merchant Profiles -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-lg); padding: 22px;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 16px;">
+                Recent merchant profiles
+            </h3>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(148, 163, 184, 0.15); color: #94a3b8; font-size: 0.72rem; text-transform: uppercase;">
+                            <th style="padding: 10px 12px;">Name</th>
+                            <th style="padding: 10px 12px;">Rating</th>
+                            <th style="padding: 10px 12px;">Trust Score</th>
+                            <th style="padding: 10px 12px; text-align: right;">Risk Tier</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in sellers %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); color: #e2e8f0;">
+                            <td style="padding: 10px 12px;">
+                                <strong style="color: #fff;">{{ s.name }}</strong>
+                            </td>
+                            <td style="padding: 10px 12px; color: #fbbf24;">
+                                ⭐ {{ s.rating }}
+                            </td>
+                            <td style="padding: 10px 12px; color: #34d399; font-weight: 700;">
+                                {% if s.trust_score is defined %}
+                                    {{ (s.trust_score * 100)|int }}%
+                                {% else %}
+                                    {{ ((s.rating / 5.0) * 100)|int }}%
+                                {% endif %}
+                            </td>
+                            <td style="padding: 10px 12px; text-align: right;">
+                                {% if (s.risk_status is defined and s.risk_status in ['TRUSTED', 'SAFE', 'VERIFIED']) or (s.risk_level is defined and s.risk_level == 'LOW') %}
+                                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.68rem;">Prime Safe</span>
+                                {% elif (s.risk_status is defined and s.risk_status in ['MODERATE_RISK', 'MEDIUM']) or (s.risk_level is defined and s.risk_level == 'MEDIUM') %}
+                                <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-size: 0.68rem;">Marketplace</span>
+                                {% else %}
+                                <span class="badge" style="background: rgba(244, 63, 94, 0.2); color: #fb7185; font-size: 0.68rem;">High Risk</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Right Table: Active Festival Coupons & Reminders -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-lg); padding: 22px;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 16px;">
+                Upcoming reminders & active concessions
+            </h3>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(148, 163, 184, 0.15); color: #94a3b8; font-size: 0.72rem; text-transform: uppercase;">
+                            <th style="padding: 10px 12px;">Reminder / Coupon</th>
+                            <th style="padding: 10px 12px;">Due / Discount</th>
+                            <th style="padding: 10px 12px; text-align: right;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in coupons[:6] %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); color: #e2e8f0;">
+                            <td style="padding: 10px 12px;">
+                                <strong style="font-family: monospace; color: #38bdf8;">{{ c.code }}</strong>
+                                <div style="font-size: 0.72rem; color: #94a3b8;">{{ c.title }}</div>
+                            </td>
+                            <td style="padding: 10px 12px; color: #34d399; font-weight: 700;">
+                                {% if c.discount_type == 'FLAT' %}Flat ₹{{ c.discount_value|int }}{% else %}{{ c.discount_value|int }}% OFF{% endif %}
+                            </td>
+                            <td style="padding: 10px 12px; text-align: right;">
+                                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.68rem;">Active</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SECURITY FOOTER NOTE MATCHING FARMCARE AI REFERENCE (IMAGE 3) -->
+    <div style="padding: 14px 20px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(148, 163, 184, 0.15); border-radius: var(--radius-md); font-size: 0.74rem; color: #94a3b8; line-height: 1.5;">
+        <strong>Security note:</strong> this is a student-project local admin panel. Use HTTPS, a strong secret/password, production authentication, CSRF protection, backups, and database access controls before public deployment.
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Live Order Logistics & Delivery Management JavaScript
+async function setOrderStatus(orderId, newStatus) {
+    try {
+        const response = await fetch(`/api/admin/order/${orderId}/status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: newStatus })
+        });
+
+        const data = await response.json();
+        if (response.ok && data.success) {
+            const cell = document.getElementById(`status-badge-cell-${orderId}`);
+            const row = document.getElementById(`order-row-${orderId}`);
+
+            if (row) {
+                row.setAttribute('data-status', data.new_status);
+                row.style.background = 'rgba(16, 185, 129, 0.12)';
+                setTimeout(() => {
+                    row.style.background = '';
+                }, 1500);
+            }
+
+            if (cell) {
+                let badgeHtml = '';
+                if (data.new_status === 'Shipped') {
+                    badgeHtml = `<span class="badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 0.75rem; padding: 5px 10px; border: 1px solid rgba(56, 189, 248, 0.4);"><i class="fa-solid fa-truck"></i> Shipped</span>`;
+                } else if (data.new_status === 'Out for Delivery') {
+                    badgeHtml = `<span class="badge" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; font-size: 0.75rem; padding: 5px 10px; border: 1px solid rgba(168, 85, 247, 0.4);"><i class="fa-solid fa-motorcycle"></i> Out for Delivery</span>`;
+                } else if (data.new_status === 'Delivered') {
+                    badgeHtml = `<span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.75rem; padding: 5px 10px; border: 1px solid rgba(16, 185, 129, 0.4);"><i class="fa-solid fa-circle-check"></i> Reached / Delivered</span>`;
+                } else if (data.new_status === 'Cancelled') {
+                    badgeHtml = `<span class="badge" style="background: rgba(244, 63, 94, 0.2); color: #fb7185; font-size: 0.75rem; padding: 5px 10px; border: 1px solid rgba(244, 63, 94, 0.4);"><i class="fa-solid fa-ban"></i> Cancelled</span>`;
+                } else {
+                    badgeHtml = `<span class="badge" style="background: rgba(234, 179, 8, 0.2); color: #facc15; font-size: 0.75rem; padding: 5px 10px; border: 1px solid rgba(234, 179, 8, 0.4);"><i class="fa-solid fa-clock"></i> ${data.new_status}</span>`;
+                }
+                cell.innerHTML = badgeHtml;
+            }
+
+            if (typeof showToast === 'function') {
+                showToast(data.message || `Order status updated to ${data.new_status}`, 'success');
+            } else {
+                alert(data.message);
+            }
+        } else {
+            if (typeof showToast === 'function') {
+                showToast(data.error || 'Failed to update order status', 'danger');
+            } else {
+                alert(data.error || 'Failed to update order status');
+            }
+        }
+    } catch (err) {
+        console.error('Error updating order status:', err);
+        if (typeof showToast === 'function') {
+            showToast('Network error while updating order status.', 'danger');
+        }
+    }
+}
+
+// Order Filtering by Status Tab
+document.addEventListener('DOMContentLoaded', () => {
+    const filterBtns = document.querySelectorAll('.order-filter-btn');
+    const orderRows = document.querySelectorAll('.order-row');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => {
+                b.style.background = 'transparent';
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            btn.style.background = 'rgba(16, 185, 129, 0.25)';
+
+            const filter = btn.getAttribute('data-filter');
+            orderRows.forEach(row => {
+                const status = row.getAttribute('data-status');
+                if (filter === 'all' || status === filter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

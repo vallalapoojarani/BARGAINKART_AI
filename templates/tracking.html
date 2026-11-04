@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Package Tracking Timeline{% endblock %}
+
+{% block content %}
+<div class="tracking-page">
+
+    <!-- Top Navigation Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <div class="badge badge-savings" style="margin-bottom: 6px;">
+                <i class="fa-solid fa-truck-fast"></i> BargainExpress Priority Logistics
+            </div>
+            <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                Order Tracking Timeline
+            </h1>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+                Real-time milestone tracking including AI hardware quality gate verification.
+            </p>
+        </div>
+
+        {% if all_user_orders %}
+        <!-- Order Switcher -->
+        <form method="GET" action="{{ url_for('orders.track_order') }}" style="display: flex; align-items: center; gap: 10px;">
+            <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Switch Order:</label>
+            <select name="identifier" onchange="this.form.submit()" 
+                    style="background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.85rem; outline: none;">
+                {% for o in all_user_orders %}
+                <option value="{{ o.id }}" {% if order and order.id == o.id %}selected{% endif %}>
+                    #{{ o.order_number }} ({{ o.status }})
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+        {% endif %}
+    </div>
+
+    {% if order %}
+    <!-- Order Key Metrics Card -->
+    <div class="card" style="margin-bottom: 28px; background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Tracking ID</div>
+                <div style="font-size: 1.25rem; font-weight: 800; color: var(--accent-teal); font-family: 'Space Grotesk', sans-serif; margin-top: 2px;">
+                    {{ order.tracking_number }}
+                </div>
+            </div>
+
+            <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Current Status</div>
+                <div style="font-size: 1.25rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-top: 2px;">
+                    <span class="badge {% if order.status == 'Delivered' %}badge-low-risk{% else %}badge-savings{% endif %}">
+                        {{ order.status }}
+                    </span>
+                </div>
+            </div>
+
+            <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Expected Delivery</div>
+                <div style="font-size: 1.15rem; font-weight: 700; color: #fff; margin-top: 2px;">
+                    Within 2 Business Days
+                </div>
+            </div>
+
+            <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Destination Address</div>
+                <div style="font-size: 0.85rem; color: #cbd5e1; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    {{ order.shipping_address }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7-STEP VISUAL TRACKING TIMELINE -->
+    <div class="card" style="margin-bottom: 28px;">
+        <h3 class="card-title" style="margin-bottom: 24px;">
+            <i class="fa-solid fa-route text-indigo-400"></i> Shipment Journey Milestones
+        </h3>
+
+        <div class="tracking-timeline">
+            <div class="timeline-step-list">
+                {% for event in order.tracking_events %}
+                <div class="timeline-step {% if event.completed %}completed{% elif loop.first or (loop.previtem and loop.previtem.completed) %}current{% endif %}">
+                    <div class="timeline-step-circle">
+                        {% if event.completed %}
+                        <i class="fa-solid fa-check"></i>
+                        {% elif loop.index == 1 %}
+                        <i class="fa-solid fa-receipt"></i>
+                        {% elif loop.index == 2 %}
+                        <i class="fa-solid fa-credit-card"></i>
+                        {% elif loop.index == 3 %}
+                        <i class="fa-solid fa-shield-check"></i>
+                        {% elif loop.index == 4 %}
+                        <i class="fa-solid fa-box-archive"></i>
+                        {% elif loop.index == 5 %}
+                        <i class="fa-solid fa-truck-fast"></i>
+                        {% elif loop.index == 6 %}
+                        <i class="fa-solid fa-motorcycle"></i>
+                        {% else %}
+                        <i class="fa-solid fa-house-chimney"></i>
+                        {% endif %}
+                    </div>
+                    <div class="timeline-step-title">{{ event.status_title }}</div>
+                    <div class="timeline-step-desc">{{ event.location }}</div>
+                    {% if event.timestamp and event.completed %}
+                    <div style="font-size: 0.65rem; color: #10b981; margin-top: 4px;">{{ event.timestamp.strftime('%d %b, %I:%M %p') }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Detail Logs -->
+    <div class="card">
+        <h3 class="card-title" style="margin-bottom: 16px;">
+            <i class="fa-solid fa-clipboard-list text-cyan-400"></i> Milestone Activity Log
+        </h3>
+
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+            {% for event in order.tracking_events %}
+            <div style="display: flex; align-items: flex-start; gap: 16px; padding: 12px 16px; background: rgba(15, 23, 42, 0.4); border-radius: var(--radius-sm); border-left: 3px solid {% if event.completed %}#10b981{% else %}#475569{% endif %};">
+                <div style="color: {% if event.completed %}#10b981{% else %}#475569{% endif %}; font-size: 1.1rem; margin-top: 2px;">
+                    <i class="fa-solid {% if event.completed %}fa-circle-check{% else %}fa-circle-notch{% endif %}"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">{{ event.status_title }}</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">{{ event.location }}</span>
+                    </div>
+                    <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 3px;">
+                        {{ event.description }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; padding: 60px 20px;">
+        <i class="fa-solid fa-truck" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 16px;"></i>
+        <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 8px;">No Order Selected for Tracking</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
+            Place an order to monitor its live 7-stage fulfillment timeline.
+        </p>
+        <a href="{{ url_for('products.product_list') }}" class="btn btn-primary">
+            Explore Products
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

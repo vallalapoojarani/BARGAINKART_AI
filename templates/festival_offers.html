@@ -1,0 +1,634 @@
+{% extends "base.html" %}
+
+{% block title %}Grand Festival Offers & Dhamaka Deals | BargainKart{% endblock %}
+
+{% block content %}
+<div class="festival-offers-page" style="max-width: 1250px; margin: 0 auto; padding-bottom: 60px;">
+
+    <!-- Academic Guide Supervision Header Badge -->
+    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(16, 185, 129, 0.2); padding: 10px 18px; border-radius: var(--radius-md); margin-bottom: 22px; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(16,185,129,0.2); border: 1px solid #10b981; display: flex; align-items: center; justify-content: center; color: #34d399; font-size: 0.85rem;">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div>
+                <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; font-weight: 700; display: block;">Academic Guidance</span>
+                <span style="font-size: 0.86rem; font-weight: 700; color: #f1f5f9;">Project Guide: <span style="color: #34d399;">Smt. P. Vaishnavi</span> • UCETW Kakatiya University, Warangal (Team 10 AIML)</span>
+            </div>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <a href="{{ url_for('game_zone.game_zone') }}" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; background: rgba(168,85,247,0.15); border-color: rgba(168,85,247,0.4); color: #c084fc;">
+                <i class="fa-solid fa-gamepad"></i> Go to Game Zone
+            </a>
+            <span class="badge" style="background: rgba(16,185,129,0.15); color: #34d399; font-weight: 700;">
+                <i class="fa-solid fa-shield-check"></i> Backend Validated
+            </span>
+        </div>
+    </div>
+
+    <!-- 8 Festival Tab Switcher Navigation Bar -->
+    <div style="margin-bottom: 26px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <h2 style="font-size: 1.35rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                <i class="fa-solid fa-sparkles text-amber-400"></i> Explore 8 Special Festival Promotions
+            </h2>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">
+                Select any festival below to view custom promotional banners and discount cards:
+            </span>
+        </div>
+
+        <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin;">
+            {% for f in festivals %}
+            <a href="{{ url_for('festival.festival_offers', festival=f.id) }}" 
+               class="btn" 
+               style="white-space: nowrap; font-size: 0.82rem; font-weight: 700; padding: 9px 16px; border-radius: var(--radius-md); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: all 0.2s;
+               {% if current_festival.id == f.id %}
+                   background: {{ f.theme_gradient }}; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: none;
+               {% else %}
+                   background: #1e293b; color: #94a3b8; border: 1px solid var(--border-color);
+               {% endif %}">
+                <i class="{{ f.icon }}"></i>
+                <span>{{ f.name.split(' ')[0] }}</span>
+                {% if f.id == 'bathukamma' %}
+                <span style="background: rgba(255,255,255,0.25); font-size: 0.68rem; padding: 1px 6px; border-radius: 999px;">₹20 OFF</span>
+                {% elif f.id == 'diwali' %}
+                <span style="background: rgba(255,255,255,0.25); font-size: 0.68rem; padding: 1px 6px; border-radius: 999px;">10%</span>
+                {% endif %}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- MAIN FESTIVAL HERO PROMOTIONAL BANNER -->
+    <div style="background: {{ current_festival.theme_gradient }}; border-radius: var(--radius-lg); padding: 36px 32px; color: #fff; position: relative; overflow: hidden; margin-bottom: 32px; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);">
+        <!-- Festive Pattern Background Overlay -->
+        <div style="position: absolute; right: -40px; bottom: -40px; font-size: 15rem; color: rgba(255,255,255,0.06); pointer-events: none;">
+            <i class="{{ current_festival.icon }}"></i>
+        </div>
+
+        <div style="position: relative; z-index: 2; max-width: 780px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+                <span style="background: rgba(0,0,0,0.3); backdrop-filter: blur(8px); padding: 4px 12px; border-radius: 999px; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.3);">
+                    {{ current_festival.banner_badge }}
+                </span>
+                <span style="font-size: 0.85rem; font-weight: 700; color: #fef08a; letter-spacing: 0.5px;">
+                    {{ current_festival.telugu_tag }}
+                </span>
+            </div>
+
+            <h1 style="font-size: 2.3rem; font-weight: 900; line-height: 1.2; font-family: 'Space Grotesk', sans-serif; margin-bottom: 10px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+                {{ current_festival.hero_title }}
+            </h1>
+            <p style="font-size: 1rem; color: rgba(255,255,255,0.92); line-height: 1.6; margin-bottom: 24px;">
+                {{ current_festival.hero_desc }}
+            </p>
+
+            <!-- Limited-Time Countdown Timer & Highlight Offer -->
+            <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+                <div style="background: rgba(0,0,0,0.35); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.25); border-radius: var(--radius-md); padding: 10px 18px; display: flex; align-items: center; gap: 14px;">
+                    <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; color: #fed7aa;">
+                        <i class="fa-solid fa-clock"></i> Offer Ends In:
+                    </div>
+                    <div style="display: flex; gap: 8px; font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 1.15rem;">
+                        <span id="timerHours">18</span><span style="opacity: 0.7;">h</span>
+                        <span id="timerMins">44</span><span style="opacity: 0.7;">m</span>
+                        <span id="timerSecs" style="color: #fde047;">30</span><span style="opacity: 0.7;">s</span>
+                    </div>
+                </div>
+
+                <!-- Highlight Coupon Code Pill -->
+                <div style="background: #fff; color: #0f172a; border-radius: var(--radius-md); padding: 8px 16px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    <div>
+                        <span style="font-size: 0.68rem; text-transform: uppercase; font-weight: 800; color: #64748b; display: block;">PROMO CODE</span>
+                        <strong style="font-family: monospace; font-size: 1.1rem; color: #0f172a; letter-spacing: 1px;" id="highlightCouponCode">{{ current_festival.highlight_coupon }}</strong>
+                    </div>
+                    <button class="btn btn-sm" onclick="copyCouponCode('{{ current_festival.highlight_coupon }}')" style="background: #0f172a; color: #fff; border: none; font-size: 0.75rem; padding: 6px 12px; border-radius: var(--radius-sm);">
+                        <i class="fa-solid fa-copy"></i> Copy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INTERACTIVE FESTIVAL PRODUCT CHOOSER & ADD TO CART COUPON FLOW -->
+    <div class="card" style="margin-bottom: 32px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(236, 72, 153, 0.14)); border: 2px solid rgba(245, 158, 11, 0.45); box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+            <div>
+                <span class="badge" style="background: rgba(236, 72, 153, 0.25); color: #f472b6; font-weight: 800; font-size: 0.75rem;">
+                    <i class="fa-solid fa-gift"></i> FESTIVAL SPECIAL PRODUCT CHOOSER & CART FLOW
+                </span>
+                <h3 style="font-size: 1.45rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin: 6px 0 4px;">
+                    Select Product, Adjust Quantity & Apply {{ current_festival.highlight_coupon }} (e.g. ₹200 -> ₹180)
+                </h3>
+                <p style="font-size: 0.86rem; color: #94a3b8; max-width: 750px; margin: 0;">
+                    Pick any product across all categories. Add it to cart with quantity <strong style="color: #38bdf8;">+++ 1 / --- 1</strong>, and apply your official festival coupon. Your cart automatically validates the backend concession!
+                </p>
+            </div>
+
+            <!-- Promotional Highlight Badge -->
+            <div style="text-align: right; background: rgba(15,23,42,0.85); border: 1px solid var(--border-color); padding: 10px 18px; border-radius: var(--radius-md);">
+                <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Active Concession</div>
+                <div style="font-size: 1.25rem; font-weight: 800; color: #34d399; font-family: 'Space Grotesk', sans-serif;">
+                    {{ current_festival.highlight_discount }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Product Chooser & Cart Action Box -->
+        <div style="background: rgba(15, 23, 42, 0.75); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; align-items: center;">
+                
+                <!-- Product Selector Dropdown & Preview -->
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #38bdf8; display: block; margin-bottom: 6px;">
+                        <i class="fa-solid fa-hand-pointer"></i> Choose Product from Catalog:
+                    </label>
+                    <select id="festivalProductSelect" onchange="onFestivalProductChange()"
+                            style="width: 100%; background: #1e293b; border: 1px solid rgba(56, 189, 248, 0.4); color: #fff; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 600; outline: none;">
+                        {% if p200 %}
+                        <option value="{{ p200.id }}" data-price="{{ p200.base_price }}" data-img="{{ p200.image_url }}" data-name="{{ p200.name }}" data-brand="{{ p200.brand }}" data-cat="{{ p200.category }}" selected>
+                            ⭐ ₹200 Deal: {{ p200.name[:35] }} ({{ format_inr(p200.base_price) }})
+                        </option>
+                        {% endif %}
+                        {% if p300 %}
+                        <option value="{{ p300.id }}" data-price="{{ p300.base_price }}" data-img="{{ p300.image_url }}" data-name="{{ p300.name }}" data-brand="{{ p300.brand }}" data-cat="{{ p300.category }}">
+                            ⭐ ₹300 Deal: {{ p300.name[:35] }} ({{ format_inr(p300.base_price) }})
+                        </option>
+                        {% endif %}
+                        {% for p in featured_products %}
+                        {% if not (p200 and p.id == p200.id) and not (p300 and p.id == p300.id) %}
+                        <option value="{{ p.id }}" data-price="{{ p.base_price }}" data-img="{{ p.image_url }}" data-name="{{ p.name }}" data-brand="{{ p.brand }}" data-cat="{{ p.category }}">
+                            {{ p.name[:35] }} ({{ format_inr(p.base_price) }}) • {{ p.category }}
+                        </option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+
+                    <!-- Selected Product Live Thumbnail Strip -->
+                    <div style="display: flex; gap: 14px; align-items: center; margin-top: 14px; background: rgba(11, 17, 32, 0.6); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.06);">
+                        <img id="festiveProdThumb" src="{% if p200 %}{{ p200.image_url }}{% else %}{{ featured_products[0].image_url }}{% endif %}" alt="Product" 
+                             style="width: 60px; height: 60px; object-fit: contain; background: #000; border-radius: 4px; padding: 4px;">
+                        <div>
+                            <span id="festiveProdMeta" style="font-size: 0.72rem; color: #f59e0b; font-weight: 700; text-transform: uppercase;">
+                                {% if p200 %}{{ p200.brand }} • {{ p200.category }}{% else %}{{ featured_products[0].brand }}{% endif %}
+                            </span>
+                            <div id="festiveProdTitle" style="font-size: 0.88rem; font-weight: 700; color: #fff; line-height: 1.3;">
+                                {% if p200 %}{{ p200.name }}{% else %}{{ featured_products[0].name }}{% endif %}
+                            </div>
+                            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 0.68rem; margin-top: 2px;">
+                                <i class="fa-solid fa-shield-check"></i> Prime Verified Safe Seller
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Breakdown & Quantity Controls -->
+                <div style="background: rgba(11, 17, 32, 0.8); padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span style="font-size: 0.78rem; font-weight: 700; color: #cbd5e1;">Quantity (+++ 1 / --- 1):</span>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <button type="button" onclick="stepFestiveQty(-1)" style="width: 30px; height: 30px; background: #1e293b; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; font-weight: 800; cursor: pointer;">- 1</button>
+                            <input type="number" id="festiveQtyInput" value="1" min="1" max="99" style="width: 45px; height: 30px; text-align: center; background: #0f172a; border: 1px solid var(--border-color); color: #38bdf8; font-weight: 800; border-radius: 4px; font-size: 0.9rem;" readonly>
+                            <button type="button" onclick="stepFestiveQty(1)" style="width: 30px; height: 30px; background: #1e293b; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; font-weight: 800; cursor: pointer;">+ 1</button>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; align-items: center; justify-content: space-around; background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 4px;">
+                        <div>
+                            <span style="font-size: 0.7rem; color: #94a3b8; display: block;">Base Total</span>
+                            <strong style="font-size: 1.05rem; color: #94a3b8; text-decoration: line-through;" id="festiveBaseDisplay">₹200</strong>
+                        </div>
+                        <div style="color: #ec4899; font-weight: 800; font-size: 1.1rem;">-</div>
+                        <div>
+                            <span style="font-size: 0.7rem; color: #ec4899; display: block;">Coupon ({{ current_festival.highlight_coupon }})</span>
+                            <strong style="font-size: 1.05rem; color: #ec4899;" id="festiveDiscountDisplay">₹20</strong>
+                        </div>
+                        <div style="color: #10b981; font-weight: 800; font-size: 1.1rem;">=</div>
+                        <div>
+                            <span style="font-size: 0.7rem; color: #10b981; display: block;">Final Payable</span>
+                            <strong style="font-size: 1.35rem; color: #34d399; font-family: 'Space Grotesk', sans-serif;" id="festiveFinalDisplay">₹180</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons: Add to Cart and Bargain -->
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="btn btn-primary" onclick="addSelectedFestiveToCart(true)" 
+                            style="background: linear-gradient(135deg, #f59e0b, #ec4899); border: none; font-weight: 800; padding: 12px 18px; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(245,158,11,0.3);">
+                        <i class="fa-solid fa-cart-shopping"></i> Add to Cart & Apply {{ current_festival.highlight_coupon }}
+                    </button>
+                    
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary btn-sm" onclick="addSelectedFestiveToCart(false)" style="flex: 1; font-size: 0.78rem;">
+                            <i class="fa-solid fa-plus"></i> Add to Cart (Standard)
+                        </button>
+                        <a id="festiveBargainLink" href="{% if p200 %}{{ url_for('negotiate.negotiate_center', product_id=p200.id) }}{% else %}{{ url_for('negotiate.negotiate_center') }}{% endif %}" 
+                           class="btn btn-secondary btn-sm" style="flex: 1; font-size: 0.78rem; text-align: center;">
+                            <i class="fa-solid fa-robot"></i> Bargain via Voice
+                        </a>
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="{{ url_for('cart.view_cart') }}" style="font-size: 0.78rem; color: #38bdf8; text-decoration: underline;">
+                            <i class="fa-solid fa-basket-shopping"></i> Go directly to Cart to view savings
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- BACKEND COUPON VALIDATION CALCULATOR -->
+    <div style="margin-bottom: 36px;">
+        <!-- SECURE BACKEND COUPON VALIDATOR CALCULATOR -->
+        <div class="card" style="background: #111827; border: 1px solid var(--border-color); padding: 24px; max-width: 680px; margin: 0 auto;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                <div style="width: 36px; height: 36px; border-radius: var(--radius-sm); background: rgba(56, 189, 248, 0.15); color: #38bdf8; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa-solid fa-calculator"></i>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0;">Backend Coupon Validator</h3>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Enforces cryptographic server-side validation; prevents frontend coupon tampering.</span>
+                </div>
+            </div>
+
+            <form id="couponValidatorForm" onsubmit="validateCouponBackend(event)" style="margin-top: 16px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                    <div>
+                        <label style="font-size: 0.8rem; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 6px;">Order Amount (₹):</label>
+                        <input type="number" id="calcOrderAmount" value="200" min="1" step="1" required 
+                               style="width: 100%; background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.95rem; font-family: 'Space Grotesk', sans-serif;">
+                    </div>
+
+                    <div>
+                        <label style="font-size: 0.8rem; font-weight: 700; color: #94a3b8; display: block; margin-bottom: 6px;">Coupon Code:</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="calcCouponCode" value="{{ current_festival.highlight_coupon }}" uppercase required 
+                                   style="flex: 1; background: #1e293b; border: 1px solid var(--border-color); color: #38bdf8; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.95rem; font-family: monospace; font-weight: 700; text-transform: uppercase;">
+                            <button type="submit" class="btn btn-ai" id="validateCouponBtn" style="padding: 10px 18px;">
+                                <i class="fa-solid fa-check"></i> Validate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Validation Result Box -->
+                <div id="validationResultCard" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); padding: 14px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <strong style="color: #34d399; font-size: 0.88rem;" id="valResultTitle">Coupon Valid!</strong>
+                        <span style="font-size: 0.72rem; color: #94a3b8; font-family: monospace;" id="valTokenText">BK-VFD</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
+                        <span style="color: #94a3b8;">Original Order Amount:</span>
+                        <strong style="color: #fff;" id="valOriginalAmount">₹200</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 4px;">
+                        <span style="color: #94a3b8;">Discount Deducted:</span>
+                        <strong style="color: #ec4899;" id="valDiscountAmount">-₹20</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.95rem; font-weight: 800; border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 6px; margin-top: 6px;">
+                        <span style="color: #34d399;">Final Validated Total:</span>
+                        <strong style="color: #34d399; font-size: 1.15rem;" id="valFinalAmount">₹180</strong>
+                    </div>
+                </div>
+
+                <div id="validationErrorCard" style="display: none; background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: var(--radius-sm); padding: 12px; margin-top: 10px; color: #fb7185; font-size: 0.82rem;">
+                    <i class="fa-solid fa-circle-exclamation"></i> <span id="valErrorText">Invalid coupon code</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- FEATURED FESTIVE PRODUCTS SECTION WITH QUANTITY & DIRECT CART ACTIONS -->
+    <div style="margin-top: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <h3 style="font-size: 1.35rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 4px;">
+                    <i class="fa-solid fa-gift text-amber-400"></i> Featured Festive Products ({{ current_festival.category_filter }})
+                </h3>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">
+                    Pick any item, choose quantity (+++ 1 / --- 1), add to cart, and apply <strong style="color: #38bdf8;">{{ current_festival.highlight_coupon }}</strong>.
+                </p>
+            </div>
+            <a href="{{ url_for('products.product_list') }}" class="btn btn-secondary btn-sm" style="font-size: 0.8rem;">
+                View All Catalog <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+            {% for prod in featured_products %}
+            <div class="card product-card" style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column;">
+                <div style="height: 180px; background: #0b1120; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative;">
+                    <img src="{{ prod.image_url }}" alt="{{ prod.name }}" style="max-height: 160px; object-fit: contain; transition: transform 0.3s;">
+                    <span style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); font-size: 0.68rem; font-weight: 700; color: #f59e0b; padding: 2px 8px; border-radius: var(--radius-sm);">
+                        {{ prod.brand }}
+                    </span>
+                </div>
+                <div style="padding: 16px; flex: 1; display: flex; flex-direction: column;">
+                    <span style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">{{ prod.category }}</span>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: 8px; flex: 1;">
+                        {{ prod.name }}
+                    </h4>
+
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px;">
+                        <div>
+                            <span style="font-size: 0.7rem; color: #64748b; display: block;">Base Price</span>
+                            <strong style="font-size: 1.15rem; color: #fff; font-family: 'Space Grotesk', sans-serif;">{{ format_inr(prod.base_price) }}</strong>
+                        </div>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 0.72rem;">
+                            <i class="fa-solid fa-shield-check"></i> Safe Seller
+                        </span>
+                    </div>
+
+                    <!-- Quantity Stepper on Card: [-] 1 [+] -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgba(11, 17, 32, 0.6); padding: 6px 10px; border-radius: var(--radius-sm);">
+                        <span style="font-size: 0.74rem; color: #cbd5e1; font-weight: 600;">Qty:</span>
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <button type="button" onclick="stepGridQty({{ prod.id }}, -1)" style="width: 24px; height: 24px; background: #1e293b; border: 1px solid var(--border-color); color: #fff; border-radius: 3px; font-weight: 800; cursor: pointer; font-size: 0.75rem;">-</button>
+                            <input type="number" id="gridQty-{{ prod.id }}" value="1" min="1" max="99" style="width: 36px; height: 24px; text-align: center; background: #0f172a; border: 1px solid var(--border-color); color: #38bdf8; font-weight: 800; border-radius: 3px; font-size: 0.8rem;" readonly>
+                            <button type="button" onclick="stepGridQty({{ prod.id }}, 1)" style="width: 24px; height: 24px; background: #1e293b; border: 1px solid var(--border-color); color: #fff; border-radius: 3px; font-weight: 800; cursor: pointer; font-size: 0.75rem;">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Direct Cart Actions -->
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="addGridItemToCart({{ prod.id }}, true, '{{ current_festival.highlight_coupon }}')" 
+                                style="background: linear-gradient(135deg, #f59e0b, #ec4899); border: none; font-size: 0.76rem; font-weight: 700; padding: 7px 12px;">
+                            <i class="fa-solid fa-cart-shopping"></i> Add & Apply {{ current_festival.highlight_coupon }}
+                        </button>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="addGridItemToCart({{ prod.id }}, false, '')" style="flex: 1; font-size: 0.74rem;">
+                                <i class="fa-solid fa-plus"></i> Add to Cart
+                            </button>
+                            <a href="{{ url_for('negotiate.negotiate_center', product_id=prod.id) }}" class="btn btn-ai btn-sm" style="flex: 1; font-size: 0.74rem; text-align: center;" title="Voice Bargain with Robot">
+                                <i class="fa-solid fa-robot"></i> Bargain
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Dynamic Festival Product Chooser Calculation
+const currentFestivalCode = '{{ current_festival.highlight_coupon }}';
+const isFlatFestival = currentFestivalCode.includes('20') && currentFestivalCode.startsWith('BATHUKAMMA');
+
+function onFestivalProductChange() {
+    const sel = document.getElementById('festivalProductSelect');
+    const opt = sel.options[sel.selectedIndex];
+    if (!opt) return;
+
+    const basePrice = parseFloat(opt.getAttribute('data-price')) || 200;
+    const img = opt.getAttribute('data-img');
+    const name = opt.getAttribute('data-name');
+    const brand = opt.getAttribute('data-brand');
+    const cat = opt.getAttribute('data-cat');
+    const prodId = opt.value;
+
+    document.getElementById('festiveProdThumb').src = img;
+    document.getElementById('festiveProdTitle').textContent = name;
+    document.getElementById('festiveProdMeta').textContent = `${brand} • ${cat}`;
+    document.getElementById('festiveBargainLink').href = `/negotiate?product_id=${prodId}`;
+
+    recalcFestiveTotal();
+}
+
+function stepFestiveQty(delta) {
+    const input = document.getElementById('festiveQtyInput');
+    let q = parseInt(input.value) || 1;
+    q += delta;
+    if (q < 1) q = 1;
+    if (q > 99) q = 99;
+    input.value = q;
+    recalcFestiveTotal();
+}
+
+function recalcFestiveTotal() {
+    const sel = document.getElementById('festivalProductSelect');
+    const opt = sel ? sel.options[sel.selectedIndex] : null;
+    const unitPrice = opt ? parseFloat(opt.getAttribute('data-price')) : 200;
+    const qty = parseInt(document.getElementById('festiveQtyInput').value) || 1;
+    const subtotal = unitPrice * qty;
+
+    // Concession calculation
+    let discount = 0;
+    if (currentFestivalCode === 'BATHUKAMMA20') {
+        discount = 20 * qty;
+    } else if (currentFestivalCode.includes('10')) {
+        discount = subtotal * 0.10;
+    } else if (currentFestivalCode.includes('15')) {
+        discount = subtotal * 0.15;
+    } else if (currentFestivalCode.includes('20')) {
+        discount = subtotal * 0.20;
+    } else {
+        discount = subtotal * 0.10;
+    }
+
+    const finalPayable = Math.max(0, subtotal - discount);
+
+    document.getElementById('festiveBaseDisplay').textContent = '₹' + subtotal.toLocaleString();
+    document.getElementById('festiveDiscountDisplay').textContent = '-₹' + Math.round(discount).toLocaleString();
+    document.getElementById('festiveFinalDisplay').textContent = '₹' + Math.round(finalPayable).toLocaleString();
+}
+
+// Step Grid Quantity: [-] 1 [+]
+function stepGridQty(prodId, delta) {
+    const input = document.getElementById('gridQty-' + prodId);
+    if (!input) return;
+    let q = parseInt(input.value) || 1;
+    q += delta;
+    if (q < 1) q = 1;
+    if (q > 99) q = 99;
+    input.value = q;
+}
+
+// Add selected item from top showcase to Cart
+async function addSelectedFestiveToCart(applyCoupon) {
+    const sel = document.getElementById('festivalProductSelect');
+    const opt = sel ? sel.options[sel.selectedIndex] : null;
+    const prodId = opt ? parseInt(opt.value) : {{ p200.id if p200 else 1 }};
+    const qty = parseInt(document.getElementById('festiveQtyInput').value) || 1;
+    const code = applyCoupon ? currentFestivalCode : '';
+
+    try {
+        const res = await fetch('/api/cart/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: prodId, quantity: qty, coupon_code: code })
+        });
+        const data = await res.json();
+        if (data.success) {
+            const couponNote = code ? ` with ${code} concession applied!` : '!';
+            showToast(`✓ Added ${qty}x to cart${couponNote} Check Cart for final total.`, 'success');
+            const cartBadge = document.getElementById('cartBadgeCount');
+            if (cartBadge && data.total_cart_items) {
+                cartBadge.textContent = data.total_cart_items;
+                cartBadge.style.display = 'inline-block';
+            }
+        } else {
+            showToast(data.message || 'Please log in to add items to cart.', 'error');
+            setTimeout(() => window.location.href = '/login?next=' + encodeURIComponent(window.location.pathname), 1200);
+        }
+    } catch(e) {
+        showToast('Cart communication issue.', 'error');
+    }
+}
+
+// 1-Click apply coupon directly to cart session
+async function applyCouponDirectToCart(couponCode) {
+    try {
+        const res = await fetch('/api/cart/apply-coupon', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ coupon_code: couponCode })
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast(`✓ ${couponCode} applied to your Cart! Add any product to enjoy your discount.`, 'success');
+        } else {
+            showToast(data.message || 'Unable to apply coupon.', 'info');
+        }
+    } catch(e) {
+        showToast(`Coupon ${couponCode} saved to your shopping session!`, 'success');
+    }
+}
+
+// Add specific grid item to cart
+async function addGridItemToCart(prodId, applyCoupon, couponCode) {
+    const input = document.getElementById('gridQty-' + prodId);
+    const qty = input ? parseInt(input.value) || 1 : 1;
+    const code = applyCoupon ? couponCode : '';
+
+    try {
+        const res = await fetch('/api/cart/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: prodId, quantity: qty, coupon_code: code })
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast(`✓ Added to cart${code ? ' with ' + code : ''}!`, 'success');
+            const cartBadge = document.getElementById('cartBadgeCount');
+            if (cartBadge && data.total_cart_items) {
+                cartBadge.textContent = data.total_cart_items;
+                cartBadge.style.display = 'inline-block';
+            }
+        } else {
+            showToast(data.message || 'Please log in to add items to cart.', 'error');
+        }
+    } catch(e) {
+        showToast('Cart communication issue.', 'error');
+    }
+}
+
+// Countdown Timer Simulator
+function updateCountdown() {
+    let s = parseInt(document.getElementById('timerSecs').textContent) || 30;
+    let m = parseInt(document.getElementById('timerMins').textContent) || 44;
+    let h = parseInt(document.getElementById('timerHours').textContent) || 18;
+
+    s--;
+    if (s < 0) {
+        s = 59;
+        m--;
+        if (m < 0) {
+            m = 59;
+            h = Math.max(0, h - 1);
+        }
+    }
+    document.getElementById('timerSecs').textContent = String(s).padStart(2, '0');
+    document.getElementById('timerMins').textContent = String(m).padStart(2, '0');
+    document.getElementById('timerHours').textContent = String(h).padStart(2, '0');
+}
+setInterval(updateCountdown, 1000);
+
+// Copy Coupon Code
+function copyCouponCode(code) {
+    navigator.clipboard.writeText(code).then(() => {
+        showToast(`Coupon code ${code} copied to clipboard!`, 'success');
+        document.getElementById('calcCouponCode').value = code;
+    }).catch(() => {
+        document.getElementById('calcCouponCode').value = code;
+        showToast(`Coupon code ${code} selected!`, 'info');
+    });
+}
+
+function fillCalculator(code, amount) {
+    document.getElementById('calcCouponCode').value = code;
+    document.getElementById('calcOrderAmount').value = amount;
+    validateCouponBackend();
+}
+
+// Backend Coupon Validation
+async function validateCouponBackend(e) {
+    if (e) e.preventDefault();
+    const code = document.getElementById('calcCouponCode').value.trim();
+    const amount = parseFloat(document.getElementById('calcOrderAmount').value);
+    const btn = document.getElementById('validateCouponBtn');
+    const resCard = document.getElementById('validationResultCard');
+    const errCard = document.getElementById('validationErrorCard');
+
+    if (!code || isNaN(amount) || amount <= 0) return;
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    resCard.style.display = 'none';
+    errCard.style.display = 'none';
+
+    try {
+        const res = await fetch('/api/coupons/validate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ coupon_code: code, order_amount: amount })
+        });
+        const data = await res.json();
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Validate';
+
+        if (data.valid) {
+            resCard.style.display = 'block';
+            document.getElementById('valResultTitle').textContent = `✓ ${data.title}`;
+            document.getElementById('valTokenText').textContent = data.verification_token;
+            document.getElementById('valOriginalAmount').textContent = '₹' + Number(data.original_amount).toLocaleString();
+            document.getElementById('valDiscountAmount').textContent = '-₹' + Number(data.discount_amount).toLocaleString() + ` (${data.savings_percent}% OFF)`;
+            document.getElementById('valFinalAmount').textContent = '₹' + Number(data.final_amount).toLocaleString();
+        } else {
+            errCard.style.display = 'block';
+            document.getElementById('valErrorText').textContent = data.message || 'Invalid coupon code';
+        }
+    } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Validate';
+        errCard.style.display = 'block';
+        document.getElementById('valErrorText').textContent = 'Validation communication error. Please try again.';
+    }
+}
+
+// Direct 1-Click Festive Checkout (Rs. 200 -> Rs. 180)
+async function placeFestiveOrder(productId, couponCode) {
+    if (!confirm(`Place instant order for this product with coupon ${couponCode} at final price ₹180?`)) return;
+
+    try {
+        const res = await fetch('/api/festive-order/direct-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: productId, coupon_code: couponCode })
+        });
+        const data = await res.json();
+        if (data.success) {
+            alert(`🎉 Success! Order #${data.order_number} confirmed at ₹${data.final_price}! Tracking ID: ${data.tracking_number}`);
+            window.location.href = '/orders';
+        } else {
+            alert(data.message || 'Please log in to place orders.');
+        }
+    } catch(e) {
+        alert('Order processing error. Please check connection.');
+    }
+}
+</script>
+{% endblock %}

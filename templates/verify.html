@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Product Authenticity & Risk Verification Center{% endblock %}
+
+{% block content %}
+<div class="verify-center-page">
+
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <div class="badge badge-low-risk" style="margin-bottom: 6px;">
+                <i class="fa-solid fa-microchip"></i> Explainable ML Risk Engine
+            </div>
+            <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                AI Authenticity & Fraud Risk Studio
+            </h1>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+                Statistical multi-factor evaluation across vendor credibility, price deviation ratios, review NLP, and datasheet integrity.
+            </p>
+        </div>
+
+        <!-- Product Selector Switcher -->
+        <form method="GET" action="{{ url_for('verify.verify_center') }}" style="display: flex; align-items: center; gap: 10px;">
+            <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Inspect Product:</label>
+            <select name="product_id" onchange="this.form.submit()" 
+                    style="background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.85rem; outline: none; max-width: 280px;">
+                {% for p in all_products %}
+                <option value="{{ p.id }}" {% if target_product and target_product.id == p.id %}selected{% endif %}>
+                    {{ p.name[:35] }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    {% if target_product and analysis %}
+    <!-- Main Audit Overview Card -->
+    <div class="card" style="margin-bottom: 28px; background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%); border-color: rgba(99, 102, 241, 0.3);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <img src="{{ target_product.image_url }}" alt="{{ target_product.name }}" style="width: 90px; height: 90px; object-fit: contain; border-radius: var(--radius-md); background: #0b1120; padding: 6px;">
+                <div>
+                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--accent-teal); text-transform: uppercase;">{{ target_product.brand }}</span>
+                    <h2 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-top: 2px;">{{ target_product.name }}</h2>
+                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+                        Listed at <strong>{{ format_inr(target_product.base_price) }}</strong> by {{ target_product.seller.name if target_product.seller else 'Official Store' }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Score Visual Gauge -->
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 24px;">
+                <div class="score-circle-wrapper" style="border-color: {{ analysis.badge_color }}; width: 95px; height: 95px;">
+                    <div style="text-align: center;">
+                        <span class="score-number" style="font-size: 1.8rem;">{{ analysis.confidence_score }}%</span>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">AI Authenticity Confidence</div>
+                    <div style="font-size: 1.4rem; font-weight: 800; color: {{ analysis.badge_color }};">
+                        {{ analysis.risk_level }} RISK
+                    </div>
+                    <div style="font-size: 0.82rem; color: #e2e8f0; font-weight: 600;">{{ analysis.verdict }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5 Factors Detailed Breakdown -->
+    <h3 style="font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 16px; font-family: 'Space Grotesk', sans-serif;">
+        <i class="fa-solid fa-list-check text-purple-400"></i> Explainable Feature Breakdown
+    </h3>
+
+    <div class="ai-evidence-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 28px;">
+        {% for key, f in analysis.evidence.items() %}
+        <div class="card" style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 0.88rem; font-weight: 700; color: #fff;">{{ f.name }}</span>
+                <span class="badge {% if f.score >= 80 %}badge-low-risk{% elif f.score >= 60 %}badge-medium-risk{% else %}badge-high-risk{% endif %}">
+                    {{ f.score }}/100
+                </span>
+            </div>
+            <div class="evidence-progress-bar" style="margin-bottom: 12px; height: 8px;">
+                <div class="evidence-progress-fill" style="width: {{ f.score }}%;"></div>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                {{ f.details }}
+            </p>
+            <div style="margin-top: 10px; font-size: 0.72rem; color: var(--text-muted);">
+                Feature Weight Contribution: <strong>{{ f.weight }}</strong>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Synthesis Explanation -->
+    <div class="card" style="margin-bottom: 24px;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 10px;">
+            <i class="fa-solid fa-brain text-cyan-400"></i> AI Synthesis Narrative
+        </h4>
+        <p style="font-size: 0.9rem; color: #cbd5e1; line-height: 1.6;">
+            {{ analysis.explanation }}
+        </p>
+    </div>
+
+    <!-- Mandatory Ethical Disclaimer -->
+    <div class="ai-disclaimer-box" style="margin-bottom: 36px;">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.3rem;"></i>
+        <div>
+            <strong>Important Machine Learning Integrity Notice:</strong>
+            <p style="margin-top: 2px;">{{ analysis.disclaimer }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recent Platform Audits Log Table -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fa-solid fa-clock-rotate-left text-indigo-400"></i> Recent Platform Authenticity Audits
+            </h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Real-time database audit trail</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Confidence Score</th>
+                        <th>Risk Classification</th>
+                        <th>Verdict</th>
+                        <th>Audited Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in recent_checks %}
+                    <tr>
+                        <td><strong>{{ c.product.name if c.product else 'Catalog Product' }}</strong></td>
+                        <td>
+                            <strong style="color: {% if c.confidence_score >= 80 %}#10b981{% elif c.confidence_score >= 60 %}#f59e0b{% else %}#f43f5e{% endif %}; font-family: 'Space Grotesk', sans-serif;">
+                                {{ c.confidence_score }}%
+                            </strong>
+                        </td>
+                        <td>
+                            <span class="badge {% if c.risk_level == 'LOW' %}badge-low-risk{% elif c.risk_level == 'MEDIUM' %}badge-medium-risk{% else %}badge-high-risk{% endif %}">
+                                {{ c.risk_level }}
+                            </span>
+                        </td>
+                        <td>{{ c.verdict }}</td>
+                        <td style="color: var(--text-muted); font-size: 0.8rem;">
+                            {{ c.created_at.strftime('%d %b %Y, %I:%M %p') if c.created_at else '' }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Products Catalog{% endblock %}
+
+{% block content %}
+<div class="products-catalog-page">
+    
+    <!-- Top Filter Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
+        <div>
+            <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                Verified Product Catalog
+            </h1>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+                Showing {{ products|length }} authentic products backed by ML risk analysis & multi-seller price transparency.
+            </p>
+        </div>
+
+        <!-- Filter Controls -->
+        <form method="GET" action="{{ url_for('products.product_list') }}" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+            {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+            
+            <select name="category" onchange="this.form.submit()" 
+                    style="background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.82rem; outline: none;">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="brand" onchange="this.form.submit()" 
+                    style="background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.82rem; outline: none;">
+                <option value="">All Brands</option>
+                {% for b in brands %}
+                <option value="{{ b }}" {% if selected_brand == b %}selected{% endif %}>{{ b }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="sort" onchange="this.form.submit()" 
+                    style="background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.82rem; outline: none;">
+                <option value="popular" {% if sort_by == 'popular' %}selected{% endif %}>Sort: Featured</option>
+                <option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                <option value="price_high" {% if sort_by == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Highest Rated</option>
+            </select>
+
+            {% if selected_category or selected_brand or search_query or sort_by != 'popular' %}
+            <a href="{{ url_for('products.product_list') }}" class="btn btn-secondary btn-sm" title="Clear all filters">
+                <i class="fa-solid fa-xmark"></i> Clear Filters
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Category Quick Pills -->
+    <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 20px;">
+        <a href="{{ url_for('products.product_list') }}" class="btn btn-sm {% if not selected_category %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 9999px; font-size: 0.78rem; padding: 6px 14px; white-space: nowrap;">
+            All (500 Products)
+        </a>
+        <a href="{{ url_for('products.product_list', category='Kitchen & Dining') }}" class="btn btn-sm {% if selected_category == 'Kitchen & Dining' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 9999px; font-size: 0.78rem; padding: 6px 14px; white-space: nowrap;">
+            🍳 Kitchen & Dining
+        </a>
+        <a href="{{ url_for('products.product_list', category='Kids Fashion & Toys') }}" class="btn btn-sm {% if selected_category == 'Kids Fashion & Toys' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 9999px; font-size: 0.78rem; padding: 6px 14px; white-space: nowrap;">
+            👗 Kids Fashion & Toys
+        </a>
+        <a href="{{ url_for('products.product_list', category='Mens Fashion & Wear') }}" class="btn btn-sm {% if selected_category == 'Mens Fashion & Wear' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 9999px; font-size: 0.78rem; padding: 6px 14px; white-space: nowrap;">
+            👔 Men's Wear
+        </a>
+        <a href="{{ url_for('products.product_list', category='Womens Fashion & Ethnic') }}" class="btn btn-sm {% if selected_category == 'Womens Fashion & Ethnic' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 9999px; font-size: 0.78rem; padding: 6px 14px; white-space: nowrap;">
+            🥻 Women's Ethnic & Wear
+        </a>
+        <a href="{{ url_for('products.product_list', category='Electronics & Gadgets') }}" class="btn btn-sm {% if selected_category == 'Electronics & Gadgets' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 9999px; font-size: 0.78rem; padding: 6px 14px; white-space: nowrap;">
+            📱 Electronics & Gadgets
+        </a>
+        <a href="{{ url_for('products.product_list', category='Home Decor & Space Furnishings') }}" class="btn btn-sm {% if selected_category == 'Home Decor & Space Furnishings' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 9999px; font-size: 0.78rem; padding: 6px 14px; white-space: nowrap;">
+            🛋️ Home Decor & Empty Spaces
+        </a>
+    </div>
+
+    <!-- Active Search Filter Pill -->
+    {% if search_query %}
+    <div style="margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); padding: 4px 12px; border-radius: 9999px; font-size: 0.8rem; color: #c7d2fe;">
+        <span>Searching for: <strong>"{{ search_query }}"</strong></span>
+        <a href="{{ url_for('products.product_list', category=selected_category, brand=selected_brand) }}" style="color: inherit; text-decoration: none;">&times;</a>
+    </div>
+    {% endif %}
+
+    <!-- Products Grid -->
+    {% if products %}
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <div class="product-card-image">
+                <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+                
+                <div class="card-top-badges">
+                    <span class="badge badge-low-risk">
+                        <i class="fa-solid fa-shield-check"></i> Likely Authentic
+                    </span>
+                    {% if product.potential_savings > 0 %}
+                    <span class="badge badge-savings">
+                        Save {{ product.potential_savings_percent }}%
+                    </span>
+                    {% endif %}
+                </div>
+
+                <button class="wishlist-toggle-btn {% if product.id in user_wishlist_ids %}active{% endif %}" 
+                        data-product-id="{{ product.id }}" title="Toggle Wishlist">
+                    <i class="{% if product.id in user_wishlist_ids %}fa-solid fa-heart text-rose-500{% else %}fa-regular fa-heart{% endif %}"></i>
+                </button>
+            </div>
+
+            <div class="product-card-body">
+                <div class="product-brand">{{ product.brand }} • {{ product.category }}</div>
+                <a href="{{ url_for('products.product_detail', product_id=product.id) }}" class="product-title" title="{{ product.name }}">
+                    {{ product.name }}
+                </a>
+
+                <div class="product-rating">
+                    <span class="stars"><i class="fa-solid fa-star"></i> {{ product.rating }}</span>
+                    <span>({{ product.review_count }} reviews)</span>
+                    <span style="margin-left: auto; color: #10b981; font-weight: 600; font-size: 0.72rem;">
+                        <i class="fa-solid fa-check"></i> In Stock ({{ product.stock }})
+                    </span>
+                </div>
+
+                <div class="product-pricing-box">
+                    <div class="price-row">
+                        <span class="current-price">{{ format_inr(product.base_price) }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="lowest-market-price">Lowest: {{ format_inr(product.lowest_seller_price) }}</span>
+                        {% if product.potential_savings > 0 %}
+                        <span class="savings-tag">Save {{ format_inr(product.potential_savings) }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- 6 REQUIRED PRODUCT CARD ACTION BUTTONS -->
+                <div class="product-card-actions">
+                    <a href="{{ url_for('products.product_detail', product_id=product.id) }}" class="btn-card-action" title="View Specifications & AI Analysis">
+                        <i class="fa-solid fa-eye"></i> View
+                    </a>
+                    <a href="{{ url_for('verify.verify_center', product_id=product.id) }}" class="btn-card-action" title="AI Authenticity Risk Check">
+                        <i class="fa-solid fa-shield"></i> Verify
+                    </a>
+                    <a href="{{ url_for('compare.compare_center', product_id=product.id) }}" class="btn-card-action" title="Cross-Marketplace Price Comparison">
+                        <i class="fa-solid fa-code-compare"></i> Compare
+                    </a>
+                    <a href="{{ url_for('negotiate.negotiate_center', product_id=product.id) }}" class="btn-card-action btn-negotiate" title="Negotiate Price with AI Agent">
+                        <i class="fa-solid fa-handshake"></i> Bargain
+                    </a>
+                    <button class="btn-card-action wishlist-toggle-btn {% if product.id in user_wishlist_ids %}active{% endif %}" 
+                            data-product-id="{{ product.id }}" style="position: static; width: 100%; height: auto; border-radius: var(--radius-sm); background: rgba(255,255,255,0.04);">
+                        <i class="fa-regular fa-heart"></i> Wishlist
+                    </button>
+                    <button class="btn-card-action btn-cart btn-add-to-cart" data-product-id="{{ product.id }}" title="Add to Cart">
+                        <i class="fa-solid fa-cart-plus"></i> Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; padding: 60px 20px;">
+        <i class="fa-solid fa-box-open" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 16px;"></i>
+        <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 8px;">No Products Found</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
+            We couldn't find any products matching your current search or category filter.
+        </p>
+        <a href="{{ url_for('products.product_list') }}" class="btn btn-primary">
+            Clear Filters & View All
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

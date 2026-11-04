@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}My Wishlist{% endblock %}
+
+{% block content %}
+<div class="wishlist-page">
+
+    <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+            Saved Wishlist
+        </h1>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Products tracked for price drops, seller updates, and authenticity verification badges.
+        </p>
+    </div>
+
+    {% if items %}
+    <div class="products-grid">
+        {% for item in items %}
+        <div class="product-card">
+            <div class="product-card-image">
+                <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
+                <div class="card-top-badges">
+                    <span class="badge badge-low-risk">
+                        <i class="fa-solid fa-shield-check"></i> Likely Authentic
+                    </span>
+                    <!-- Price drop alert badge -->
+                    <span class="badge badge-savings" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.4);">
+                        <i class="fa-solid fa-arrow-trend-down"></i> Price Drop Alert!
+                    </span>
+                </div>
+            </div>
+
+            <div class="product-card-body">
+                <div class="product-brand">{{ item.product.brand }} • {{ item.product.category }}</div>
+                <a href="{{ url_for('products.product_detail', product_id=item.product.id) }}" class="product-title">
+                    {{ item.product.name }}
+                </a>
+
+                <div class="product-pricing-box" style="margin-top: 14px;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                        <span class="current-price">{{ format_inr(item.product.base_price) }}</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Saved on {{ item.created_at }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                        <span class="lowest-market-price">Lowest Seller: {{ format_inr(item.product.lowest_seller_price) }}</span>
+                        {% if item.product.potential_savings > 0 %}
+                        <span class="savings-tag">Save {{ format_inr(item.product.potential_savings) }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px;">
+                    <button class="btn btn-primary btn-sm btn-add-to-cart" data-product-id="{{ item.product.id }}">
+                        <i class="fa-solid fa-cart-plus"></i> Move to Cart
+                    </button>
+                    <a href="{{ url_for('negotiate.negotiate_center', product_id=item.product.id) }}" class="btn btn-secondary btn-sm">
+                        <i class="fa-solid fa-handshake"></i> Bargain
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; padding: 60px 20px;">
+        <i class="fa-solid fa-heart-crack" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 16px;"></i>
+        <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 8px;">Your Wishlist is Empty</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
+            Save products while browsing to track price drop alerts and authenticity audits.
+        </p>
+        <a href="{{ url_for('products.product_list') }}" class="btn btn-primary">
+            Explore Products
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

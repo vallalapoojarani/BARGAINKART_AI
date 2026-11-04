@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Price Transparency & Comparison Hub{% endblock %}
+
+{% block content %}
+<div class="compare-page">
+
+    <!-- Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <div class="badge badge-savings" style="margin-bottom: 6px;">
+                <i class="fa-solid fa-scale-balanced"></i> Cross-Marketplace Parity
+            </div>
+            <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                Price Transparency & Comparison Hub
+            </h1>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+                Audit identical listings across multiple internal vendors and external marketplace portals in real time.
+            </p>
+        </div>
+
+        <!-- Product Selector Switcher -->
+        <form method="GET" action="{{ url_for('compare.compare_center') }}" style="display: flex; align-items: center; gap: 10px;">
+            <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Select Product:</label>
+            <select name="product_id" onchange="this.form.submit()" 
+                    style="background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.85rem; outline: none; max-width: 280px;">
+                {% for p in all_products %}
+                <option value="{{ p.id }}" {% if target_product and target_product.id == p.id %}selected{% endif %}>
+                    {{ p.name[:35] }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    {% if target_product and pricing %}
+    <!-- KPI Comparison Overview Strip -->
+    <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 28px;">
+        <div class="kpi-card kpi-primary">
+            <div class="kpi-icon-box"><i class="fa-solid fa-tag"></i></div>
+            <div>
+                <div class="kpi-title">Current Listed Price</div>
+                <div class="kpi-value">{{ format_inr(pricing.current_price) }}</div>
+            </div>
+        </div>
+
+        <div class="kpi-card kpi-emerald">
+            <div class="kpi-icon-box"><i class="fa-solid fa-trophy"></i></div>
+            <div>
+                <div class="kpi-title">Lowest Eligible Price</div>
+                <div class="kpi-value" style="color: #34d399;">{{ format_inr(pricing.lowest_price) }}</div>
+            </div>
+        </div>
+
+        <div class="kpi-card kpi-teal">
+            <div class="kpi-icon-box"><i class="fa-solid fa-calculator"></i></div>
+            <div>
+                <div class="kpi-title">Average Market Price</div>
+                <div class="kpi-value">{{ format_inr(pricing.average_price) }}</div>
+            </div>
+        </div>
+
+        <div class="kpi-card kpi-purple">
+            <div class="kpi-icon-box"><i class="fa-solid fa-piggy-bank"></i></div>
+            <div>
+                <div class="kpi-title">Potential Savings</div>
+                <div class="kpi-value" style="color: #c084fc;">
+                    {{ format_inr(pricing.potential_savings) }} ({{ pricing.savings_percent }}%)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js Price Comparison Visualization -->
+    <div class="card" style="margin-bottom: 28px;">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fa-solid fa-chart-column text-cyan-400"></i> Real-Time Seller Price Spread
+            </h3>
+            <span style="font-size: 0.8rem; color: #34d399; font-weight: 600;">
+                <i class="fa-solid fa-circle-check"></i> Highlighted green bar indicates lowest verified price
+            </span>
+        </div>
+        <div class="chart-container" style="height: 320px;">
+            <canvas id="sellerCompareChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Detailed Sellers Table -->
+    <div class="card" style="margin-bottom: 28px;">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fa-solid fa-store text-indigo-400"></i> Marketplace Listings Matrix
+            </h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">
+                Same product • Different sellers/listings • Live prices
+            </span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Seller / Platform</th>
+                        <th>Risk & Safety Level</th>
+                        <th>Offered Price</th>
+                        <th>Price Spread</th>
+                        <th>Seller Rating</th>
+                        <th>Delivery ETA</th>
+                        <th>Return & Warranty</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for offer in pricing.offers %}
+                    <tr {% if offer.is_lowest %}style="background: rgba(16, 185, 129, 0.08);"{% endif %}>
+                        <td>
+                            <strong>{{ offer.seller_name }}</strong>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">{{ offer.platform_name }}</div>
+                            {% if offer.is_current %}<span class="badge" style="background: rgba(99,102,241,0.2); color: #818cf8; margin-top: 2px;">Primary Listing</span>{% endif %}
+                        </td>
+                        <td>
+                            {% if offer.risk_status == 'SAFE' or offer.risk_status == 'TRUSTED' %}
+                            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 0.72rem; border: 1px solid rgba(16, 185, 129, 0.3);">
+                                <i class="fa-solid fa-circle-check"></i> 🟢 SAFE (Prime)
+                            </span>
+                            <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 2px;">Trust Score: {{ offer.trust_score }}%</div>
+                            {% elif 'MOD' in offer.risk_status %}
+                            <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; font-size: 0.72rem; border: 1px solid rgba(245, 158, 11, 0.3);">
+                                <i class="fa-solid fa-triangle-exclamation"></i> 🟡 MODERATE RISK
+                            </span>
+                            <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 2px;">Trust Score: {{ offer.trust_score }}%</div>
+                            {% else %}
+                            <span class="badge" style="background: rgba(244, 63, 94, 0.15); color: #fb7185; font-size: 0.72rem; border: 1px solid rgba(244, 63, 94, 0.3);">
+                                <i class="fa-solid fa-circle-exclamation"></i> 🔴 HIGH RISK (Unverified)
+                            </span>
+                            <div style="font-size: 0.7rem; color: #f43f5e; margin-top: 2px;">Low Trust: {{ offer.trust_score }}%</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <strong style="font-size: 1.1rem; color: {% if offer.is_lowest %}#10b981{% else %}#fff{% endif %}; font-family: 'Space Grotesk', sans-serif;">
+                                {{ format_inr(offer.price) }}
+                            </strong>
+                            {% if offer.is_lowest %}
+                            <span class="badge badge-low-risk" style="margin-left: 6px; font-size: 0.65rem;">LOWEST</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if offer.diff_from_current < 0 %}
+                            <span style="color: #10b981; font-weight: 700;">-{{ format_inr(offer.diff_from_current * -1) }}</span>
+                            {% elif offer.diff_from_current > 0 %}
+                            <span style="color: #f43f5e; font-weight: 700;">+{{ format_inr(offer.diff_from_current) }}</span>
+                            {% else %}
+                            <span style="color: var(--text-muted);">Baseline</span>
+                            {% endif %}
+                        </td>
+                        <td>⭐ {{ offer.rating }}/5.0</td>
+                        <td>{{ offer.delivery_days }} Days</td>
+                        <td>
+                            <span style="font-size: 0.75rem; color: #cbd5e1;">{{ offer.return_policy }}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm btn-add-to-cart" data-product-id="{{ target_product.id }}">
+                                Buy at {{ format_inr(offer.price) }}
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const ctx = document.getElementById('sellerCompareChart');
+    if (ctx) {
+        const labels = {{ pricing.chart_data.labels|tojson }};
+        const datasets = {{ pricing.chart_data.datasets|tojson }};
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        ticks: {
+                            callback: function(v) { return '₹' + (v / 1000) + 'k'; }
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

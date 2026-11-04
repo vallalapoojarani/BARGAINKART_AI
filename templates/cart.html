@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart{% endblock %}
+
+{% block content %}
+<div class="cart-page">
+
+    <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+            Shopping Cart
+        </h1>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Transparent itemized pricing showing retail prices, AI-negotiated prices, and cumulative savings.
+        </p>
+    </div>
+
+    {% if items %}
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 28px; align-items: flex-start;">
+        
+        <!-- Items Table -->
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Pricing Tier</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 14px;">
+                                    <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" style="width: 54px; height: 54px; object-fit: contain; background: #0b1120; border-radius: var(--radius-sm); padding: 4px;">
+                                    <div>
+                                        <a href="{{ url_for('products.product_detail', product_id=item.product.id) }}" style="color: #fff; font-weight: 700; text-decoration: none; font-size: 0.9rem;">
+                                            {{ item.product.name[:35] }}
+                                        </a>
+                                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
+                                            {{ item.product.brand }} • Sold by {{ item.product.seller.name if item.product.seller else 'Official Retail' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if item.is_negotiated %}
+                                <span class="badge" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168,85,247,0.4);">
+                                    <i class="fa-solid fa-handshake"></i> AI Negotiated
+                                </span>
+                                {% else %}
+                                <span class="badge" style="background: rgba(148, 163, 184, 0.15); color: #94a3b8;">
+                                    Standard Retail
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.is_negotiated %}
+                                <div>
+                                    <span style="font-weight: 800; color: #34d399; font-family: 'Space Grotesk', sans-serif;">
+                                        {{ format_inr(item.unit_price) }}
+                                    </span>
+                                    <div style="text-decoration: line-through; font-size: 0.75rem; color: var(--text-muted);">
+                                        {{ format_inr(item.original_price) }}
+                                    </div>
+                                </div>
+                                {% else %}
+                                <strong style="color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                                    {{ format_inr(item.unit_price) }}
+                                </strong>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span style="font-weight: 700; color: #fff;">{{ item.quantity }}</span>
+                            </td>
+                            <td>
+                                <strong style="color: #fff; font-size: 1.05rem; font-family: 'Space Grotesk', sans-serif;">
+                                    {{ format_inr(item.subtotal) }}
+                                </strong>
+                                {% if item.savings > 0 %}
+                                <div style="font-size: 0.72rem; color: var(--accent-emerald); font-weight: 600;">
+                                    Saved {{ format_inr(item.savings) }}
+                                </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="btn btn-secondary btn-sm" onclick="removeItem({{ item.id }})" title="Remove item">
+                                    <i class="fa-solid fa-trash-can text-rose-400"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Order Summary Card -->
+        <div class="card" style="padding: 24px;">
+            <h3 class="card-title" style="margin-bottom: 16px;">Order Summary</h3>
+
+            <!-- Coupon Application Section in Cart -->
+            <div style="background: rgba(15, 23, 42, 0.7); border: 1px dashed var(--border-color); border-radius: var(--radius-md); padding: 14px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: #fff;">
+                        <i class="fa-solid fa-tags text-purple-400"></i> Apply Festival / Game Coupon
+                    </span>
+                    {% if applied_coupon %}
+                    <button class="btn btn-sm text-rose-400" onclick="removeCartCoupon()" style="background: none; border: none; font-size: 0.75rem; cursor: pointer;">
+                        <i class="fa-solid fa-xmark"></i> Remove
+                    </button>
+                    {% endif %}
+                </div>
+
+                {% if applied_coupon %}
+                <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="color: #34d399; font-size: 0.82rem;">{{ applied_coupon.code }} Applied</strong>
+                        <div style="font-size: 0.72rem; color: #cbd5e1;">{{ applied_coupon.title }}</div>
+                    </div>
+                    <span style="color: #34d399; font-weight: 800; font-size: 0.95rem;">-{{ format_inr(coupon_discount) }}</span>
+                </div>
+                {% else %}
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <input type="text" id="cartCouponInput" placeholder="Code (e.g. BATHUKAMMA20, GAME10)" style="flex: 1; background: #1e293b; border: 1px solid var(--border-color); color: #38bdf8; padding: 7px 10px; border-radius: var(--radius-sm); font-size: 0.82rem; font-family: monospace; text-transform: uppercase;">
+                    <button class="btn btn-secondary btn-sm" onclick="applyCartCoupon()" style="font-size: 0.78rem; padding: 7px 12px;">Apply</button>
+                </div>
+                {% endif %}
+
+                <!-- Quick Clickable Coupon Chips -->
+                <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px;">Click to apply official voucher:</div>
+                <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                    <button type="button" class="badge" onclick="quickApplyCoupon('BATHUKAMMA20')" style="cursor: pointer; background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); font-size: 0.68rem;">
+                        BATHUKAMMA20 (-₹20)
+                    </button>
+                    <button type="button" class="badge" onclick="quickApplyCoupon('GAME10')" style="cursor: pointer; background: rgba(168,85,247,0.2); color: #c084fc; border: 1px solid rgba(168,85,247,0.4); font-size: 0.68rem;">
+                        GAME10 (10% OFF)
+                    </button>
+                    <button type="button" class="badge" onclick="quickApplyCoupon('DIWALI10')" style="cursor: pointer; background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.4); font-size: 0.68rem;">
+                        DIWALI10 (10% OFF)
+                    </button>
+                    <button type="button" class="badge" onclick="quickApplyCoupon('SANKRANTI15')" style="cursor: pointer; background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.4); font-size: 0.68rem;">
+                        SANKRANTI15 (15% OFF)
+                    </button>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.88rem; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                    <span>Total Original Price:</span>
+                    <span style="text-decoration: line-through; color: var(--text-muted);">{{ format_inr(total_original) }}</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                    <span>Subtotal Price:</span>
+                    <span style="color: #fff; font-weight: 700;">{{ format_inr(total_negotiated) }}</span>
+                </div>
+
+                {% if coupon_discount > 0 %}
+                <div style="display: flex; justify-content: space-between; color: #ec4899; font-weight: 700;">
+                    <span><i class="fa-solid fa-tag"></i> Coupon Discount ({{ applied_coupon.code if applied_coupon else '' }}):</span>
+                    <span>-{{ format_inr(coupon_discount) }}</span>
+                </div>
+                {% endif %}
+
+                <div style="display: flex; justify-content: space-between; color: #10b981; font-weight: 700;">
+                    <span><i class="fa-solid fa-piggy-bank"></i> Total Savings:</span>
+                    <span>-{{ format_inr(total_savings) }}</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                    <span>Delivery Shipping:</span>
+                    <span style="color: #10b981; font-weight: 600;">FREE (BargainExpress)</span>
+                </div>
+
+                <div style="height: 1px; background: var(--border-color); margin: 8px 0;"></div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 800; color: #fff;">
+                    <span>Grand Total:</span>
+                    <span style="color: #38bdf8; font-family: 'Space Grotesk', sans-serif;">{{ format_inr(grand_total) }}</span>
+                </div>
+            </div>
+
+            <a href="{{ url_for('orders.checkout') }}" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 1rem;">
+                <i class="fa-solid fa-credit-card"></i> Proceed to Checkout ({{ format_inr(grand_total) }})
+            </a>
+
+            <div style="text-align: center; margin-top: 14px; font-size: 0.75rem; color: var(--text-muted);">
+                <i class="fa-solid fa-shield-halved text-emerald-400"></i> AI Authenticity Verified • Safe Simulated Payment
+            </div>
+        </div>
+
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center; padding: 60px 20px;">
+        <i class="fa-solid fa-cart-shopping" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 16px;"></i>
+        <h3 style="font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 8px;">Your Cart is Empty</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
+            Explore our product catalog, verify authenticity, and bargain with the AI agent to unlock savings!
+        </p>
+        <a href="{{ url_for('products.product_list') }}" class="btn btn-primary">
+            Explore Products
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+async function removeItem(itemId) {
+    if (!confirm('Remove this product from your cart?')) return;
+    try {
+        const res = await fetch(`/api/cart/remove/${itemId}`, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+            window.location.reload();
+        }
+    } catch (e) {
+        alert('Failed to remove item');
+    }
+}
+
+async function applyCartCoupon() {
+    const input = document.getElementById('cartCouponInput');
+    const code = input ? input.value.trim() : '';
+    if (!code) {
+        alert('Please enter a coupon code.');
+        return;
+    }
+    await sendCouponRequest(code);
+}
+
+function quickApplyCoupon(code) {
+    sendCouponRequest(code);
+}
+
+async function sendCouponRequest(code) {
+    try {
+        const res = await fetch('/api/cart/apply-coupon', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ coupon_code: code })
+        });
+        const data = await res.json();
+        if (data.success) {
+            alert(data.message);
+            window.location.reload();
+        } else {
+            alert(data.message || 'Invalid coupon code');
+        }
+    } catch (e) {
+        alert('Failed to apply coupon. Please check connection.');
+    }
+}
+
+async function removeCartCoupon() {
+    try {
+        const res = await fetch('/api/cart/remove-coupon', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+            window.location.reload();
+        }
+    } catch (e) {
+        alert('Failed to remove coupon');
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,11 @@
+Flask>=3.0.0
+Flask-Login>=0.6.3
+Flask-SQLAlchemy>=3.1.1
+Werkzeug>=3.0.0
+pymongo>=4.6.0
+scikit-learn>=1.4.0
+numpy>=1.26.0
+pandas>=2.1.0; platform_system != "Windows" or python_version < "3.13"
+Pillow>=10.0.0
+python-dotenv>=1.0.0
+requests>=2.31.0

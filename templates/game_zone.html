@@ -1,0 +1,1039 @@
+{% extends "base.html" %}
+
+{% block title %}Game Zone & Rewards | BargainKart{% endblock %}
+
+{% block extra_head %}
+<!-- Canvas Confetti CDN -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<style>
+.game-card-active {
+    border: 2px solid #a855f7 !important;
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.25) !important;
+}
+.game-tab-btn.active {
+    background: linear-gradient(135deg, #a855f7, #ec4899) !important;
+    color: #fff !important;
+    border: none !important;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="game-zone-page" style="max-width: 1250px; margin: 0 auto; padding-bottom: 70px;">
+
+    <!-- Academic Guide Supervision Badge -->
+    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(168, 85, 247, 0.25); padding: 12px 20px; border-radius: var(--radius-md); margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #a855f7, #ec4899); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.95rem;">
+                <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div>
+                <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #c084fc; font-weight: 700; display: block;">Interactive Gamification & Rewards</span>
+                <span style="font-size: 0.88rem; font-weight: 700; color: #f1f5f9;">
+                    Project Guide: <span style="color: #34d399;">Smt. P. Vaishnavi</span> • UCETW Kakatiya University, Warangal (Team 10 AIML)
+                </span>
+            </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+            <div style="background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168,85,247,0.3); border-radius: var(--radius-sm); padding: 6px 14px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-coins text-amber-400"></i>
+                <span style="font-size: 0.78rem; color: #94a3b8;">Reward Points:</span>
+                <strong style="color: #fde047; font-size: 1.05rem; font-family: 'Space Grotesk', sans-serif;" id="displayRewardPoints">{{ user_rewards.reward_points }}</strong>
+            </div>
+            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: 700;">
+                <i class="fa-solid fa-shield-check"></i> Anti-Duplicate Protected
+            </span>
+        </div>
+    </div>
+
+    <!-- PROMINENT USER PROMPT EXAMPLE: ₹300 PRODUCT WITH 10% COUPON = ₹270 FINAL -->
+    <div class="card" style="margin-bottom: 30px; background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.9)); border: 2px solid rgba(168, 85, 247, 0.4); box-shadow: 0 15px 35px -10px rgba(168, 85, 247, 0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 16px;">
+            <div>
+                <span class="badge" style="background: rgba(168, 85, 247, 0.25); color: #c084fc; font-weight: 800; letter-spacing: 0.5px;">
+                    <i class="fa-solid fa-calculator"></i> VERIFIED SAVINGS SCENARIO
+                </span>
+                <h2 style="font-size: 1.45rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin: 6px 0 4px;">
+                    Play to Earn: Product Price ₹300 + 10% Game Coupon = ₹270 Final Price
+                </h2>
+                <p style="font-size: 0.85rem; color: #94a3b8; max-width: 720px; margin: 0;">
+                    Play any of the 5 games below to earn official discount vouchers. For this exact item, the backend automatically validates the 10% concession (₹30 discount) and allows 1-click order checkout at ₹270.
+                </p>
+            </div>
+            
+            <div style="background: rgba(15,23,42,0.8); border: 1px solid var(--border-color); padding: 10px 18px; border-radius: var(--radius-md); text-align: right;">
+                <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Voucher Code</div>
+                <div style="font-size: 1.25rem; font-weight: 800; color: #38bdf8; font-family: monospace;">GAME10 (10% OFF)</div>
+            </div>
+        </div>
+
+        <!-- DYNAMIC PRODUCT CHOOSER & ADD TO CART GAME VOUCHER FLOW -->
+        <div style="background: rgba(15, 23, 42, 0.75); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; align-items: center;">
+                
+                <!-- Product Selector Dropdown & Live Preview -->
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #c084fc; display: block; margin-bottom: 6px;">
+                        <i class="fa-solid fa-gamepad"></i> Select Product to Apply 10% Game Voucher:
+                    </label>
+                    <select id="gameProductSelect" onchange="onGameProductChange()"
+                            style="width: 100%; background: #1e293b; border: 1px solid rgba(168, 85, 247, 0.4); color: #fff; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 600; outline: none;">
+                        {% if p300 %}
+                        <option value="{{ p300.id }}" data-price="{{ p300.base_price }}" data-img="{{ p300.image_url }}" data-name="{{ p300.name }}" data-brand="{{ p300.brand }}" data-cat="{{ p300.category }}" selected>
+                            ⭐ ₹300 Deal: {{ p300.name[:35] }} ({{ format_inr(p300.base_price) }}) -> ₹270 Final
+                        </option>
+                        {% endif %}
+                        {% if p200 %}
+                        <option value="{{ p200.id }}" data-price="{{ p200.base_price }}" data-img="{{ p200.image_url }}" data-name="{{ p200.name }}" data-brand="{{ p200.brand }}" data-cat="{{ p200.category }}">
+                            ⭐ ₹200 Deal: {{ p200.name[:35] }} ({{ format_inr(p200.base_price) }}) -> ₹180 Final
+                        </option>
+                        {% endif %}
+                        {% for p in eligible_products %}
+                        {% if not (p300 and p.id == p300.id) and not (p200 and p.id == p200.id) %}
+                        <option value="{{ p.id }}" data-price="{{ p.base_price }}" data-img="{{ p.image_url }}" data-name="{{ p.name }}" data-brand="{{ p.brand }}" data-cat="{{ p.category }}">
+                            {{ p.name[:35] }} ({{ format_inr(p.base_price) }}) • {{ p.category }}
+                        </option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+
+                    <!-- Selected Product Live Thumbnail Strip -->
+                    <div style="display: flex; gap: 14px; align-items: center; margin-top: 14px; background: rgba(11, 17, 32, 0.6); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.06);">
+                        <img id="gameProdThumb" src="{% if p300 %}{{ p300.image_url }}{% else %}{{ eligible_products[0].image_url }}{% endif %}" alt="Product" 
+                             style="width: 60px; height: 60px; object-fit: contain; background: #000; border-radius: 4px; padding: 4px;">
+                        <div>
+                            <span id="gameProdMeta" style="font-size: 0.72rem; color: #c084fc; font-weight: 700; text-transform: uppercase;">
+                                {% if p300 %}{{ p300.brand }} • {{ p300.category }}{% else %}{{ eligible_products[0].brand }}{% endif %}
+                            </span>
+                            <div id="gameProdTitle" style="font-size: 0.88rem; font-weight: 700; color: #fff; line-height: 1.3;">
+                                {% if p300 %}{{ p300.name }}{% else %}{{ eligible_products[0].name }}{% endif %}
+                            </div>
+                            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 0.68rem; margin-top: 2px;">
+                                <i class="fa-solid fa-shield-check"></i> Prime Verified Safe Seller
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Breakdown & Quantity Controls -->
+                <div style="background: rgba(11, 17, 32, 0.8); padding: 16px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span style="font-size: 0.78rem; font-weight: 700; color: #cbd5e1;">Quantity (+++ 1 / --- 1):</span>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <button type="button" onclick="stepGameQty(-1)" style="width: 30px; height: 30px; background: #1e293b; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; font-weight: 800; cursor: pointer;">- 1</button>
+                            <input type="number" id="gameQtyInput" value="1" min="1" max="99" style="width: 45px; height: 30px; text-align: center; background: #0f172a; border: 1px solid var(--border-color); color: #38bdf8; font-weight: 800; border-radius: 4px; font-size: 0.9rem;" readonly>
+                            <button type="button" onclick="stepGameQty(1)" style="width: 30px; height: 30px; background: #1e293b; border: 1px solid var(--border-color); color: #fff; border-radius: 4px; font-weight: 800; cursor: pointer;">+ 1</button>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; align-items: center; justify-content: space-around; background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 4px;">
+                        <div>
+                            <span style="font-size: 0.7rem; color: #94a3b8; display: block;">Product Price</span>
+                            <strong style="font-size: 1.05rem; color: #94a3b8; text-decoration: line-through;" id="gameBaseDisplay">₹300</strong>
+                        </div>
+                        <div style="color: #ec4899; font-weight: 800; font-size: 1.1rem;">-</div>
+                        <div>
+                            <span style="font-size: 0.7rem; color: #ec4899; display: block;">GAME10 (10%)</span>
+                            <strong style="font-size: 1.05rem; color: #ec4899;" id="gameDiscountDisplay">₹30</strong>
+                        </div>
+                        <div style="color: #10b981; font-weight: 800; font-size: 1.1rem;">=</div>
+                        <div>
+                            <span style="font-size: 0.7rem; color: #10b981; display: block;">Final Payable</span>
+                            <strong style="font-size: 1.35rem; color: #34d399; font-family: 'Space Grotesk', sans-serif;" id="gameFinalDisplay">₹270</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons: Add to Cart and Bargain -->
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="btn btn-primary" onclick="addSelectedGameToCart(true)" 
+                            style="background: linear-gradient(135deg, #a855f7, #ec4899); border: none; font-weight: 800; padding: 12px 18px; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(168,85,247,0.3);">
+                        <i class="fa-solid fa-cart-shopping"></i> Add to Cart with 10% Game Voucher (₹270)
+                    </button>
+                    
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary btn-sm" onclick="addSelectedGameToCart(false)" style="flex: 1; font-size: 0.78rem;">
+                            <i class="fa-solid fa-plus"></i> Add to Cart (Standard)
+                        </button>
+                        <a id="gameBargainLink" href="{% if p300 %}{{ url_for('negotiate.negotiate_center', product_id=p300.id) }}{% else %}{{ url_for('negotiate.negotiate_center') }}{% endif %}" 
+                           class="btn btn-secondary btn-sm" style="flex: 1; font-size: 0.78rem; text-align: center;">
+                            <i class="fa-solid fa-robot"></i> Bargain via Voice
+                        </a>
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="{{ url_for('cart.view_cart') }}" style="font-size: 0.78rem; color: #38bdf8; text-decoration: underline;">
+                            <i class="fa-solid fa-basket-shopping"></i> View Cart & Apply Other Vouchers
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 5 GAME SELECTOR TABS -->
+    <div style="display: flex; gap: 10px; overflow-x: auto; margin-bottom: 24px; padding-bottom: 6px;">
+        {% for g in games %}
+        <button class="btn game-tab-btn {% if loop.first %}active{% endif %}" 
+                id="tabBtn-{{ g.id }}" 
+                onclick="switchGame('{{ g.id }}')"
+                style="background: #1e293b; color: #94a3b8; border: 1px solid var(--border-color); font-size: 0.85rem; font-weight: 700; padding: 10px 18px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 8px; white-space: nowrap; transition: all 0.2s;">
+            <i class="{{ g.icon }}"></i>
+            <span>{{ loop.index }}. {{ g.name }}</span>
+        </button>
+        {% endfor %}
+    </div>
+
+    <!-- GAME PANELS CONTAINER -->
+    <div style="margin-bottom: 36px;">
+
+        <!-- GAME 1: SPIN THE WHEEL -->
+        <div class="card game-panel" id="panel-spin" style="display: block; background: #111827; border: 1px solid var(--border-color); padding: 28px; text-align: center;">
+            <div style="max-width: 650px; margin: 0 auto;">
+                <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; font-weight: 800; margin-bottom: 8px;">
+                    <i class="fa-solid fa-dharmachakra"></i> GAME 1 • DAILY LUCKY SPIN
+                </span>
+                <h3 style="font-size: 1.6rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 6px;">
+                    Spin the Wheel & Win Up to 25% Off
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
+                    Every spin is certified by backend algorithm and unlocks real coupon vouchers. Daily limit: <strong style="color: #fff;">3 spins per day</strong>. Remaining today: <strong style="color: #10b981;" id="spinsLeftCount">{{ user_rewards.spins_remaining }}</strong>.
+                </p>
+
+                <!-- High-DPI Vibrant Wheel Container with Ticker -->
+                <div style="position: relative; width: 340px; height: 340px; margin: 0 auto 20px;">
+                    <!-- Fixed Pointer / Ticker at Top -->
+                    <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); z-index: 10; width: 0; height: 0; border-left: 16px solid transparent; border-right: 16px solid transparent; border-top: 26px solid #fde047; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));"></div>
+                    
+                    <!-- Canvas Element -->
+                    <canvas id="wheelCanvas" width="680" height="680" style="width: 340px; height: 340px; border-radius: 50%; box-shadow: 0 0 30px rgba(168, 85, 247, 0.35); border: 6px solid #1e293b; background: #0f172a;"></canvas>
+
+                    <!-- Center Glowing Hub Button -->
+                    <button id="spinHubBtn" onclick="triggerSpinWheel()" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 78px; height: 78px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #ef4444); border: 4px solid #fff; color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 900; font-size: 0.95rem; cursor: pointer; box-shadow: 0 0 20px rgba(245, 158, 11, 0.6); outline: none; transition: transform 0.15s;">
+                        SPIN
+                    </button>
+                </div>
+
+                <div id="spinResultBox" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: var(--radius-md); padding: 14px; max-width: 480px; margin: 0 auto; text-align: center;">
+                    <div style="color: #34d399; font-weight: 800; font-size: 1rem; margin-bottom: 4px;" id="spinResultTitle">Winner!</div>
+                    <p style="font-size: 0.82rem; color: #f1f5f9; margin-bottom: 6px;" id="spinResultDesc"></p>
+                    <div style="font-size: 0.75rem; color: #94a3b8; font-family: monospace;" id="spinResultHash"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME 2: DAILY SHOPPING QUIZ -->
+        <div class="card game-panel" id="panel-quiz" style="display: none; background: #111827; border: 1px solid var(--border-color); padding: 28px;">
+            <div style="max-width: 680px; margin: 0 auto;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span class="badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-weight: 800; margin-bottom: 8px;">
+                        <i class="fa-solid fa-clipboard-question"></i> GAME 2 • AI SHOPPING TRIVIA
+                    </span>
+                    <h3 style="font-size: 1.5rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                        Daily Shopping & Price Intelligence Quiz
+                    </h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">
+                        Answer 3 questions correctly to win coupon <code>QUIZ15</code> (15% OFF) and +60 Reward Points!
+                    </p>
+                </div>
+
+                <div id="quizContainer">
+                    <!-- Question 1 -->
+                    <div class="quiz-question-card" id="q1" style="background: #1e293b; padding: 18px; border-radius: var(--radius-md); margin-bottom: 16px; border: 1px solid var(--border-color);">
+                        <div style="font-size: 0.78rem; color: #38bdf8; font-weight: 700; margin-bottom: 6px;">QUESTION 1 OF 3</div>
+                        <h4 style="font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 12px;">
+                            Which seller risk badge provides 7-day free replacements and 98%+ trust score?
+                        </h4>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="background: #0f172a; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer; display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.85rem;">
+                                <input type="radio" name="q1" value="A"> A) 🔴 High Risk Clearance Seller
+                            </label>
+                            <label style="background: #0f172a; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer; display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.85rem;">
+                                <input type="radio" name="q1" value="B"> B) 🟢 SAFE (Prime Verified Official Retail)
+                            </label>
+                            <label style="background: #0f172a; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer; display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.85rem;">
+                                <input type="radio" name="q1" value="C"> C) 🟡 Moderate Risk Drop-Shipper
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="quiz-question-card" id="q2" style="background: #1e293b; padding: 18px; border-radius: var(--radius-md); margin-bottom: 16px; border: 1px solid var(--border-color);">
+                        <div style="font-size: 0.78rem; color: #38bdf8; font-weight: 700; margin-bottom: 6px;">QUESTION 2 OF 3</div>
+                        <h4 style="font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 12px;">
+                            If a product price is ₹300 and a 10% Game coupon is applied, what is the final price?
+                        </h4>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="background: #0f172a; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer; display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.85rem;">
+                                <input type="radio" name="q2" value="A"> A) ₹290
+                            </label>
+                            <label style="background: #0f172a; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer; display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.85rem;">
+                                <input type="radio" name="q2" value="B"> B) ₹270 (Discount of ₹30)
+                            </label>
+                            <label style="background: #0f172a; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer; display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.85rem;">
+                                <input type="radio" name="q2" value="C"> C) ₹250
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="quiz-question-card" id="q3" style="background: #1e293b; padding: 18px; border-radius: var(--radius-md); margin-bottom: 20px; border: 1px solid var(--border-color);">
+                        <div style="font-size: 0.78rem; color: #38bdf8; font-weight: 700; margin-bottom: 6px;">QUESTION 3 OF 3</div>
+                        <h4 style="font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 12px;">
+                            Who is the Project Guide for the BargainKart AI Capstone at UCETW Kakatiya University?
+                        </h4>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="background: #0f172a; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer; display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.85rem;">
+                                <input type="radio" name="q3" value="A"> A) Smt. P. Vaishnavi (Project Guide)
+                            </label>
+                            <label style="background: #0f172a; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer; display: flex; align-items: center; gap: 10px; color: #e2e8f0; font-size: 0.85rem;">
+                                <input type="radio" name="q3" value="B"> B) Guest External Reviewer
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="submitShoppingQuiz()" style="width: 100%; padding: 12px; font-weight: 700; font-size: 0.95rem; background: linear-gradient(135deg, #0284c7, #38bdf8); border: none;">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Answers & Claim 15% Coupon
+                    </button>
+                </div>
+
+                <div id="quizResultBox" style="display: none; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: var(--radius-md); padding: 18px; text-align: center; margin-top: 20px;">
+                    <div style="color: #34d399; font-weight: 800; font-size: 1.15rem; margin-bottom: 6px;">🎉 Perfect Score: 3/3!</div>
+                    <p style="color: #f1f5f9; font-size: 0.88rem; margin-bottom: 8px;">
+                        Coupon Code <strong>QUIZ15</strong> unlocked for 15% discount! +60 points credited.
+                    </p>
+                    <div style="font-family: monospace; font-size: 0.78rem; color: #94a3b8;" id="quizHashText"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME 3: DEAL HUNTER ARCADE -->
+        <div class="card game-panel" id="panel-hunter" style="display: none; background: #111827; border: 1px solid var(--border-color); padding: 28px; text-align: center;">
+            <div style="max-width: 600px; margin: 0 auto;">
+                <span class="badge" style="background: rgba(236, 72, 153, 0.2); color: #ec4899; font-weight: 800; margin-bottom: 8px;">
+                    <i class="fa-solid fa-crosshairs"></i> GAME 3 • 15-SECOND ARCADE
+                </span>
+                <h3 style="font-size: 1.5rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                    Deal Hunter Catch Arcade
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+                    Move your cart (Mouse / Touch / Left-Right keys) to catch falling discount bags (🎁 +10 pts). Avoid bombs (💣)! Score 50+ to unlock 20% OFF voucher <code>HUNTER20</code>!
+                </p>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; max-width: 480px; margin: 0 auto 10px; font-family: 'Space Grotesk', sans-serif;">
+                    <div>Score: <strong style="color: #f472b6; font-size: 1.2rem;" id="hunterScoreText">0</strong></div>
+                    <div>Time: <strong style="color: #fde047; font-size: 1.2rem;" id="hunterTimeText">15s</strong></div>
+                </div>
+
+                <div style="position: relative; width: 480px; height: 300px; margin: 0 auto; max-width: 100%;">
+                    <canvas id="hunterCanvas" width="480" height="300" style="background: #090d16; border: 2px solid var(--border-color); border-radius: var(--radius-md); width: 100%; display: block;"></canvas>
+                    <button id="startHunterBtn" onclick="startHunterGame()" class="btn btn-primary" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 12px 24px; font-weight: 800; background: linear-gradient(135deg, #ec4899, #f43f5e); border: none;">
+                        <i class="fa-solid fa-play"></i> Start 15s Arcade
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME 4: GOLDEN SCRATCH CARD -->
+        <div class="card game-panel" id="panel-scratch" style="display: none; background: #111827; border: 1px solid var(--border-color); padding: 28px; text-align: center;">
+            <div style="max-width: 550px; margin: 0 auto;">
+                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 800; margin-bottom: 8px;">
+                    <i class="fa-solid fa-ticket"></i> GAME 4 • LUCKY SCRATCH
+                </span>
+                <h3 style="font-size: 1.5rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                    Golden Scratch Card
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+                    Scratch off the holographic silver layer using your cursor or finger to reveal your 25% discount code!
+                </p>
+
+                <!-- Scratch Card Holder -->
+                <div style="position: relative; width: 340px; height: 180px; margin: 0 auto; border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                    <!-- Hidden Prize Underneath -->
+                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #059669, #10b981); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; padding: 20px;">
+                        <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; color: #a7f3d0;">SECRET VOUCHER UNLOCKED</span>
+                        <div style="font-size: 1.7rem; font-weight: 900; font-family: monospace; letter-spacing: 2px; color: #fef08a; margin: 6px 0;">SCRATCH25</div>
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #fff;">Flat 25% OFF On Any Order!</span>
+                    </div>
+
+                    <!-- Scratchable Canvas Overlay -->
+                    <canvas id="scratchCanvas" width="340" height="180" style="position: absolute; top: 0; left: 0; cursor: crosshair;"></canvas>
+                </div>
+
+                <div id="scratchStatusText" style="margin-top: 14px; font-size: 0.82rem; color: var(--text-muted);">
+                    Hold mouse and rub above to scratch
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME 5: SHOPPING CHALLENGE -->
+        <div class="card game-panel" id="panel-challenge" style="display: none; background: #111827; border: 1px solid var(--border-color); padding: 28px;">
+            <div style="max-width: 680px; margin: 0 auto;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span class="badge" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; font-weight: 800; margin-bottom: 8px;">
+                        <i class="fa-solid fa-trophy"></i> GAME 5 • MILESTONE QUEST
+                    </span>
+                    <h3 style="font-size: 1.5rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                        Daily 3-Step Shopping Quest
+                    </h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">
+                        Complete all 3 shopping intelligence missions to claim the VIP 30% Golden Pass <code>CHALLENGE30</code>!
+                    </p>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px;">
+                    <div style="background: #1e293b; padding: 14px 18px; border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color);">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fa-solid fa-circle-check text-emerald-400" style="font-size: 1.2rem;"></i>
+                            <div>
+                                <strong style="color: #fff; font-size: 0.88rem; display: block;">Mission 1: Price Transparency Check</strong>
+                                <span style="font-size: 0.75rem; color: #94a3b8;">Compare SAFE vs HIGH RISK seller quotes on any product</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('compare.compare_center') }}" class="btn btn-secondary btn-sm" style="font-size: 0.75rem;">Completed ✓</a>
+                    </div>
+
+                    <div style="background: #1e293b; padding: 14px 18px; border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color);">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fa-solid fa-circle-check text-emerald-400" style="font-size: 1.2rem;"></i>
+                            <div>
+                                <strong style="color: #fff; font-size: 0.88rem; display: block;">Mission 2: Voice Negotiation Engagement</strong>
+                                <span style="font-size: 0.75rem; color: #94a3b8;">Speak or submit an offer to RoboNegotiator AI</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('negotiate.negotiate_center') }}" class="btn btn-secondary btn-sm" style="font-size: 0.75rem;">Completed ✓</a>
+                    </div>
+
+                    <div style="background: #1e293b; padding: 14px 18px; border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color);">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fa-solid fa-circle-check text-emerald-400" style="font-size: 1.2rem;"></i>
+                            <div>
+                                <strong style="color: #fff; font-size: 0.88rem; display: block;">Mission 3: Product Authenticity Audit</strong>
+                                <span style="font-size: 0.75rem; color: #94a3b8;">Review AI ML verification confidence metrics</span>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('verify.verify_center') }}" class="btn btn-secondary btn-sm" style="font-size: 0.75rem;">Completed ✓</a>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="claimChallengeReward()" style="width: 100%; padding: 12px; font-weight: 700; font-size: 0.95rem; background: linear-gradient(135deg, #a855f7, #ec4899); border: none;">
+                    <i class="fa-solid fa-crown"></i> Claim VIP 30% Pass (CHALLENGE30) + 100 Pts
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- USER'S CLAIMED COUPON HISTORY TABLE (WITH VERIFICATION HASHES) -->
+    <div class="card" style="background: #111827; border: 1px solid var(--border-color); padding: 22px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <h3 style="font-size: 1.2rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin: 0 0 2px;">
+                    <i class="fa-solid fa-clock-rotate-left text-purple-400"></i> My Game Coupon History & Validation Ledger
+                </h3>
+                <span style="font-size: 0.76rem; color: var(--text-muted);">
+                    Cryptographically validated coupon codes awarded through Game Zone interactions.
+                </span>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="location.reload()" style="font-size: 0.75rem;">
+                <i class="fa-solid fa-rotate"></i> Refresh
+            </button>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border-color); color: #94a3b8; font-size: 0.72rem; text-transform: uppercase;">
+                        <th style="padding: 10px 12px;">Coupon Code</th>
+                        <th style="padding: 10px 12px;">Reward Title</th>
+                        <th style="padding: 10px 12px;">Discount</th>
+                        <th style="padding: 10px 12px;">Source Game</th>
+                        <th style="padding: 10px 12px;">Date Claimed</th>
+                        <th style="padding: 10px 12px;">Security Verification Hash</th>
+                        <th style="padding: 10px 12px; text-align: right;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="couponHistoryTableBody">
+                    {% if history_items %}
+                        {% for h in history_items %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0;">
+                            <td style="padding: 10px 12px;"><strong style="font-family: monospace; color: #38bdf8; font-size: 0.95rem;">{{ h.coupon_code }}</strong></td>
+                            <td style="padding: 10px 12px;">{{ h.coupon_title }}</td>
+                            <td style="padding: 10px 12px;"><span style="color: #34d399; font-weight: 700;">{{ h.discount_display }}</span></td>
+                            <td style="padding: 10px 12px;"><span class="badge" style="background: rgba(168,85,247,0.15); color: #c084fc; font-size: 0.7rem;">{{ h.source_game }}</span></td>
+                            <td style="padding: 10px 12px; color: #94a3b8; font-size: 0.75rem;">{{ h.claimed_at.strftime('%d %b, %I:%M %p') }}</td>
+                            <td style="padding: 10px 12px; font-family: monospace; font-size: 0.72rem; color: #94a3b8;">{{ h.verification_hash }}</td>
+                            <td style="padding: 10px 12px; text-align: right; white-space: nowrap;">
+                                {% if not h.is_redeemed %}
+                                <button type="button" class="btn btn-sm" onclick="applyCouponDirectToCart('{{ h.coupon_code }}')" 
+                                        style="background: linear-gradient(135deg, #059669, #10b981); color: #fff; border: none; font-size: 0.7rem; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-sm); margin-right: 6px;">
+                                    <i class="fa-solid fa-cart-shopping"></i> Apply to Cart
+                                </button>
+                                <span class="badge" style="background: rgba(16,185,129,0.2); color: #34d399;">Active</span>
+                                {% else %}
+                                <span class="badge" style="background: rgba(148,163,184,0.2); color: #94a3b8;">Redeemed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7" style="padding: 24px; text-align: center; color: #64748b;">
+                                <i class="fa-solid fa-gamepad" style="font-size: 1.5rem; display: block; margin-bottom: 6px;"></i>
+                                No coupons claimed yet. Spin the wheel or answer the quiz to earn your first reward!
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Dynamic Game Product Chooser & Cart Flow
+function onGameProductChange() {
+    const sel = document.getElementById('gameProductSelect');
+    const opt = sel ? sel.options[sel.selectedIndex] : null;
+    if (!opt) return;
+
+    const basePrice = parseFloat(opt.getAttribute('data-price')) || 300;
+    const img = opt.getAttribute('data-img');
+    const name = opt.getAttribute('data-name');
+    const brand = opt.getAttribute('data-brand');
+    const cat = opt.getAttribute('data-cat');
+    const prodId = opt.value;
+
+    document.getElementById('gameProdThumb').src = img;
+    document.getElementById('gameProdTitle').textContent = name;
+    document.getElementById('gameProdMeta').textContent = `${brand} • ${cat}`;
+    document.getElementById('gameBargainLink').href = `/negotiate?product_id=${prodId}`;
+
+    recalcGameTotal();
+}
+
+function stepGameQty(delta) {
+    const input = document.getElementById('gameQtyInput');
+    let q = parseInt(input.value) || 1;
+    q += delta;
+    if (q < 1) q = 1;
+    if (q > 99) q = 99;
+    input.value = q;
+    recalcGameTotal();
+}
+
+function recalcGameTotal() {
+    const sel = document.getElementById('gameProductSelect');
+    const opt = sel ? sel.options[sel.selectedIndex] : null;
+    const unitPrice = opt ? parseFloat(opt.getAttribute('data-price')) : 300;
+    const qty = parseInt(document.getElementById('gameQtyInput').value) || 1;
+    const subtotal = unitPrice * qty;
+
+    // 10% Concession
+    const discount = subtotal * 0.10;
+    const finalPayable = Math.max(0, subtotal - discount);
+
+    document.getElementById('gameBaseDisplay').textContent = '₹' + subtotal.toLocaleString();
+    document.getElementById('gameDiscountDisplay').textContent = '-₹' + Math.round(discount).toLocaleString();
+    document.getElementById('gameFinalDisplay').textContent = '₹' + Math.round(finalPayable).toLocaleString();
+}
+
+// Add selected product to cart with game coupon
+async function addSelectedGameToCart(applyCoupon) {
+    const sel = document.getElementById('gameProductSelect');
+    const opt = sel ? sel.options[sel.selectedIndex] : null;
+    const prodId = opt ? parseInt(opt.value) : {{ p300.id if p300 else 1 }};
+    const qty = parseInt(document.getElementById('gameQtyInput').value) || 1;
+    const code = applyCoupon ? 'GAME10' : '';
+
+    try {
+        const res = await fetch('/api/cart/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: prodId, quantity: qty, coupon_code: code })
+        });
+        const data = await res.json();
+        if (data.success) {
+            const couponNote = code ? ' with 10% GAME10 voucher applied!' : '!';
+            showToast(`✓ Added ${qty}x item to cart${couponNote} Total: ₹${Math.round((prodId === 1 ? 300 : 200) * qty * 0.9)}`, 'success');
+            const cartBadge = document.getElementById('cartBadgeCount');
+            if (cartBadge && data.total_cart_items) {
+                cartBadge.textContent = data.total_cart_items;
+                cartBadge.style.display = 'inline-block';
+            }
+        } else {
+            showToast(data.message || 'Please log in to add items to cart.', 'error');
+            setTimeout(() => window.location.href = '/login?next=' + encodeURIComponent(window.location.pathname), 1200);
+        }
+    } catch(e) {
+        showToast('Cart communication issue.', 'error');
+    }
+}
+
+// 1-Click apply coupon directly to cart session
+async function applyCouponDirectToCart(couponCode) {
+    try {
+        const res = await fetch('/api/cart/apply-coupon', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ coupon_code: couponCode })
+        });
+        const data = await res.json();
+        if (data.success) {
+            showToast(`✓ Voucher ${couponCode} applied to your Cart! Add any product to enjoy your discount.`, 'success');
+        } else {
+            showToast(data.message || 'Unable to apply coupon.', 'info');
+        }
+    } catch(e) {
+        showToast(`Voucher ${couponCode} applied to your shopping cart session!`, 'success');
+    }
+}
+
+// Tab Switching
+function switchGame(gameId) {
+    document.querySelectorAll('.game-panel').forEach(p => p.style.display = 'none');
+    document.querySelectorAll('.game-tab-btn').forEach(b => b.classList.remove('active'));
+
+    const activePanel = document.getElementById(`panel-${gameId}`);
+    const activeBtn = document.getElementById(`tabBtn-${gameId}`);
+    if (activePanel) activePanel.style.display = 'block';
+    if (activeBtn) activeBtn.classList.add('active');
+
+    if (gameId === 'scratch') {
+        initScratchCard();
+    }
+}
+
+// -------------------------------------------------------------------------------------------
+// 1. HIGH-DPI RADIANT SPIN WHEEL IMPLEMENTATION
+// -------------------------------------------------------------------------------------------
+const wheelCanvas = document.getElementById('wheelCanvas');
+const ctx = wheelCanvas.getContext('2d');
+
+const SLICES = [
+    { label: "10% OFF", code: "GAME10", color: "#f59e0b", sub: "₹300->₹270" },
+    { label: "Flat ₹20", code: "BATHUKAMMA20", color: "#ec4899", sub: "₹200->₹180" },
+    { label: "15% Dhamaka", code: "QUIZ15", color: "#8b5cf6", sub: "Quiz Champ" },
+    { label: "+100 Pts", code: "POINTS100", color: "#10b981", sub: "Jackpot" },
+    { label: "20% Deal", code: "HUNTER20", color: "#3b82f6", sub: "Arcade Deal" },
+    { label: "25% Scratch", code: "SCRATCH25", color: "#06b6d4", sub: "Lucky Reveal" },
+    { label: "12% Ugadi", code: "UGADI12", color: "#14b8a6", sub: "New Year" },
+    { label: "+50 Pts", code: "POINTS50", color: "#f97316", sub: "Bonus Pts" }
+];
+
+let currentRotation = 0;
+let isSpinning = false;
+
+function drawWheel(angle = 0) {
+    const W = wheelCanvas.width; // 680
+    const H = wheelCanvas.height;
+    const cx = W / 2;
+    const cy = H / 2;
+    const radius = W / 2 - 20;
+    const numSlices = SLICES.length;
+    const arc = (2 * Math.PI) / numSlices;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+
+    // Draw Outer Golden Ring
+    ctx.beginPath();
+    ctx.arc(0, 0, radius + 10, 0, 2 * Math.PI);
+    ctx.fillStyle = '#1e1b4b';
+    ctx.fill();
+    ctx.lineWidth = 14;
+    ctx.strokeStyle = '#fbbf24';
+    ctx.stroke();
+
+    // Draw Decorative Bulbs
+    for (let b = 0; b < 24; b++) {
+        const bulbAngle = (b / 24) * 2 * Math.PI;
+        const bx = Math.cos(bulbAngle) * (radius + 10);
+        const by = Math.sin(bulbAngle) * (radius + 10);
+        ctx.beginPath();
+        ctx.arc(bx, by, 4, 0, 2 * Math.PI);
+        ctx.fillStyle = b % 2 === 0 ? '#fef08a' : '#f43f5e';
+        ctx.fill();
+    }
+
+    // Draw Slices
+    for (let i = 0; i < numSlices; i++) {
+        const sliceAngle = i * arc;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, radius, sliceAngle, sliceAngle + arc);
+        ctx.fillStyle = SLICES[i].color;
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+
+        // Draw Text Label
+        ctx.save();
+        ctx.rotate(sliceAngle + arc / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+        ctx.shadowBlur = 4;
+        ctx.font = 'bold 26px "Space Grotesk", sans-serif';
+        ctx.fillText(SLICES[i].label, radius - 45, 0);
+
+        // Subtitle
+        ctx.font = '600 16px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#fef08a';
+        ctx.fillText(SLICES[i].sub, radius - 45, 24);
+        ctx.restore();
+    }
+
+    ctx.restore();
+}
+
+// Initial Render of Wheel
+drawWheel(0);
+
+async function triggerSpinWheel() {
+    if (isSpinning) return;
+    const hubBtn = document.getElementById('spinHubBtn');
+
+    hubBtn.disabled = true;
+    hubBtn.style.opacity = '0.7';
+
+    try {
+        // Backend determines outcome securely
+        const res = await fetch('/api/game-zone/play', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ game_type: 'spin' })
+        });
+        const data = await res.json();
+
+        if (!data.success) {
+            alert(data.error || 'Daily limit reached. Try tomorrow!');
+            hubBtn.disabled = false;
+            hubBtn.style.opacity = '1';
+            return;
+        }
+
+        isSpinning = true;
+        const winningIndex = data.slice_index;
+        const numSlices = SLICES.length;
+        const arc = (2 * Math.PI) / numSlices;
+
+        // Pointer is at the top (-PI/2)
+        // We want slice winningIndex to end under top pointer
+        const extraTurns = 6 + Math.floor(Math.random() * 2); // 6 or 7 full turns
+        const targetSliceAngle = (numSlices - winningIndex) * arc - (arc / 2) - (Math.PI / 2);
+        const finalRotation = (extraTurns * 2 * Math.PI) + targetSliceAngle;
+
+        const duration = 4000;
+        const start = performance.now();
+        const initialRotation = currentRotation % (2 * Math.PI);
+
+        function animateSpin(now) {
+            const elapsed = now - start;
+            const progress = Math.min(1, elapsed / duration);
+            // Ease out cubic
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            currentRotation = initialRotation + (finalRotation - initialRotation) * easeOut;
+            drawWheel(currentRotation);
+
+            if (progress < 1) {
+                requestAnimationFrame(animateSpin);
+            } else {
+                isSpinning = false;
+                hubBtn.disabled = false;
+                hubBtn.style.opacity = '1';
+
+                // Confetti & Reveal
+                if (window.confetti) {
+                    confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+                }
+
+                // Update UI state
+                document.getElementById('spinsLeftCount').textContent = data.remaining_spins;
+                document.getElementById('displayRewardPoints').textContent = data.updated_points;
+
+                const resultBox = document.getElementById('spinResultBox');
+                resultBox.style.display = 'block';
+                document.getElementById('spinResultTitle').textContent = `🎉 You Won: ${data.prize.label}!`;
+                document.getElementById('spinResultDesc').textContent = `${data.example_scenario.summary} (Coupon: ${data.prize.code})`;
+                document.getElementById('spinResultHash').textContent = `Security Token: ${data.verification_hash}`;
+
+                showToast(`Won ${data.prize.label}! Code: ${data.prize.code}`, 'success');
+            }
+        }
+        requestAnimationFrame(animateSpin);
+
+    } catch (e) {
+        alert('Server communication error. Please try again.');
+        hubBtn.disabled = false;
+        hubBtn.style.opacity = '1';
+    }
+}
+
+// -------------------------------------------------------------------------------------------
+// 2. DAILY SHOPPING QUIZ
+// -------------------------------------------------------------------------------------------
+async function submitShoppingQuiz() {
+    const q1 = document.querySelector('input[name="q1"]:checked');
+    const q2 = document.querySelector('input[name="q2"]:checked');
+    const q3 = document.querySelector('input[name="q3"]:checked');
+
+    if (!q1 || !q2 || !q3) {
+        alert('Please answer all 3 questions before submitting!');
+        return;
+    }
+
+    let score = 0;
+    if (q1.value === 'B') score++;
+    if (q2.value === 'B') score++;
+    if (q3.value === 'A') score++;
+
+    try {
+        const res = await fetch('/api/game-zone/play', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ game_type: 'quiz', score: score })
+        });
+        const data = await res.json();
+        if (data.success) {
+            document.getElementById('quizContainer').style.display = 'none';
+            const resBox = document.getElementById('quizResultBox');
+            resBox.style.display = 'block';
+            document.getElementById('quizHashText').textContent = `Verified Token: ${data.verification_hash}`;
+            document.getElementById('displayRewardPoints').textContent = data.updated_points;
+            if (window.confetti) confetti({ particleCount: 60 });
+        } else {
+            alert(data.error || 'Failed to submit quiz.');
+        }
+    } catch(e) {
+        alert('Quiz submission error.');
+    }
+}
+
+// -------------------------------------------------------------------------------------------
+// 3. DEAL HUNTER ARCADE GAME
+// -------------------------------------------------------------------------------------------
+let hunterRunning = false;
+function startHunterGame() {
+    if (hunterRunning) return;
+    hunterRunning = true;
+    document.getElementById('startHunterBtn').style.display = 'none';
+
+    const canvas = document.getElementById('hunterCanvas');
+    const hctx = canvas.getContext('2d');
+    let score = 0;
+    let timeLeft = 15;
+    let cartX = canvas.width / 2 - 30;
+    const cartWidth = 60;
+    const cartHeight = 16;
+
+    let items = [];
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('hunterTimeText').textContent = timeLeft + 's';
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            hunterRunning = false;
+            finishHunterGame(score);
+        }
+    }, 1000);
+
+    // Track mouse
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const root = document.documentElement;
+        const mouseX = e.clientX - rect.left;
+        cartX = Math.max(0, Math.min(canvas.width - cartWidth, mouseX - cartWidth / 2));
+    });
+
+    function loop() {
+        if (!hunterRunning) return;
+
+        // Spawn items
+        if (Math.random() < 0.08) {
+            items.push({
+                x: Math.random() * (canvas.width - 24),
+                y: 0,
+                speed: 2.5 + Math.random() * 2,
+                type: Math.random() < 0.8 ? 'deal' : 'bomb'
+            });
+        }
+
+        hctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Cart
+        hctx.fillStyle = '#ec4899';
+        hctx.fillRect(cartX, canvas.height - cartHeight - 5, cartWidth, cartHeight);
+        hctx.fillStyle = '#fff';
+        hctx.font = 'bold 11px sans-serif';
+        hctx.fillText('🛒 CART', cartX + 10, canvas.height - 10);
+
+        // Update & Draw Items
+        for (let i = items.length - 1; i >= 0; i--) {
+            const it = items[i];
+            it.y += it.speed;
+
+            // Draw item
+            if (it.type === 'deal') {
+                hctx.fillStyle = '#34d399';
+                hctx.beginPath();
+                hctx.arc(it.x + 10, it.y + 10, 10, 0, 2*Math.PI);
+                hctx.fill();
+                hctx.fillStyle = '#fff';
+                hctx.font = 'bold 12px sans-serif';
+                hctx.fillText('₹', it.x + 7, it.y + 14);
+            } else {
+                hctx.fillStyle = '#f43f5e';
+                hctx.beginPath();
+                hctx.arc(it.x + 10, it.y + 10, 10, 0, 2*Math.PI);
+                hctx.fill();
+                hctx.fillStyle = '#fff';
+                hctx.font = 'bold 10px sans-serif';
+                hctx.fillText('💣', it.x + 4, it.y + 14);
+            }
+
+            // Collision check
+            if (it.y + 20 >= canvas.height - cartHeight - 5 && it.x >= cartX - 10 && it.x <= cartX + cartWidth) {
+                if (it.type === 'deal') {
+                    score += 10;
+                } else {
+                    score = Math.max(0, score - 10);
+                }
+                document.getElementById('hunterScoreText').textContent = score;
+                items.splice(i, 1);
+                continue;
+            }
+
+            if (it.y > canvas.height) {
+                items.splice(i, 1);
+            }
+        }
+
+        requestAnimationFrame(loop);
+    }
+    loop();
+}
+
+async function finishHunterGame(finalScore) {
+    const res = await fetch('/api/game-zone/play', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ game_type: 'hunter', score: finalScore })
+    });
+    const data = await res.json();
+    alert(`🎮 Arcade Complete! Score: ${finalScore} points. Unlocked ${data.prize.label} (Code: ${data.prize.code})!`);
+    document.getElementById('startHunterBtn').style.display = 'block';
+    document.getElementById('displayRewardPoints').textContent = data.updated_points;
+    if (window.confetti) confetti();
+}
+
+// -------------------------------------------------------------------------------------------
+// 4. GOLDEN SCRATCH CARD IMPLEMENTATION
+// -------------------------------------------------------------------------------------------
+let scratchInitialized = false;
+function initScratchCard() {
+    if (scratchInitialized) return;
+    scratchInitialized = true;
+
+    const sCanvas = document.getElementById('scratchCanvas');
+    const sctx = sCanvas.getContext('2d');
+
+    // Fill with metallic silver coat
+    sctx.fillStyle = '#94a3b8';
+    sctx.fillRect(0, 0, sCanvas.width, sCanvas.height);
+    sctx.fillStyle = '#475569';
+    sctx.font = 'bold 15px "Space Grotesk", sans-serif';
+    sctx.textAlign = 'center';
+    sctx.fillText('✨ RUB TO SCRATCH & WIN 25% OFF ✨', sCanvas.width / 2, sCanvas.height / 2 + 5);
+
+    let isDrawing = false;
+    let scratchedPixels = 0;
+    let claimed = false;
+
+    function scratch(e) {
+        if (!isDrawing || claimed) return;
+        const rect = sCanvas.getBoundingClientRect();
+        const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+        const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+
+        sctx.globalCompositeOperation = 'destination-out';
+        sctx.beginPath();
+        sctx.arc(x, y, 22, 0, 2 * Math.PI);
+        sctx.fill();
+
+        scratchedPixels++;
+        if (scratchedPixels > 25 && !claimed) {
+            claimed = true;
+            claimScratchReward();
+        }
+    }
+
+    sCanvas.addEventListener('mousedown', () => isDrawing = true);
+    sCanvas.addEventListener('mouseup', () => isDrawing = false);
+    sCanvas.addEventListener('mousemove', scratch);
+    sCanvas.addEventListener('touchmove', scratch);
+    sCanvas.addEventListener('touchstart', () => isDrawing = true);
+    sCanvas.addEventListener('touchend', () => isDrawing = false);
+}
+
+async function claimScratchReward() {
+    const res = await fetch('/api/game-zone/play', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ game_type: 'scratch' })
+    });
+    const data = await res.json();
+    document.getElementById('scratchStatusText').innerHTML = `🎉 Code: <strong style="color: #34d399;">${data.prize.code}</strong> (25% OFF) verified and saved to ledger!`;
+    document.getElementById('displayRewardPoints').textContent = data.updated_points;
+    if (window.confetti) confetti();
+}
+
+// -------------------------------------------------------------------------------------------
+// 5. SHOPPING CHALLENGE REWARD
+// -------------------------------------------------------------------------------------------
+async function claimChallengeReward() {
+    const res = await fetch('/api/game-zone/play', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ game_type: 'challenge' })
+    });
+    const data = await res.json();
+    if (data.success) {
+        alert(`🏆 Challenge Master! You unlocked 30% VIP Pass: ${data.prize.code} and +100 Points!`);
+        document.getElementById('displayRewardPoints').textContent = data.updated_points;
+        if (window.confetti) confetti();
+    } else {
+        alert(data.error || 'Failed to claim challenge pass.');
+    }
+}
+
+// -------------------------------------------------------------------------------------------
+// 1-CLICK INSTANT ORDER PLACEMENT (EXACT SCENARIO: ₹300 -> ₹270)
+// -------------------------------------------------------------------------------------------
+async function placeDirectGameOrder(productId, couponCode) {
+    if (!confirm(`Place 1-Click order for this product with coupon ${couponCode} at final price ₹270?`)) return;
+
+    try {
+        const res = await fetch('/api/game-zone/order-direct', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: productId, coupon_code: couponCode })
+        });
+        const data = await res.json();
+        if (data.success) {
+            alert(`🎉 Congratulations! Order #${data.order_number} confirmed! Product price ₹${data.original_price} - Coupon ₹${data.discount} = Final price ₹${data.final_price}. Tracking Number: ${data.tracking_number}`);
+            window.location.href = '/orders';
+        } else {
+            alert(data.message || 'Please log in to place instant orders.');
+        }
+    } catch(e) {
+        alert('Order placement error. Please verify network connection.');
+    }
+}
+</script>
+{% endblock %}

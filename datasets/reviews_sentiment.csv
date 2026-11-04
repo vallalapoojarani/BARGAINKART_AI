@@ -1,0 +1,10 @@
+review_id,product_id,user_name,rating,verified_purchase,review_title,review_comment,sentiment_score,suspicious_flag
+1,1,Aakash Mehta,5,True,"Flawless computational speed","Apple M3 Max handles massive 8k render pipelines smoothly without thermal throttling. Best purchase of the year.",0.94,False
+2,1,Deepak Rao,5,True,"Official serial verified","Warranty registered directly on checkcoverage.apple.com with complete 1-year coverage. High confidence.",0.96,False
+3,2,Rohit Sen,4,True,"Great OLED panel","Colors pop and HDR content is pristine. Only downside is average battery under heavy RTX load.",0.76,False
+4,3,Pooja Sharma,5,True,"Stunning build & camera zoom","Titanium feels noticeably lighter. 5x telephoto produces crisp architectural shots. Verified seller packaging.",0.95,False
+5,3,Karan Malhotra,5,False,"100% original guaranteed cheap best copy","Trust me genuine item best price contact on whatsapp for discounts 100% duplicate free.",0.10,True
+6,4,Siddharth Joshi,5,True,"S-Pen and AI features are unmatched","Circle to search and audio transcription save hours weekly. Hardware feels ultra-premium.",0.92,False
+7,5,Meera Nair,5,True,"Whisper quiet noise cancellation","Blocks airplane engine drone effortlessly. Multipoint pairing switches instantly between laptop and phone.",0.89,False
+8,6,Varun Nair,5,True,"Console is whisper quiet","Loads Spider-Man 2 in 3 seconds. Slim form factor fits my entertainment shelf comfortably.",0.91,False
+9,6,Gaurav K,2,False,"Box seal broken and strange seller","Packaging looked taped over and seal was tampered. Contacted customer support for replacement.",-0.82,True

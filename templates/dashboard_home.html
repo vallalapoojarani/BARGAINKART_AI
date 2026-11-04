@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Home Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-home">
+
+    <!-- Welcome Hero Banner -->
+    <div class="card" style="margin-bottom: 28px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(168, 85, 247, 0.2) 100%); border-color: rgba(99, 102, 241, 0.4);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div>
+                <span class="badge" style="background: rgba(255,255,255,0.1); color: #fff; margin-bottom: 8px;">
+                    <i class="fa-solid fa-sparkles text-amber-400"></i> Smart E-Commerce Command Center
+                </span>
+                <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                    Welcome back, {{ current_user.name }}!
+                </h1>
+                <p style="font-size: 0.88rem; color: #cbd5e1; margin-top: 4px; max-width: 600px;">
+                    Monitor your authenticated orders, active AI price negotiations, and real-time savings analytics.
+                </p>
+            </div>
+
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <a href="{{ url_for('products.product_list') }}" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-box-open"></i> Browse Products
+                </a>
+                <a href="{{ url_for('negotiate.negotiate_center') }}" class="btn btn-ai btn-sm">
+                    <i class="fa-solid fa-handshake"></i> AI Bargaining Studio
+                </a>
+                <a href="{{ url_for('dashboard.user_analytics') }}" class="btn btn-secondary btn-sm">
+                    <i class="fa-solid fa-chart-pie"></i> View Analytics
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick KPIs Strip -->
+    <div class="kpi-grid">
+        <div class="kpi-card kpi-primary">
+            <div class="kpi-icon-box"><i class="fa-solid fa-receipt"></i></div>
+            <div>
+                <div class="kpi-title">Completed Orders</div>
+                <div class="kpi-value">{{ total_orders }}</div>
+            </div>
+        </div>
+
+        <div class="kpi-card kpi-teal">
+            <div class="kpi-icon-box"><i class="fa-solid fa-wallet"></i></div>
+            <div>
+                <div class="kpi-title">Total Expenditure</div>
+                <div class="kpi-value">{{ format_inr(total_spent) }}</div>
+            </div>
+        </div>
+
+        <div class="kpi-card kpi-emerald">
+            <div class="kpi-icon-box"><i class="fa-solid fa-piggy-bank"></i></div>
+            <div>
+                <div class="kpi-title">Total AI Savings</div>
+                <div class="kpi-value" style="color: #34d399;">{{ format_inr(total_savings) }}</div>
+            </div>
+        </div>
+
+        <div class="kpi-card kpi-purple">
+            <div class="kpi-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+            <div>
+                <div class="kpi-title">Quality Assurance</div>
+                <div class="kpi-value" style="color: #c084fc;">94.8%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2 Column Overview Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 24px; margin-bottom: 28px;">
+        
+        <!-- Recent Orders -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fa-solid fa-truck-fast text-indigo-400"></i> Recent Orders
+                </h3>
+                <a href="{{ url_for('orders.orders_list') }}" style="font-size: 0.8rem; color: var(--accent-teal); text-decoration: none;">View All</a>
+            </div>
+
+            {% if recent_orders %}
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+                {% for ord in recent_orders %}
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(15,23,42,0.5); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                    <div>
+                        <div style="font-weight: 700; color: #fff; font-size: 0.88rem;">#{{ ord.order_number }}</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted);">{{ ord.created_at.strftime('%d %b %Y') if ord.created_at else '' }} • {{ ord.items|length }} items</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="badge {% if ord.status == 'Delivered' %}badge-low-risk{% else %}badge-savings{% endif %}" style="font-size: 0.7rem;">
+                            {{ ord.status }}
+                        </span>
+                        <div style="font-weight: 700; color: #fff; font-size: 0.88rem; margin-top: 2px;">
+                            {{ format_inr(ord.total_amount) }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 20px 0;">No past orders found.</p>
+            {% endif %}
+        </div>
+
+        <!-- Recent AI Negotiations -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fa-solid fa-handshake text-purple-400"></i> Recent AI Negotiations
+                </h3>
+                <a href="{{ url_for('negotiate.negotiate_center') }}" style="font-size: 0.8rem; color: var(--accent-purple); text-decoration: none;">Negotiator Studio</a>
+            </div>
+
+            {% if recent_negotiations %}
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+                {% for neg in recent_negotiations %}
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(15,23,42,0.5); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                    <div>
+                        <div style="font-weight: 700; color: #fff; font-size: 0.88rem;">{{ neg.product.name[:25] if neg.product else 'Product' }}</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted);">{{ neg.rounds }} Rounds • Original: {{ format_inr(neg.initial_price) }}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="badge" style="background: rgba(16,185,129,0.15); color: #34d399; font-size: 0.7rem;">
+                            {{ neg.status }}
+                        </span>
+                        <div style="font-weight: 700; color: #10b981; font-size: 0.85rem; margin-top: 2px;">
+                            Final: {{ format_inr(neg.final_price) }} ({{ neg.discount_percent }}% OFF)
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 20px 0;">No active negotiations. Try making an offer on any product!</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

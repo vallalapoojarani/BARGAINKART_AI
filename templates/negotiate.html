@@ -1,0 +1,644 @@
+{% extends "base.html" %}
+
+{% block title %}AI Price Negotiator Studio with Talking Robot & Voice{% endblock %}
+
+{% block extra_head %}
+<style>
+/* Animated Robot Mouth Waveform */
+@keyframes robotWave {
+    0%, 100% { height: 4px; }
+    50% { height: 16px; }
+}
+.robot-head-compact.speaking #negRobotMouth .mouth-bar:nth-child(1) { animation: robotWave 0.4s ease-in-out infinite; }
+.robot-head-compact.speaking #negRobotMouth .mouth-bar:nth-child(2) { animation: robotWave 0.3s ease-in-out 0.1s infinite; }
+.robot-head-compact.speaking #negRobotMouth .mouth-bar:nth-child(3) { animation: robotWave 0.5s ease-in-out 0.05s infinite; }
+.robot-head-compact.speaking #negRobotMouth .mouth-bar:nth-child(4) { animation: robotWave 0.35s ease-in-out 0.15s infinite; }
+.robot-head-compact.speaking #negRobotMouth .mouth-bar:nth-child(5) { animation: robotWave 0.45s ease-in-out 0.2s infinite; }
+
+.robot-head-compact.speaking {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.6) !important;
+}
+.robot-head-compact.speaking .robot-led-eye {
+    background: #fde047 !important;
+    box-shadow: 0 0 10px #fde047 !important;
+}
+
+.mic-recording-pulse {
+    animation: micPulse 1s infinite alternate;
+    background: #f43f5e !important;
+    border-color: #f43f5e !important;
+    color: #fff !important;
+    box-shadow: 0 0 15px rgba(244, 63, 94, 0.8) !important;
+}
+@keyframes micPulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="negotiation-studio-page" style="max-width: 1250px; margin: 0 auto; padding-bottom: 60px;">
+
+    <!-- Academic Guide Supervision Header Banner -->
+    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(168, 85, 247, 0.25); padding: 10px 18px; border-radius: var(--radius-md); margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(168, 85, 247, 0.2); border: 1px solid #a855f7; display: flex; align-items: center; justify-content: center; color: #c084fc; font-size: 0.85rem;">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+            <div>
+                <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #c084fc; font-weight: 700; display: block;">Automated AI Negotiation Agent</span>
+                <span style="font-size: 0.86rem; font-weight: 700; color: #f1f5f9;">
+                    Project Guide: <span style="color: #34d399;">Smt. P. Vaishnavi</span> • UCETW Kakatiya University, Warangal (Team 10 AIML)
+                </span>
+            </div>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <a href="{{ url_for('game_zone.game_zone') }}" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; background: rgba(236,72,153,0.15); border-color: rgba(236,72,153,0.3); color: #f472b6;">
+                <i class="fa-solid fa-gamepad"></i> Game Zone (₹300 -> ₹270)
+            </a>
+            <a href="{{ url_for('festival.festival_offers') }}" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.3); color: #fbbf24;">
+                <i class="fa-solid fa-tags"></i> Festival Offers (₹200 -> ₹180)
+            </a>
+        </div>
+    </div>
+
+    <!-- Header & Product Switcher -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 14px;">
+        <div>
+            <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; margin-bottom: 4px;">
+                AI Price Negotiator Studio
+            </h1>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                The AI Robot speaks counter-offers aloud and listens to your voice. Submit your target offer to bargain against inventory constraints and seller margins.
+            </p>
+        </div>
+
+        <!-- Product Selector Switcher -->
+        <form method="GET" action="{{ url_for('negotiate.negotiate_center') }}" style="display: flex; align-items: center; gap: 10px;">
+            <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Switch Item:</label>
+            <select name="product_id" onchange="this.form.submit()" 
+                    style="background: #1e293b; border: 1px solid var(--border-color); color: #fff; padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.85rem; outline: none; max-width: 290px;">
+                {% for p in all_products %}
+                <option value="{{ p.id }}" {% if product and product.id == p.id %}selected{% endif %}>
+                    {{ p.name[:32] }} ({{ format_inr(p.base_price) }})
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    {% if product %}
+    <div class="negotiation-container">
+        
+        <!-- Left Column: Product Summary & Deal Card -->
+        <div class="neg-product-summary">
+            <div style="height: 180px; background: #0b1120; border-radius: var(--radius-md); overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; border: 1px solid var(--border-color);">
+                <img src="{{ product.image_url }}" alt="{{ product.name }}" style="max-height: 160px; object-fit: contain;">
+            </div>
+
+            <span style="font-size: 0.72rem; font-weight: 700; color: var(--accent-teal); text-transform: uppercase;">
+                {{ product.brand }} • {{ product.category }}
+            </span>
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: #fff; margin: 4px 0 12px; line-height: 1.4;">
+                {{ product.name }}
+            </h3>
+
+            <!-- Metrics Matrix -->
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.82rem;">
+                    <span style="color: var(--text-muted);">Original Retail Price:</span>
+                    <strong style="color: #fff; font-size: 0.95rem;">{{ format_inr(product.base_price) }}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.82rem;">
+                    <span style="color: var(--text-muted);">Stock Concession Pressure:</span>
+                    <strong style="color: #10b981;">{{ product.stock }} Units (High Concession)</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.82rem;">
+                    <span style="color: var(--text-muted);">AI Recommended Offer:</span>
+                    <strong style="color: #c084fc;" id="paramRecRange">
+                        {{ format_inr(product.base_price * 0.88) }} – {{ format_inr(product.base_price * 0.95) }}
+                    </strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem;">
+                    <span style="color: var(--text-muted);">Max Expected Concession:</span>
+                    <strong style="color: #34d399;">Up to {{ format_inr(product.base_price * 0.16) }} (16%)</strong>
+                </div>
+            </div>
+
+            <!-- Current Deal Status Card -->
+            <div class="card" id="dealSummaryCard" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; padding: 16px; border-radius: var(--radius-md);">
+                <div style="font-size: 0.78rem; font-weight: 800; color: #10b981; text-transform: uppercase; margin-bottom: 6px;">
+                    <i class="fa-solid fa-circle-check"></i> Deal Locked by AI Robot!
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">Agreed Final Price:</span>
+                    <strong style="font-size: 1.45rem; color: #34d399; font-family: 'Space Grotesk', sans-serif;" id="dealFinalPrice">₹0</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 10px;">
+                    <span style="color: var(--text-muted);">Total Savings:</span>
+                    <strong style="color: #fde047;" id="dealSavings">₹0</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 14px; background: rgba(15,23,42,0.8); padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                    <span style="color: var(--text-muted);">Deal Verification Token:</span>
+                    <strong style="color: #38bdf8; font-family: monospace;" id="dealTokenText">BK-DEAL-VERIFIED</strong>
+                </div>
+                <button class="btn btn-primary" id="applyDealBtn" style="width: 100%; background: linear-gradient(135deg, #059669, #10b981); border: none; font-weight: 700;">
+                    <i class="fa-solid fa-cart-arrow-down"></i> Apply Negotiated Deal to Cart
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Column: Interactive Multi-Round Dialogue Terminal with TALKING ROBOT -->
+        <div class="neg-chat-terminal" style="display: flex; flex-direction: column;">
+
+            <!-- TALKING ROBOT BARGAINING AGENT BANNER -->
+            <div class="bargain-robot-header" id="bargainRobotHeader" style="background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(168, 85, 247, 0.35); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <!-- Animated Robot Head -->
+                    <div class="robot-head-compact" id="negRobotHead" style="position: relative; width: 44px; height: 44px; background: #0f172a; border: 2px solid #a855f7; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); transition: all 0.3s;">
+                        <div style="position: absolute; top: -6px; width: 4px; height: 6px; background: #c084fc;">
+                            <div style="position: absolute; top: -4px; left: -2px; width: 8px; height: 8px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 8px #38bdf8;"></div>
+                        </div>
+                        <!-- Eyes -->
+                        <div style="display: flex; gap: 8px; margin-bottom: 4px;">
+                            <div class="robot-led-eye" style="width: 7px; height: 7px; background: #38bdf8; border-radius: 2px; box-shadow: 0 0 6px #38bdf8;"></div>
+                            <div class="robot-led-eye" style="width: 7px; height: 7px; background: #38bdf8; border-radius: 2px; box-shadow: 0 0 6px #38bdf8;"></div>
+                        </div>
+                        <!-- Mouth Waveform -->
+                        <div class="robot-mouth-mini" id="negRobotMouth" style="display: flex; gap: 2px; height: 10px; align-items: flex-end;">
+                            <div class="mouth-bar" style="width: 3px; height: 4px; background: #a855f7; border-radius: 1px;"></div>
+                            <div class="mouth-bar" style="width: 3px; height: 8px; background: #a855f7; border-radius: 1px;"></div>
+                            <div class="mouth-bar" style="width: 3px; height: 5px; background: #a855f7; border-radius: 1px;"></div>
+                            <div class="mouth-bar" style="width: 3px; height: 7px; background: #a855f7; border-radius: 1px;"></div>
+                            <div class="mouth-bar" style="width: 3px; height: 3px; background: #a855f7; border-radius: 1px;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <strong style="color: #fff; font-size: 0.95rem; font-family: 'Space Grotesk', sans-serif;">RoboNegotiator AI</strong>
+                            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 0.68rem;" id="negRobotStatusBadge">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span> Ready • Voice Active
+                            </span>
+                        </div>
+                        <span style="font-size: 0.74rem; color: #94a3b8;" id="negRobotSubText">
+                            Speaks counter-offers aloud. Speak into mic or click voice chips.
+                        </span>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" class="btn btn-secondary btn-sm" id="replayLastOfferVoiceBtn" onclick="reListenLastAiOffer()" style="font-size: 0.75rem; background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8;">
+                        <i class="fa-solid fa-volume-high"></i> Listen Again
+                    </button>
+                    <select id="strategyModeSelect" style="background: #1e293b; border: 1px solid var(--border-color); color: #c084fc; padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.75rem; outline: none;">
+                        <option value="BALANCED_BROKER">Balanced Broker</option>
+                        <option value="AGGRESSIVE_CLEARANCE">Clearance Mode</option>
+                        <option value="TOUGH_VENDOR">Firm Vendor</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 3-Round Stepper -->
+            <div class="neg-rounds-stepper">
+                <div class="stepper-step active" id="stepRound1">
+                    <div class="step-circle">1</div>
+                    <span>Round 1: Initial</span>
+                </div>
+                <div style="flex: 1; height: 2px; background: #334155; margin: 0 8px;"></div>
+                <div class="stepper-step" id="stepRound2">
+                    <div class="step-circle">2</div>
+                    <span>Round 2: Counter</span>
+                </div>
+                <div style="flex: 1; height: 2px; background: #334155; margin: 0 8px;"></div>
+                <div class="stepper-step" id="stepRound3">
+                    <div class="step-circle">3</div>
+                    <span>Round 3: Final</span>
+                </div>
+            </div>
+
+            <!-- Dialogue Scroll Area -->
+            <div class="neg-dialogue-window" id="negDialogueWindow">
+                <div class="neg-bubble ai">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <strong style="color: #c084fc; font-size: 0.8rem;"><i class="fa-solid fa-robot"></i> RoboNegotiator:</strong>
+                        <button class="btn btn-sm" onclick="speakAi('Hello! I am the automated negotiation agent for {{ product.name }}. The listed price is rupees {{ product.base_price|int }}. I can negotiate up to a 12 to 16 percent concession. Recommended opening offer is rupees {{ ((product.base_price * 0.88 + product.base_price * 0.95) / 2)|int }}.')" style="background: none; border: none; color: #38bdf8; font-size: 0.75rem; cursor: pointer;">
+                            <i class="fa-solid fa-volume-high"></i> Listen
+                        </button>
+                    </div>
+                    <p>
+                        Hello! I am the automated negotiation agent for <strong>{{ product.name }}</strong>. 
+                        The listed price is <strong>{{ format_inr(product.base_price) }}</strong>. 
+                        Based on vendor inventory and current market demand, I can negotiate up to a ~12-16% concession.
+                    </p>
+                    <p style="margin-top: 6px; font-size: 0.8rem; color: #c084fc;">
+                        Recommended opening offer: <strong>{{ format_inr((product.base_price * 0.88 + product.base_price * 0.95) / 2) }}</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUICK SPOKEN VOICE SIMULATION CHIPS -->
+            <div class="quick-voice-offer-chips" style="display: flex; gap: 6px; overflow-x: auto; margin-top: 10px; margin-bottom: 8px; padding-bottom: 2px;">
+                <span style="font-size: 0.72rem; color: #94a3b8; align-self: center; white-space: nowrap; font-weight: 700;">
+                    <i class="fa-solid fa-microphone text-purple-400"></i> Speak / Quick Offer:
+                </span>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="speakAndSetOffer({{ (product.base_price * 0.90)|int }})" style="font-size: 0.75rem; padding: 4px 10px; background: rgba(168,85,247,0.15); border-color: rgba(168,85,247,0.3); color: #c084fc;">
+                    🎙️ "Offer ₹{{ (product.base_price * 0.90)|int }}"
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="speakAndSetOffer({{ (product.base_price * 0.925)|int }})" style="font-size: 0.75rem; padding: 4px 10px; background: rgba(168,85,247,0.15); border-color: rgba(168,85,247,0.3); color: #c084fc;">
+                    🎙️ "Offer ₹{{ (product.base_price * 0.925)|int }}"
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="speakAndSetOffer({{ (product.base_price * 0.85)|int }})" style="font-size: 0.75rem; padding: 4px 10px; background: rgba(168,85,247,0.15); border-color: rgba(168,85,247,0.3); color: #c084fc;">
+                    🎙️ "Offer ₹{{ (product.base_price * 0.85)|int }}"
+                </button>
+                {% if product.base_price == 300.0 %}
+                <button type="button" class="btn btn-secondary btn-sm" onclick="speakAndSetOffer(270)" style="font-size: 0.75rem; padding: 4px 10px; background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.4); color: #34d399;">
+                    🎙️ "Offer ₹270 (10% OFF)"
+                </button>
+                {% elif product.base_price == 200.0 %}
+                <button type="button" class="btn btn-secondary btn-sm" onclick="speakAndSetOffer(180)" style="font-size: 0.75rem; padding: 4px 10px; background: rgba(236,72,153,0.15); border-color: rgba(236,72,153,0.4); color: #f472b6;">
+                    🎙️ "Offer ₹180 (Bathukamma)"
+                </button>
+                {% endif %}
+            </div>
+
+            <!-- Offer Input Bar with Voice Recorder -->
+            <form id="negOfferForm" style="margin-top: auto;">
+                <input type="hidden" id="currentRound" value="1">
+                <input type="hidden" id="productId" value="{{ product.id }}">
+                <input type="hidden" id="activeNegId" value="">
+
+                <div class="neg-input-box" style="display: flex; gap: 8px;">
+                    <button type="button" class="btn btn-secondary" id="negVoiceBtn" title="Speak Your Offer (Microphone Voice Input)" style="padding: 0 16px; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); color: #c084fc; border-radius: var(--radius-sm); font-size: 0.95rem;">
+                        <i class="fa-solid fa-microphone"></i>
+                    </button>
+                    <input type="number" id="userOfferInput" placeholder="Enter or speak offer (e.g. {{ (product.base_price * 0.90)|int }})" required min="1" step="1" style="flex: 1;">
+                    <button type="submit" class="btn btn-ai" id="submitOfferBtn">
+                        <i class="fa-solid fa-paper-plane"></i> Bargain
+                    </button>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.72rem; color: var(--text-muted);">
+                    <span id="voiceStatusHint">Tip: Click mic to speak your offer or click quick chips above</span>
+                    <span id="roundsRemainingText">Round 1 of 3</span>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+let lastSpokenText = "Hello! I am the automated negotiation agent for {{ product.name if product else '' }}. What is your target offer?";
+let robotVoiceActive = true;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('negOfferForm');
+    const input = document.getElementById('userOfferInput');
+    const dialogue = document.getElementById('negDialogueWindow');
+    const roundInput = document.getElementById('currentRound');
+    const activeNegIdInput = document.getElementById('activeNegId');
+    const submitBtn = document.getElementById('submitOfferBtn');
+    const dealCard = document.getElementById('dealSummaryCard');
+    const applyBtn = document.getElementById('applyDealBtn');
+    const robotHead = document.getElementById('negRobotHead');
+    const robotBadge = document.getElementById('negRobotStatusBadge');
+    const robotSub = document.getElementById('negRobotSubText');
+    const voiceStatusHint = document.getElementById('voiceStatusHint');
+
+    let currentNegotiationId = null;
+
+    // Greet user on load if supported
+    setTimeout(() => {
+        speakAi("Welcome to AI Bargain Studio. State your target offer or tap any chip below to start.");
+    }, 800);
+
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const offer = parseFloat(input.value);
+            const round = parseInt(roundInput.value);
+            const productId = parseInt(document.getElementById('productId').value);
+            const strategyMode = document.getElementById('strategyModeSelect') ? document.getElementById('strategyModeSelect').value : 'BALANCED_BROKER';
+
+            if (!offer || isNaN(offer)) return;
+
+            // Append user offer bubble
+            appendUserBubble(offer, round);
+            input.value = '';
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Robot Thinking...';
+
+            if (robotBadge) {
+                robotBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block animate-pulse"></span> Evaluating Offer...';
+            }
+
+            try {
+                const res = await fetch(`/api/products/${productId}/negotiate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        offer: offer,
+                        round: round,
+                        negotiation_id: currentNegotiationId,
+                        strategy_mode: strategyMode
+                    })
+                });
+
+                const data = await res.json();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Bargain';
+
+                if (data.error) {
+                    appendAiBubble("Error: " + data.error);
+                    return;
+                }
+
+                currentNegotiationId = data.negotiation_id;
+                activeNegIdInput.value = data.negotiation_id;
+
+                // Append AI Response Bubble & speak aloud
+                appendAiBubble(data.message, data);
+                const speechToDeliver = data.speech_text || data.message;
+                speakAi(speechToDeliver);
+
+                // Update round state
+                if (data.status === 'ACCEPTED' || data.is_final_round) {
+                    form.style.display = 'none';
+                    dealCard.style.display = 'block';
+                    document.getElementById('dealFinalPrice').textContent = '₹' + Number(data.final_price).toLocaleString();
+                    document.getElementById('dealSavings').textContent = `₹${Number(data.savings).toLocaleString()} (${data.discount_percent}% OFF)`;
+                    if (data.deal_token && document.getElementById('dealTokenText')) {
+                        document.getElementById('dealTokenText').textContent = data.deal_token;
+                    }
+                    if (robotBadge) {
+                        robotBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span> Deal Agreed & Locked!';
+                    }
+                } else {
+                    const nextRound = round + 1;
+                    roundInput.value = nextRound;
+                    document.getElementById('roundsRemainingText').textContent = `Round ${nextRound} of 3`;
+                    
+                    if (nextRound === 2) {
+                        document.getElementById('stepRound2').classList.add('active');
+                    } else if (nextRound === 3) {
+                        document.getElementById('stepRound3').classList.add('active');
+                    }
+                }
+            } catch (err) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Bargain';
+                appendAiBubble("Network communication error. Please try again.");
+            }
+        });
+    }
+
+    // Apply Deal to Cart
+    if (applyBtn) {
+        applyBtn.addEventListener('click', async () => {
+            const productId = document.getElementById('productId').value;
+            applyBtn.disabled = true;
+            applyBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Locking Price in Cart...';
+
+            try {
+                const res = await fetch('/api/negotiate/apply-deal', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        negotiation_id: currentNegotiationId
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    setTimeout(() => {
+                        window.location.href = '/cart';
+                    }, 800);
+                } else {
+                    showToast(data.error || 'Failed to apply deal', 'danger');
+                    applyBtn.disabled = false;
+                }
+            } catch (e) {
+                showToast('Failed to lock deal into cart.', 'danger');
+                applyBtn.disabled = false;
+            }
+        });
+    }
+
+    function appendUserBubble(offer, round) {
+        const div = document.createElement('div');
+        div.className = 'neg-bubble user';
+        div.innerHTML = `<strong>Round ${round} Spoken Offer:</strong> ₹${Number(offer).toLocaleString()}`;
+        dialogue.appendChild(div);
+        dialogue.scrollTop = dialogue.scrollHeight;
+    }
+
+    function appendAiBubble(message, data = null) {
+        const div = document.createElement('div');
+        div.className = 'neg-bubble ai';
+        let content = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <strong style="color: #c084fc; font-size: 0.8rem;"><i class="fa-solid fa-robot"></i> RoboNegotiator Counter:</strong>
+                <button class="btn btn-sm" onclick="speakAi('${message.replace(/'/g, "\\'")}')" style="background: none; border: none; color: #38bdf8; font-size: 0.75rem; cursor: pointer;">
+                    <i class="fa-solid fa-volume-high"></i> Listen
+                </button>
+            </div>
+            <p>${message}</p>`;
+
+        if (data && data.status === 'COUNTER_OFFER') {
+            content += `
+                <div style="margin-top: 10px; padding: 10px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 0.8rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <strong>AI Counter Offer:</strong> 
+                        <span style="color: #38bdf8; font-weight: 700; font-size: 0.95rem;">₹${Number(data.ai_counter_offer).toLocaleString()}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: #10b981; font-size: 0.76rem; margin-bottom: 6px;">
+                        <span>Your Savings:</span>
+                        <span>₹${Number(data.savings).toLocaleString()} (${data.discount_percent}% OFF)</span>
+                    </div>`;
+
+            if (data.concession_breakdown) {
+                const cb = data.concession_breakdown;
+                content += `
+                    <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; font-size: 0.72rem; color: var(--text-muted);">
+                        <div style="display:flex; justify-content: space-between;">
+                            <span>Vendor Margin Concession:</span>
+                            <span style="color: #c084fc;">₹${Number(cb.vendor_margin_discount || 0).toLocaleString()}</span>
+                        </div>
+                        <div style="display:flex; justify-content: space-between;">
+                            <span>Stock Clearance Allowance:</span>
+                            <span style="color: #c084fc;">₹${Number(cb.clearance_allowance || 0).toLocaleString()}</span>
+                        </div>
+                    </div>`;
+            }
+            content += `</div>`;
+        } else if (data && data.status === 'ACCEPTED') {
+            content += `
+                <div style="margin-top: 10px; padding: 8px 12px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: var(--radius-sm); font-size: 0.8rem; color: #34d399;">
+                    <i class="fa-solid fa-certificate"></i> Deal Confirmed! Token: <strong style="font-family: monospace; color: #fff;">${data.deal_token || 'BK-DEAL-VERIFIED'}</strong>
+                </div>`;
+        }
+
+        div.innerHTML = content;
+        dialogue.appendChild(div);
+        dialogue.scrollTop = dialogue.scrollHeight;
+    }
+
+    // Speech-to-Text Microphone Voice Recording
+    const voiceBtn = document.getElementById('negVoiceBtn');
+    if (voiceBtn) {
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRec) {
+            const recognition = new SpeechRec();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-IN';
+
+            voiceBtn.addEventListener('click', async () => {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    try {
+                        await navigator.mediaDevices.getUserMedia({ audio: true });
+                    } catch(permErr) {
+                        console.warn('Microphone permission check:', permErr);
+                        if (window.showMicPermissionModal) window.showMicPermissionModal();
+                        return;
+                    }
+                }
+                try {
+                    voiceBtn.classList.add('mic-recording-pulse');
+                    voiceBtn.innerHTML = '<i class="fa-solid fa-microphone-lines fa-fade"></i>';
+                    input.placeholder = "Listening... Speak your target price (e.g. 180 or 270)";
+                    if (voiceStatusHint) voiceStatusHint.textContent = "Listening to your voice now... Speak clearly";
+                    recognition.start();
+                } catch(e) {
+                    recognition.stop();
+                }
+            });
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                voiceBtn.classList.remove('mic-recording-pulse');
+                voiceBtn.innerHTML = '<i class="fa-solid fa-microphone text-emerald-400"></i>';
+
+                // Extract numbers or words
+                let match = transcript.match(/\d+/);
+                if (match) {
+                    input.value = match[0];
+                    if (voiceStatusHint) voiceStatusHint.textContent = `Heard: "₹${match[0]}". Click Bargain to submit.`;
+                } else {
+                    // Try simple word matching
+                    if (transcript.toLowerCase().includes('one eighty')) input.value = 180;
+                    else if (transcript.toLowerCase().includes('two seventy')) input.value = 270;
+                    else if (transcript.toLowerCase().includes('two hundred')) input.value = 200;
+                    else if (transcript.toLowerCase().includes('three hundred')) input.value = 300;
+                    else {
+                        input.placeholder = `Heard: "${transcript}". Type amount.`;
+                    }
+                }
+            };
+
+            recognition.onerror = (event) => {
+                voiceBtn.classList.remove('mic-recording-pulse');
+                voiceBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+                if (event && event.error === 'no-speech') {
+                    input.placeholder = "No speech detected. Click mic again or use voice chips";
+                } else {
+                    input.placeholder = "Mic permission needed. Click quick voice chips above!";
+                    if (window.showMicPermissionModal) window.showMicPermissionModal();
+                }
+                if (voiceStatusHint) voiceStatusHint.textContent = "Click any voice chip above to simulate spoken offer!";
+            };
+
+            recognition.onend = () => {
+                voiceBtn.classList.remove('mic-recording-pulse');
+                voiceBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+            };
+        } else {
+            voiceBtn.addEventListener('click', () => {
+                if (window.showMicPermissionModal) {
+                    window.showMicPermissionModal();
+                } else {
+                    alert('Your browser does not have Web Speech STT. Use the quick spoken offer chips right above the input box!');
+                }
+            });
+        }
+    }
+});
+
+// Text-to-Speech Output Function
+function speakAi(text) {
+    if (!robotVoiceActive || !('speechSynthesis' in window)) return;
+    lastSpokenText = text;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.resume();
+
+    const clean = text.replace(/[*_#`₹]/g, 'rupees ').replace(/Rs\./g, 'rupees ');
+    const utt = new SpeechSynthesisUtterance(clean);
+    utt.rate = 1.0;
+    utt.pitch = 1.08;
+
+    const head = document.getElementById('negRobotHead');
+    const badge = document.getElementById('negRobotStatusBadge');
+
+    utt.onstart = () => {
+        if (head) head.classList.add('speaking');
+        if (badge) badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 inline-block animate-pulse"></span> RoboNegotiator Speaking...';
+    };
+
+    utt.onend = () => {
+        if (head) head.classList.remove('speaking');
+        if (badge) badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span> Ready • Listening';
+    };
+
+    utt.onerror = () => {
+        if (head) head.classList.remove('speaking');
+    };
+
+    window.speechSynthesis.speak(utt);
+}
+
+function reListenLastAiOffer() {
+    speakAi(lastSpokenText);
+}
+
+function toggleNegRobotVoice() {
+    robotVoiceActive = !robotVoiceActive;
+    const btn = document.getElementById('toggleRobotVoiceMuteBtn');
+    if (!robotVoiceActive) {
+        window.speechSynthesis.cancel();
+        btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-rose-400"></i> Muted';
+        showToast('Robot Voice Muted', 'info');
+    } else {
+        btn.innerHTML = '<i class="fa-solid fa-microphone-lines text-purple-400"></i> Voice Mode';
+        speakAi("Robot Voice Enabled.");
+        showToast('Robot Voice Enabled', 'success');
+    }
+}
+
+// Spoken Voice Simulation Helper Chip
+function speakAndSetOffer(amount) {
+    const input = document.getElementById('userOfferInput');
+    input.value = amount;
+
+    // Simulate user speaking
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const userUtt = new SpeechSynthesisUtterance(`I offer rupees ${amount}`);
+        userUtt.rate = 1.1;
+        userUtt.pitch = 0.95;
+        window.speechSynthesis.speak(userUtt);
+    }
+
+    showToast(`🎙️ Spoken Offer: ₹${amount}`, 'info');
+    setTimeout(() => {
+        document.getElementById('negOfferForm').dispatchEvent(new Event('submit'));
+    }, 600);
+}
+</script>
+{% endblock %}

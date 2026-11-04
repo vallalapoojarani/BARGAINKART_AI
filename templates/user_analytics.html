@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}User Analytics & Intelligence Dashboard{% endblock %}
+
+{% block content %}
+<div class="user-analytics-dashboard">
+
+    <!-- Top Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div>
+            <div class="badge" style="background: rgba(99, 102, 241, 0.15); color: #a5b4fc; margin-bottom: 6px;">
+                <i class="fa-solid fa-chart-pie"></i> Consumer Intelligence & Behavioral Economics
+            </div>
+            <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+                User Analytics Dashboard
+            </h1>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+                Detailed telemetry tracking your negotiation efficiency, spending velocity, and authenticity audits.
+            </p>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+            <button class="btn btn-secondary btn-sm" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Export Report
+            </button>
+            <a href="{{ url_for('products.product_list') }}" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-plus"></i> New Purchase
+            </a>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         TOP 6 KPI METRIC CARDS
+         ========================================================================== -->
+    <div class="kpi-grid">
+        <!-- 1. Total Orders -->
+        <div class="kpi-card kpi-primary">
+            <div class="kpi-icon-box"><i class="fa-solid fa-receipt"></i></div>
+            <div>
+                <div class="kpi-title">Total Orders</div>
+                <div class="kpi-value">{{ total_orders }}</div>
+            </div>
+        </div>
+
+        <!-- 2. Total Spent -->
+        <div class="kpi-card kpi-teal">
+            <div class="kpi-icon-box"><i class="fa-solid fa-wallet"></i></div>
+            <div>
+                <div class="kpi-title">Total Spent</div>
+                <div class="kpi-value">{{ format_inr(total_spent) }}</div>
+            </div>
+        </div>
+
+        <!-- 3. Total Savings -->
+        <div class="kpi-card kpi-emerald">
+            <div class="kpi-icon-box"><i class="fa-solid fa-piggy-bank"></i></div>
+            <div>
+                <div class="kpi-title">Total Savings</div>
+                <div class="kpi-value" style="color: #34d399;">{{ format_inr(total_savings) }}</div>
+            </div>
+        </div>
+
+        <!-- 4. Products Verified -->
+        <div class="kpi-card kpi-purple">
+            <div class="kpi-icon-box"><i class="fa-solid fa-shield-check"></i></div>
+            <div>
+                <div class="kpi-title">Products Verified</div>
+                <div class="kpi-value">{{ products_verified }}</div>
+            </div>
+        </div>
+
+        <!-- 5. Successful Negotiations -->
+        <div class="kpi-card kpi-amber">
+            <div class="kpi-icon-box"><i class="fa-solid fa-handshake"></i></div>
+            <div>
+                <div class="kpi-title">Negotiations Won</div>
+                <div class="kpi-value">{{ successful_negotiations }}</div>
+            </div>
+        </div>
+
+        <!-- 6. Average AI Confidence -->
+        <div class="kpi-card kpi-rose">
+            <div class="kpi-icon-box"><i class="fa-solid fa-microchip"></i></div>
+            <div>
+                <div class="kpi-title">Avg AI Confidence</div>
+                <div class="kpi-value" style="color: #38bdf8;">{{ avg_confidence }}%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         DYNAMIC AI INSIGHTS PANEL (Generated from Database Metrics)
+         ========================================================================== -->
+    <div class="card" style="margin-bottom: 28px; background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%); border-color: rgba(99, 102, 241, 0.3);">
+        <div class="card-header" style="border-bottom: none; margin-bottom: 12px; padding-bottom: 0;">
+            <h3 class="card-title">
+                <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i> Dynamic AI Insights & Alerts
+            </h3>
+            <span style="font-size: 0.75rem; color: #10b981; font-weight: 700;">
+                <i class="fa-solid fa-bolt"></i> Real-Time Database Synthesis
+            </span>
+        </div>
+
+        <div class="insights-grid">
+            {% for ins in insights %}
+            <div class="insight-item" style="border-left-color: {% if ins.type == 'success' %}#10b981{% elif ins.type == 'danger' %}#f43f5e{% elif ins.type == 'warning' %}#f59e0b{% else %}#6366f1{% endif %};">
+                <div class="insight-icon" style="color: {% if ins.type == 'success' %}#10b981{% elif ins.type == 'danger' %}#f43f5e{% elif ins.type == 'warning' %}#f59e0b{% else %}#818cf8{% endif %};">
+                    <i class="{{ ins.icon }}"></i>
+                </div>
+                <div>{{ ins.text }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         8 CHART.JS CHARTS GRID
+         ========================================================================== -->
+    <h3 style="font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 18px; font-family: 'Space Grotesk', sans-serif;">
+        <i class="fa-solid fa-chart-simple text-cyan-400"></i> Visual Telemetry (8 Chart.js Analytical Models)
+    </h3>
+
+    <div class="dashboard-charts-grid">
+        
+        <!-- Chart 1: Monthly Spending -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h4 class="card-title" style="font-size: 1rem;">1. Monthly Spending Trajectory</h4>
+                <span class="badge" style="background: rgba(99,102,241,0.2); color: #818cf8;">Trend Area</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="monthlySpendingChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 2: Monthly Savings -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h4 class="card-title" style="font-size: 1rem;">2. Monthly Savings Breakdown</h4>
+                <span class="badge" style="background: rgba(16,185,129,0.2); color: #34d399;">Bar Volume</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="monthlySavingsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 3: Price Comparison -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h4 class="card-title" style="font-size: 1rem;">3. Price Comparison (Listed vs Lowest)</h4>
+                <span class="badge" style="background: rgba(6,182,212,0.2); color: #22d3ee;">Comparative</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="priceComparisonChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 4: Product Authenticity Distribution -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h4 class="card-title" style="font-size: 1rem;">4. Product Authenticity Risk Distribution</h4>
+                <span class="badge" style="background: rgba(245,158,11,0.2); color: #fbbf24;">Risk Ratio</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="authenticityDistChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 5: Negotiation Success -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h4 class="card-title" style="font-size: 1rem;">5. AI Negotiation Success Distribution</h4>
+                <span class="badge" style="background: rgba(168,85,247,0.2); color: #c084fc;">Win Rate</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="negotiationSuccessChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 6: Category Spending -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h4 class="card-title" style="font-size: 1rem;">6. Category Spending Distribution</h4>
+                <span class="badge" style="background: rgba(236,72,153,0.2); color: #f472b6;">Polar Area</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="categorySpendingChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 7: Order Status Pipeline -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h4 class="card-title" style="font-size: 1rem;">7. Order Fulfillment Lifecycle Pipeline</h4>
+                <span class="badge" style="background: rgba(99,102,241,0.2); color: #818cf8;">Funnel</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="orderStatusChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Chart 8: Price History Trend -->
+        <div class="chart-card">
+            <div class="card-header">
+                <h4 class="card-title" style="font-size: 1rem;">8. Flagship Historical Price Trajectory</h4>
+                <span class="badge" style="background: rgba(168,85,247,0.2); color: #c084fc;">AI Forecast</span>
+            </div>
+            <div class="chart-container">
+                <canvas id="priceHistoryChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}
+{% endblock %}

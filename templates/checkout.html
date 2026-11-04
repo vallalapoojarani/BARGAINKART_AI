@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout & Order Placement{% endblock %}
+
+{% block content %}
+<div class="checkout-page" style="max-width: 1000px; margin: 0 auto;">
+
+    <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif;">
+            Secure Checkout
+        </h1>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Finalize shipping credentials and select a simulated payment gateway for order placement.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: flex-start;">
+        
+        <!-- Left: Form Container -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            
+            <!-- Step 1: Address & Contact -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fa-solid fa-location-dot text-indigo-400"></i> 1. Shipping Address & Contact
+                    </h3>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #e2e8f0; margin-bottom: 6px;">Full Recipient Name</label>
+                        <input type="text" id="shipName" value="{{ user.name }}" 
+                               style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #e2e8f0; margin-bottom: 6px;">Contact Phone</label>
+                            <input type="text" id="shipPhone" value="{{ user.phone }}" 
+                                   style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #e2e8f0; margin-bottom: 6px;">Email Notification</label>
+                            <input type="email" id="shipEmail" value="{{ user.email }}" readonly 
+                                   style="width: 100%; background: #0b0f19; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 14px; color: #94a3b8; font-size: 0.88rem; outline: none;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #e2e8f0; margin-bottom: 6px;">Delivery Street & Pincode</label>
+                        <textarea id="shipAddress" rows="2" 
+                                  style="width: 100%; background: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 14px; color: #fff; font-size: 0.88rem; outline: none;">{{ user.address }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Payment Simulation -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fa-solid fa-credit-card text-emerald-400"></i> 2. Simulated Academic Payment Gateway
+                    </h3>
+                    <span class="badge" style="background: rgba(16,185,129,0.15); color: #34d399;">Sandbox Mode</span>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <label style="flex: 1; padding: 12px; border: 1px solid var(--primary); background: rgba(99,102,241,0.1); border-radius: var(--radius-md); display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="radio" name="payment_method" value="Simulated Credit Card" checked style="accent-color: var(--primary);">
+                        <div>
+                            <div style="font-size: 0.85rem; font-weight: 700; color: #fff;"><i class="fa-solid fa-credit-card"></i> Credit / Debit Card</div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">Simulated Visa / Mastercard</div>
+                        </div>
+                    </label>
+
+                    <label style="flex: 1; padding: 12px; border: 1px solid var(--border-color); background: rgba(15,23,42,0.5); border-radius: var(--radius-md); display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="radio" name="payment_method" value="Simulated UPI (Google Pay / PhonePe)" style="accent-color: var(--primary);">
+                        <div>
+                            <div style="font-size: 0.85rem; font-weight: 700; color: #fff;"><i class="fa-solid fa-qrcode"></i> Instant UPI / QR</div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">Zero latency authorization</div>
+                        </div>
+                    </label>
+
+                    <label style="flex: 1; padding: 12px; border: 1px solid var(--border-color); background: rgba(15,23,42,0.5); border-radius: var(--radius-md); display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="radio" name="payment_method" value="Cash On Delivery" style="accent-color: var(--primary);">
+                        <div>
+                            <div style="font-size: 0.85rem; font-weight: 700; color: #fff;"><i class="fa-solid fa-truck-ramp-box"></i> Pay on Delivery</div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">Inspect before paying</div>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Simulated Card Details -->
+                <div id="cardFields" style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px;">
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">Card Number (Simulated Demo)</label>
+                        <input type="text" value="4532 •••• •••• 8912" readonly 
+                               style="width: 100%; background: #0b1120; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px 12px; color: #cbd5e1; font-family: monospace;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div>
+                            <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">Expiry Date</label>
+                            <input type="text" value="12/28" readonly 
+                                   style="width: 100%; background: #0b1120; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px 12px; color: #cbd5e1; font-family: monospace;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">CVV (Masked)</label>
+                            <input type="password" value="•••" readonly 
+                                   style="width: 100%; background: #0b1120; border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px 12px; color: #cbd5e1; font-family: monospace;">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 14px; font-size: 0.74rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-lock text-emerald-400"></i> No real financial card information is captured or transmitted.
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right: Order Breakdown -->
+        <div class="card" style="padding: 24px;">
+            <h3 class="card-title" style="margin-bottom: 16px;">Order Overview</h3>
+
+            <div style="display: flex; flex-direction: column; gap: 12px; max-height: 220px; overflow-y: auto; margin-bottom: 16px; padding-right: 6px;">
+                {% for item in items %}
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                    <div>
+                        <div style="font-weight: 700; color: #fff;">{{ item.product.name[:25] }}...</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted);">Qty: {{ item.quantity }} × {{ format_inr(item.unit_price) }}</div>
+                    </div>
+                    <strong style="color: #fff; font-family: 'Space Grotesk', sans-serif;">{{ format_inr(item.subtotal) }}</strong>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div style="border-top: 1px solid var(--border-color); padding-top: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 0.86rem; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+                    <span>Retail Amount:</span>
+                    <span style="text-decoration: line-through;">{{ format_inr(total_original) }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; color: #10b981; font-weight: 700;">
+                    <span>Total Savings:</span>
+                    <span>-{{ format_inr(total_savings) }}</span>
+                </div>
+                {% if applied_coupon %}
+                <div style="display: flex; justify-content: space-between; color: #ec4899; font-weight: 700;">
+                    <span><i class="fa-solid fa-tag"></i> Coupon ({{ applied_coupon.code }}):</span>
+                    <span>-{{ format_inr(coupon_discount) }}</span>
+                </div>
+                {% endif %}
+                <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+                    <span>Delivery Shipping:</span>
+                    <span style="color: #10b981; font-weight: 600;">FREE</span>
+                </div>
+                <div style="height: 1px; background: var(--border-color); margin: 4px 0;"></div>
+                <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 800; color: #fff;">
+                    <span>Total Payable:</span>
+                    <span style="color: #38bdf8; font-family: 'Space Grotesk', sans-serif;">{{ format_inr(grand_total) }}</span>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="placeOrderBtn" style="width: 100%; padding: 14px; font-size: 1rem;">
+                <i class="fa-solid fa-lock"></i> Place Order (Simulate)
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('placeOrderBtn');
+    if (btn) {
+        btn.addEventListener('click', async () => {
+            const address = document.getElementById('shipAddress').value.trim();
+            const phone = document.getElementById('shipPhone').value.trim();
+            const methodEl = document.querySelector('input[name="payment_method"]:checked');
+            const method = methodEl ? methodEl.value : 'Credit Card (Simulated)';
+
+            if (!address) {
+                alert('Please provide a delivery address.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing AI Order Verification...';
+
+            try {
+                const res = await fetch('/api/checkout/place-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ address, phone, payment_method: method })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    showToast('Order placed successfully! Redirecting to tracking...', 'success');
+                    setTimeout(() => {
+                        window.location.href = data.redirect_url;
+                    }, 1000);
+                } else {
+                    alert(data.error || 'Failed to place order');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-lock"></i> Place Order (Simulate)';
+                }
+            } catch (e) {
+                alert('Network error while placing order');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-lock"></i> Place Order (Simulate)';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
