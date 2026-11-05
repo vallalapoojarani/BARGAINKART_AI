@@ -73,8 +73,8 @@ def admin_login():
         password = request.form.get('password', '').strip()
 
         # If user inadvertently tried guide credentials here, give helpful guidance to use /login
-        if identifier in ['smt.p.vaishnavi', 'vaishnavi', 'vaishnavi@ucetw.ac.in']:
-            flash("Smt. P. Vaishnavi is configured as Project Guide. For Guide access, please sign in via the Student & Guide Portal (/login).", "info")
+        if identifier in ['smt.p.v.vaishnavi', 'smt.p.vaishnavi', 'vaishnavi', 'vaishnavi@ucetw.ac.in']:
+            flash("Smt. P.V. Vaishnavi is configured as Project Guide. For Guide access, please sign in via the Student & Guide Portal (/login).", "info")
             return redirect(url_for('auth.login'))
 
         # Look for dedicated Administrator

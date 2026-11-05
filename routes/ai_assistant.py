@@ -32,11 +32,11 @@ def assistant_chat():
             'response': (
                 f"**UCETW Academic Project Showcase — Team 10 AIML:**\n\n"
                 f"• **Institution:** University College of Engineering and Technology for Women (Kakatiya University, Warangal)\n"
-                f"• **Project Guide:** Smt. P. Vaishnavi (Project Guide)\n"
+                f"• **Project Guide:** Smt. P.V. Vaishnavi (Project Guide)\n"
                 f"• **Team Members:** V. Poojarani (23568T3055), P. Anusha (245683064L), G. Deepika (23568T3018), D. Pavani Alekhya (23568T3012), K. Prathyusha (23568T3029)\n"
                 f"• **Platform Scope:** Dual-engine automated price negotiation game, 500 catalog items, multi-seller risk transparency, empty space visual recommender & counterfeit ML detector."
             ),
-            'speech_text': "Welcome to BargainKart by Team 10 AIML, guided by Smt. P. Vaishnavi at Kakatiya University.",
+            'speech_text': "Welcome to BargainKart by Team 10 AIML, guided by Smt. P.V. Vaishnavi at Kakatiya University.",
             'action_url': url_for('dashboard.about'),
             'action_label': 'View Project & Team Page',
             'chips': ['Empty Space Recommender', 'Play Bargain Game', 'Browse 500 Products', 'Price Transparency']
@@ -230,7 +230,7 @@ def api_gemini_chat():
         'caller': 'Academic Demonstration Panel',
         'college': 'University College of Engineering and Technology for Women (UCETW)',
         'university': 'Kakatiya University, Warangal',
-        'guide': 'Smt. P. Vaishnavi',
+        'guide': 'Smt. P.V. Vaishnavi',
         'team': 'Team 10 AIML'
     }
     result = gemini_service.generate_chat_response(query, context=context)

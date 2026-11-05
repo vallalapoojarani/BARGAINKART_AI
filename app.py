@@ -1,6 +1,6 @@
 """
 BARGAINKART — AI-POWERED E-COMMERCE PLATFORM (UCETW - KAKATIYA UNIVERSITY)
-Department of CSE (AI & ML) • Academic Year 2026-2027 • Guide: Smt. P. Vaishnavi
+Department of CSE (AI & ML) • Academic Year 2026-2027 • Guide: Smt. P.V. Vaishnavi
 Team 10 AIML: V. Poojarani (23568T3055), P. Anusha (245683064L), G. Deepika (23568T3018),
               D. Pavani Alekhya (23568T3012), K. Prathyusha (23568T3029)
 Core Algorithms: 1. Google Gemini AI  2. ZOPA Negotiation  3. ML Authenticity  4. Delivery State Machine
@@ -158,7 +158,7 @@ def create_app(config_class=Config, test_config=None) -> Flask:
         return dict(cart_count=c_count, wishlist_count=w_count,
                     format_inr=lambda v: f"₹{float(v):,.0f}" if str(v).replace('.', '', 1).isdigit() else f"₹{v}",
                     gemini_active=GeminiAIEngine.is_active(),
-                    college_name="UCETW Kakatiya University", guide_name="Smt. P. Vaishnavi")
+                    college_name="UCETW Kakatiya University", guide_name="Smt. P.V. Vaishnavi")
 
     # Review API Endpoints for Teachers & Viva
     @app.route('/api/gemini/chat', methods=['POST'])
@@ -193,5 +193,5 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     debug = bool(os.environ.get('FLASK_DEBUG', True))
     print(f"\n* BARGAINKART SERVER: http://127.0.0.1:{port}")
-    print(f"* UCETW Kakatiya University • Team 10 AIML • Guide: Smt. P. Vaishnavi\n")
+    print(f"* UCETW Kakatiya University • Team 10 AIML • Guide: Smt. P.V. Vaishnavi\n")
     app.run(host='0.0.0.0', port=port, debug=debug)

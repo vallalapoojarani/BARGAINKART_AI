@@ -18,7 +18,7 @@ def run_tests():
     res = client.get('/about')
     assert res.status_code == 200, f"Expected 200 for /about, got {res.status_code}"
     html = res.data.decode('utf-8')
-    assert "Smt. P. Vaishnavi" in html, "Guide name missing from /about"
+    assert ("Smt. P.V. Vaishnavi" in html or "Smt. P. Vaishnavi" in html), "Guide name missing from /about"
     assert "V. Poojarani" in html and "23568T3055" in html, "Member Poojarani missing from /about"
     assert "P. Anusha" in html and "245683064L" in html, "Member Anusha missing from /about"
     assert "G. Deepika" in html and "23568T3018" in html, "Member Deepika missing from /about"
@@ -30,7 +30,8 @@ def run_tests():
 
     # Test 2: User Login with Roll Numbers and Passwords
     credentials_to_test = [
-        ('smt.p.vaishnavi', 'vaishnavi', 'Smt. P. Vaishnavi'),
+        ('smt.p.v.vaishnavi', 'vaishnavi', 'Smt. P.V. Vaishnavi'),
+        ('smt.p.vaishnavi', 'vaishnavi', 'Smt. P.V. Vaishnavi'),
         ('23568T3055', 'poojarani', 'V. Poojarani'),
         ('245683064L', 'anusha', 'P. Anusha'),
         ('23568T3018', 'deepika', 'G. Deepika'),

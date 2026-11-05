@@ -29,7 +29,8 @@ def login():
             all_users = User.query.all()
             for u in all_users:
                 u_clean = u.name.lower().replace('smt.', '').replace('dr.', '').replace(' ', '').replace('.', '')
-                if clean_id and clean_id in u_clean:
+                u_roll = (u.roll_number or '').lower().replace('smt.', '').replace('dr.', '').replace(' ', '').replace('.', '')
+                if clean_id and (clean_id in u_clean or u_clean in clean_id or clean_id in u_roll or u_roll in clean_id or ('vaishnavi' in clean_id and 'vaishnavi' in u_clean)):
                     user = u
                     break
 
@@ -56,7 +57,8 @@ def quick_login(identifier):
         clean_id = identifier.lower().replace('smt.', '').replace(' ', '').replace('.', '')
         for u in User.query.all():
             u_clean = u.name.lower().replace('smt.', '').replace(' ', '').replace('.', '')
-            if clean_id and clean_id in u_clean:
+            u_roll = (u.roll_number or '').lower().replace('smt.', '').replace(' ', '').replace('.', '')
+            if clean_id and (clean_id in u_clean or u_clean in clean_id or clean_id in u_roll or u_roll in clean_id or ('vaishnavi' in clean_id and 'vaishnavi' in u_clean)):
                 user = u
                 break
     if user:

@@ -210,7 +210,11 @@ def api_dashboard_stats():
 def about():
     """Academic Project & Team 10 AIML Capstone Showcase."""
     from models.models import User
-    guide = User.query.filter_by(roll_number='smt.p.vaishnavi').first()
+    guide = User.query.filter(
+        (User.roll_number.in_(['smt.p.v.vaishnavi', 'smt.p.vaishnavi'])) |
+        (User.email == 'vaishnavi@ucetw.ac.in') |
+        (User.name.ilike('%vaishnavi%'))
+    ).first()
     team_members = [
         User.query.filter_by(roll_number='23568T3055').first(),
         User.query.filter_by(roll_number='245683064L').first(),

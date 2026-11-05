@@ -218,12 +218,12 @@ def seed_database(force=True):
         db.create_all()
 
         # 1. ACADEMIC PROJECT TEAM & USERS
-        # Guide: Smt. P. Vaishnavi (Password: vaishnavi)
+        # Guide: Smt. P.V. Vaishnavi (Password: vaishnavi, Roll: smt.p.v.vaishnavi)
         guide_user = User(
-            name="Smt. P. Vaishnavi",
+            name="Smt. P.V. Vaishnavi",
             email="vaishnavi@ucetw.ac.in",
-            role="admin",
-            roll_number="smt.p.vaishnavi",
+            role="guide",
+            roll_number="smt.p.v.vaishnavi",
             designation="Project Guide",
             phone="+91 94401 23456",
             address="UCETW Faculty Quarters, Kakatiya University, Warangal, Telangana - 506009"
@@ -281,7 +281,7 @@ def seed_database(force=True):
         db.session.add(admin_user)
 
         db.session.flush()
-        print(f"[*] Seeded Guide (Smt. P. Vaishnavi) and {len(created_team_users)} Team 10 AIML Members.")
+        print(f"[*] Seeded Guide (Smt. P.V. Vaishnavi) and {len(created_team_users)} Team 10 AIML Members.")
 
         # 2. FESTIVAL COUPONS (Bathukamma & Diwali Offers)
         coupons = [
@@ -644,7 +644,7 @@ def seed_database(force=True):
 
         # 7. SAMPLE REVIEWS & AUTHENTICITY CHECKS
         sample_reviews = [
-            ("Smt. P. Vaishnavi", 5, "Outstanding Quality & Verified Authenticity", "Tested this kitchen tool thoroughly. Genuine 304 steel material and razor-sharp cutting edge."),
+            ("Smt. P.V. Vaishnavi", 5, "Outstanding Quality & Verified Authenticity", "Tested this kitchen tool thoroughly. Genuine 304 steel material and razor-sharp cutting edge."),
             ("V. Poojarani", 5, "Amazing Bargain with Festival Coupon!", "Got this product for ₹180 with BATHUKAMMA20 code. Fast 2-day delivery and genuine packaging."),
             ("P. Anusha", 5, "Price Transparency Feature is Superb", "Compared different sellers before buying. Verified safe seller delivered genuine item."),
             ("G. Deepika", 5, "Clean finish and durable", "The AI recommended this for our kitchen and it works great. Worth every rupee."),
@@ -691,7 +691,7 @@ def seed_database(force=True):
         print("DATABASE SUCCESSFULLY SEEDED WITH:")
         print(f" - {len(created_products)} Products across 6 categories")
         print(f" - {len(created_products) * 3} Seller quotes with Safe / Moderate / High Risk badges")
-        print(" - Guide: Smt. P. Vaishnavi (Password: vaishnavi)")
+        print(" - Guide: Smt. P.V. Vaishnavi (Password: vaishnavi, Roll/User: smt.p.v.vaishnavi)")
         print(" - Team 10 AIML: V. Poojarani, P. Anusha, G. Deepika, D. Pavani Alekhya, K. Prathyusha")
         print(" - Festival Coupons: BATHUKAMMA20 (Rs.200 -> Rs.180), DIWALI10, etc.")
         print(" - Order #BK-ORD-TELANGANA2026 placed at Rs.180 with live tracking")

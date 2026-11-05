@@ -72,11 +72,11 @@
 
                 <!-- Guide Photo Circular Avatar -->
                 <div style="width: 120px; height: 120px; border-radius: 50%; border: 3.5px solid #10b981; overflow: hidden; margin: 0 auto 16px; box-shadow: 0 0 25px rgba(16,185,129,0.35); background: #0f172a; position: relative;">
-                    <img src="{{ url_for('static', filename='images/team/guide.jpg') }}" alt="Smt. P. Vaishnavi - Project Guide" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%;">
+                    <img src="{{ url_for('static', filename='images/team/guide.jpg') }}" alt="Smt. P.V. Vaishnavi - Project Guide" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%;">
                 </div>
 
                 <h3 style="font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 4px;">
-                    Smt. P. Vaishnavi
+                    {{ guide.name if guide else "Smt. P.V. Vaishnavi" }}
                 </h3>
                 <div style="font-size: 0.88rem; font-weight: 700; color: #34d399; margin-bottom: 4px;">
                     Project Guide
@@ -90,8 +90,8 @@
                 </div>
 
                 <div style="display: flex; gap: 10px; justify-content: center;">
-                    <a href="{{ url_for('auth.quick_login', identifier='smt.p.vaishnavi') }}" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #059669, #10b981); border: none; font-size: 0.8rem; padding: 7px 16px;">
-                        <i class="fa-solid fa-right-to-bracket"></i> Sign In as Guide
+                    <a href="{{ url_for('auth.quick_login', identifier='smt.p.v.vaishnavi') }}" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #059669, #10b981); border: none; font-size: 0.8rem; padding: 7px 16px;">
+                        <i class="fa-solid fa-right-to-bracket"></i> Sign In as Guide (smt.p.v.vaishnavi)
                     </a>
                 </div>
 
